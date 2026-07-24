@@ -1,71 +1,69 @@
-# 🏥 Healthcare Clinic Website & Backend
+# 🏥 Healthcare Clinic Website Backend (Django + DRF)
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)
-![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-red.svg)
+![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![Django](https://img.shields.io/badge/Django-5.0+-092E20.svg)
+![DRF](https://img.shields.io/badge/DRF-3.15+-red.svg)
+![MySQL](https://img.shields.io/badge/MySQL-PyMySQL-00758F.svg)
+![JWT](https://img.shields.io/badge/JWT-SimpleJWT-black.svg)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2ea44f.svg)
 
-Welcome to the **Healthcare Clinic Website & Backend Repository**. This project was developed as part of the internship assignment at **PY Digital Services Pvt. Ltd.**
+Welcome to the enterprise backend repository for the **Healthcare Clinic Website**. This project was developed as part of the internship assignment at **PY Digital Services Pvt. Ltd.**
 
 ---
 
-## 👨‍💻 Team Module Allocations
-
-| Team Member | Module Assignment | Key Responsibilities |
-| :--- | :--- | :--- |
-| **Abusufiyan / Harshavardhan** | *Authentication* | JWT Auth, RBAC, User/Doctor Login |
-| **Gautam / Alok Verma** | *Appointments* | Booking APIs, Doctor Schedules |
-| **Suhaib / Aniket Ghatage** | *Content* | Blogs, Testimonials, Services |
-| **Udbhav** | *Administration & System Integration* | Base Database Models, Soft-Deletion, Admin Dashboard APIs, Global Exception Middleware, API Docs, CI/CD |
+## 🛠️ Required Tech Stack
+- **Language**: Python 3.10+
+- **Framework**: Django 5.0+ & Django REST Framework (DRF)
+- **Database**: MySQL (supported via `PyMySQL` driver with SQLite zero-setup dev fallback)
+- **Authentication**: JWT Token Authentication (`rest_framework_simplejwt`)
+- **API Documentation**: OpenAPI / Swagger UI & ReDoc (`drf-spectacular`)
+- **Testing & Debugging**: DRF `APITestCase` suite & `Postman_Collection.json`
+- **VCS & CI/CD**: Git, GitHub, and GitHub Actions CI Pipeline
 
 ---
 
-## 🏗️ Module 4: Administration & System Integration (Udbhav's Work)
+## 👨‍💻 Module 4: Administration & System Integration (Udbhav's Work)
 
-This module forms the underlying core architecture of the backend. Key implementations include:
+Udbhav engineered the core foundation and integration module for the backend:
 
-### 1. 🛡️ Database Architecture & Soft-Deletion (`BaseModel`)
-- **UUIDv4 Primary Keys**: Replaced auto-incrementing integer IDs with 36-character UUID strings to eliminate ID enumeration security risks.
-- **Soft Deletion (`is_deleted`)**: Medical records cannot be permanently destroyed. All ORM models inherit an `is_deleted` flag, preserving data for regulatory compliance while filtering it out of routine API queries.
-- **Timestamps**: Automatic `created_at` and `updated_at` timestamps for every database record.
+### 1. 🛡️ Database Design & Optimization (`TimeStampedModel`)
+- **UUID Primary Keys**: Uses `uuid.uuid4()` for primary keys across all models to prevent sequential ID enumeration attacks.
+- **Soft Deletion (`is_deleted`)**: Implements an `is_deleted` boolean flag on base models. When records are "deleted", they are preserved for medical compliance and historical auditing while being automatically excluded from standard ORM querysets.
+- **MySQL Driver Support**: Configured `PyMySQL` so MySQL databases can be used seamlessly across environments.
 
-### 2. 📊 High-Performance Admin Dashboard APIs (`/api/v1/admin/dashboard`)
-- Built aggregated metric endpoints using SQLAlchemy `func.count()` queries to return system stats (total users, active appointments, pending reviews, audit logs) in a single database roundtrip.
+### 2. 📊 High-Performance Admin Dashboard APIs (`/api/admin/dashboard/`)
+- Uses Django ORM aggregations (`Count`, `Q` conditional filters) to calculate system metrics (total users, active appointments, completed visits, audit counts) in a single database query.
 
-### 3. 🚨 Unified Exception Handling Middleware
-- Intercepts all `HTTPException`, `RequestValidationError`, `SQLAlchemyError`, and 500 runtime errors, formatting them into a standard, predictable JSON schema:
+### 3. 🚨 Custom DRF Exception Handling
+- Intercepts all DRF exceptions, database errors, and validation errors, returning a unified JSON format:
 ```json
 {
   "success": false,
-  "message": "Invalid request parameters.",
-  "errors": ["email: Field required"]
+  "errors": ["field: This field is required."]
 }
 ```
 
-### 4. 🧪 Postman Collection & Automated Tests
-- Full `Postman_Collection.json` provided at `Backend/Postman_Collection.json` for manual and automated API route testing.
-- Automated `pytest` suite in `Backend/app/tests/` covering root endpoints, database health, demo seeding, and dashboard analytics.
+### 4. 📬 Postman Collection & Automated Tests
+- Postman Collection file at `Backend/Postman_Collection.json`.
+- Run automated unit tests using `python manage.py test`.
 
 ---
 
 ## 🚀 Quickstart Guide
 
-### Running the Backend Locally
 ```bash
 cd Backend
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Run FastAPI development server
-uvicorn app.main:app --reload
+# Run migrations
+python manage.py migrate
+
+# Start Django Development Server
+python manage.py runserver
 ```
 
-- **Interactive Swagger Docs**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **ReDoc**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
-
-### Running Automated Tests
-```bash
-cd Backend
-pytest
-```
+- **Interactive Swagger Docs**: [http://127.0.0.1:8000/api/docs/](http://127.0.0.1:8000/api/docs/)
+- **ReDoc**: [http://127.0.0.1:8000/api/redoc/](http://127.0.0.1:8000/api/redoc/)
+- **JWT Token Endpoint**: [http://127.0.0.1:8000/api/token/](http://127.0.0.1:8000/api/token/)

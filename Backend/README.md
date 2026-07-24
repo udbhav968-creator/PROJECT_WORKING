@@ -1,16 +1,9 @@
-# ⚙️ Healthcare Clinic Backend API
+# ⚙️ Django REST Framework Backend
 
-FastAPI enterprise backend for the Healthcare Clinic project.
+Enterprise Backend API for Healthcare Clinic built with Python, Django 5, DRF, MySQL, and JWT Authentication.
 
-## Architecture Highlights (Udbhav Module)
-- **Framework**: FastAPI + Pydantic v2
-- **ORM**: SQLAlchemy 2.0 with custom `BaseModel` (UUIDs + `is_deleted` soft deletion)
-- **Exception Middleware**: Custom global handlers for unified JSON error responses.
-- **Admin Dashboard Router**: `/api/v1/admin/dashboard` & `/api/v1/admin/health`
-- **Testing**: `pytest` test suite with `TestClient`
-
-## Endpoints
-- `GET /`: Health check & API metadata
-- `GET /api/v1/admin/health`: Database connection status
-- `GET /api/v1/admin/dashboard`: Aggregated admin analytics and audit logs
-- `POST /api/v1/admin/seed-demo-data`: Seed test data for dashboard verification
+## App Structure
+- `clinic_core/`: Master settings, URLs, WSGI, PyMySQL driver initialization, SimpleJWT settings.
+- `apps/core/`: `TimeStampedModel` base model with UUID primary keys and `is_deleted` soft-deletion support; DRF custom exception handler.
+- `apps/authentication/`: `RoleModel`, `UserProfileModel`, JWT token configuration.
+- `apps/administration/`: `AdminDashboardView`, `SystemHealthView`, `SeedDemoDataView`, ORM aggregations, Postman collection, unit tests.
