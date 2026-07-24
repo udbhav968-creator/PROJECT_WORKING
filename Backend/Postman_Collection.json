@@ -1,0 +1,52 @@
+{
+	"info": {
+		"_postman_id": "c1f7b8e2-9843-4a11-b582-udbhav-module-2026",
+		"name": "Healthcare Clinic Backend - Udbhav Admin & Integration Module",
+		"description": "Postman Collection for testing Administration & System Integration endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "System Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/admin/health",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["api", "v1", "admin", "health"]
+				}
+			}
+		},
+		{
+			"name": "Seed Demo Testing Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/admin/seed-demo-data",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["api", "v1", "admin", "seed-demo-data"]
+				}
+			}
+		},
+		{
+			"name": "Get Admin Dashboard Summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/admin/dashboard",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["api", "v1", "admin", "dashboard"]
+				}
+			}
+		}
+	]
+}
