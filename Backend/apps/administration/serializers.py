@@ -5,7 +5,17 @@ from apps.administration.models import AdminAuditLogModel, AppointmentModel
 class AdminAuditLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminAuditLogModel
-        fields = ['id', 'admin_email', 'action', 'resource', 'ip_address', 'details', 'created_at']
+        fields = ["id", "admin_email", "action", "resource", "ip_address", "details", "created_at"]
+
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppointmentModel
+        fields = [
+            "id", "patient_name", "patient_phone", "patient_email",
+            "doctor_name", "appointment_date", "status", "notes",
+            "created_at", "updated_at",
+        ]
 
 
 class SystemStatsSerializer(serializers.Serializer):

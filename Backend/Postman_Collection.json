@@ -1,75 +1,150 @@
 {
-	"info": {
-		"_postman_id": "c1f7b8e2-9843-4a11-b582-udbhav-django-2026",
-		"name": "Healthcare Clinic Django DRF API - Udbhav Module",
-		"description": "Postman Collection for Django REST Framework, JWT Authentication, and Administration Endpoints.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Obtain JWT Token",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"adminpassword\"\n}"
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/token/",
-					"protocol": "http",
-					"host": ["127", "0", "0", "1"],
-					"port": "8000",
-					"path": ["api", "token", ""]
-				}
-			}
-		},
-		{
-			"name": "System Health Check",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/admin/health/",
-					"protocol": "http",
-					"host": ["127", "0", "0", "1"],
-					"port": "8000",
-					"path": ["api", "admin", "health", ""]
-				}
-			}
-		},
-		{
-			"name": "Seed Demo Testing Data",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/admin/seed-demo-data/",
-					"protocol": "http",
-					"host": ["127", "0", "0", "1"],
-					"port": "8000",
-					"path": ["api", "admin", "seed-demo-data", ""]
-				}
-			}
-		},
-		{
-			"name": "Get Admin Dashboard Summary",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/admin/dashboard/",
-					"protocol": "http",
-					"host": ["127", "0", "0", "1"],
-					"port": "8000",
-					"path": ["api", "admin", "dashboard", ""]
-				}
-			}
-		}
-	]
+    "info": {
+        "_postman_id": "udbhav-module4-final-2026",
+        "name": "🏥 Healthcare Clinic API – Udbhav Module 4 (Admin & Integration)",
+        "description": "Complete Postman Collection for Module 4: Administration & System Integration.\n\n**Endpoints covered:**\n- JWT Authentication\n- System Health Check\n- Admin Dashboard Analytics\n- Audit Log List (paginated)\n- Demo Data Seeding\n\n**Base URL:** http://127.0.0.1:8000",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "🔐 Authentication",
+            "item": [
+                {
+                    "name": "Obtain JWT Access Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [{"key": "Content-Type", "value": "application/json"}],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"adminpassword\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/token/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "token", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Refresh JWT Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [{"key": "Content-Type", "value": "application/json"}],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"refresh\": \"<your_refresh_token_here>\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/token/refresh/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "token", "refresh", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "⚙️ System Integration",
+            "item": [
+                {
+                    "name": "System Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/health/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "health", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📊 Admin Dashboard APIs",
+            "item": [
+                {
+                    "name": "Seed Demo Testing Data",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/seed-demo-data/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "seed-demo-data", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Admin Dashboard Summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/dashboard/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "dashboard", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Audit Logs (Paginated)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/audit-logs/?page=1&page_size=10",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "audit-logs", ""],
+                            "query": [
+                                {"key": "page", "value": "1"},
+                                {"key": "page_size", "value": "10"}
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📚 API Documentation",
+            "item": [
+                {
+                    "name": "Swagger UI (Open in Browser)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {"raw": "http://127.0.0.1:8000/api/docs/"}
+                    }
+                },
+                {
+                    "name": "ReDoc (Open in Browser)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {"raw": "http://127.0.0.1:8000/api/redoc/"}
+                    }
+                },
+                {
+                    "name": "OpenAPI JSON Schema",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {"raw": "http://127.0.0.1:8000/api/schema/"}
+                    }
+                }
+            ]
+        }
+    ]
 }
