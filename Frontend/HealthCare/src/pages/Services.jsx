@@ -1,10 +1,26 @@
 import { Link } from "react-router-dom";
+import {
+  ArrowDown,
+  CalendarCheck2,
+  CalendarDays,
+  MessageCircleMore,
+  MessagesSquare,
+  Stethoscope,
+  UserRoundCheck,
+} from "lucide-react";
 
 import ServiceCard from "../components/services/ServiceCard.jsx";
 
 import services, { serviceFeatures } from "../data/services.js";
 
 import "../styles/information-pages.css";
+
+const serviceFeatureIcons = {
+  1: Stethoscope,
+  2: MessagesSquare,
+  3: UserRoundCheck,
+  4: CalendarCheck2,
+};
 
 function Services() {
   return (
@@ -30,6 +46,7 @@ function Services() {
                 to="/appointment"
                 className="info-button info-button-primary"
               >
+                <CalendarDays size={18} aria-hidden="true" />
                 Book an Appointment
               </Link>
 
@@ -38,6 +55,7 @@ function Services() {
                 className="info-button info-button-secondary"
               >
                 Explore Services
+                <ArrowDown size={18} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -118,21 +136,26 @@ function Services() {
           </header>
 
           <div className="service-features-grid">
-            {serviceFeatures.map((feature, index) => (
-              <article className="service-feature-card" key={feature.id}>
-                <span className="service-feature-number">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+            {serviceFeatures.map((feature, index) => {
+              const FeatureIcon =
+                serviceFeatureIcons[feature.id] || Stethoscope;
 
-                <div className="service-feature-icon" aria-hidden="true">
-                  +
-                </div>
+              return (
+                <article className="service-feature-card" key={feature.id}>
+                  <span className="service-feature-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
 
-                <h3>{feature.title}</h3>
+                  <div className="service-feature-icon" aria-hidden="true">
+                    <FeatureIcon size={24} strokeWidth={1.9} />
+                  </div>
 
-                <p>{feature.description}</p>
-              </article>
-            ))}
+                  <h3>{feature.title}</h3>
+
+                  <p>{feature.description}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -157,6 +180,7 @@ function Services() {
               to="/appointment"
               className="info-button info-button-light"
             >
+              <CalendarDays size={18} aria-hidden="true" />
               Book Appointment
             </Link>
 
@@ -164,6 +188,7 @@ function Services() {
               to="/contact"
               className="info-button info-button-outline-light"
             >
+              <MessageCircleMore size={18} aria-hidden="true" />
               Contact Clinic
             </Link>
           </div>

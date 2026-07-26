@@ -1,4 +1,13 @@
 import { Link } from "react-router-dom";
+import {
+  ArrowDown,
+  ArrowRight,
+  CalendarDays,
+  Ear,
+  HeartPulse,
+  MessagesSquare,
+  UserRoundCheck,
+} from "lucide-react";
 
 import DoctorCard from "../components/doctors/DoctorCard.jsx";
 
@@ -8,6 +17,12 @@ import doctors, {
 } from "../data/doctors.js";
 
 import "../styles/information-pages.css";
+
+const carePrincipleIcons = {
+  1: Ear,
+  2: MessagesSquare,
+  3: UserRoundCheck,
+};
 
 function Doctors() {
   return (
@@ -33,6 +48,7 @@ function Doctors() {
                 to="/appointment"
                 className="info-button info-button-primary"
               >
+                <CalendarDays size={18} aria-hidden="true" />
                 Book an Appointment
               </Link>
 
@@ -41,6 +57,7 @@ function Doctors() {
                 className="info-button info-button-secondary"
               >
                 Meet the Doctors
+                <ArrowDown size={18} aria-hidden="true" />
               </a>
             </div>
 
@@ -82,7 +99,7 @@ function Doctors() {
 
             <div className="doctors-hero-mini-card">
               <span className="doctors-mini-icon" aria-hidden="true">
-                +
+                <HeartPulse size={21} strokeWidth={2.1} />
               </span>
 
               <div>
@@ -159,23 +176,32 @@ function Doctors() {
               className="info-button info-button-secondary"
             >
               Learn About Our Clinic
+              <ArrowRight size={18} aria-hidden="true" />
             </Link>
           </div>
 
           <div className="doctors-care-principles">
-            {carePrinciples.map((principle) => (
-              <article
-                className="doctor-care-principle"
-                key={principle.id}
-              >
-                <span>{principle.number}</span>
+            {carePrinciples.map((principle) => {
+              const PrincipleIcon =
+                carePrincipleIcons[principle.id] || HeartPulse;
 
-                <div>
-                  <h3>{principle.title}</h3>
-                  <p>{principle.description}</p>
-                </div>
-              </article>
-            ))}
+              return (
+                <article
+                  className="doctor-care-principle"
+                  key={principle.id}
+                >
+                  <span className="doctor-care-icon" aria-hidden="true">
+                    <PrincipleIcon size={22} strokeWidth={2} />
+                  </span>
+
+                  <div>
+                    <small>{principle.number}</small>
+                    <h3>{principle.title}</h3>
+                    <p>{principle.description}</p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -200,6 +226,7 @@ function Doctors() {
               to="/appointment"
               className="info-button info-button-light"
             >
+              <CalendarDays size={18} aria-hidden="true" />
               Book Appointment
             </Link>
 
@@ -208,6 +235,7 @@ function Doctors() {
               className="info-button info-button-outline-light"
             >
               Explore Services
+              <ArrowRight size={18} aria-hidden="true" />
             </Link>
           </div>
         </div>

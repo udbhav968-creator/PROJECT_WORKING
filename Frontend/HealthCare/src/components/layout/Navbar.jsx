@@ -3,10 +3,10 @@ import { NavLink } from "react-router-dom";
 const navigationLinks = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
-  { label: "Doctors", path: "/doctors" },
   { label: "Services", path: "/services" },
-  { label: "Testimonials", path: "/testimonials" },
-  { label: "Appointment", path: "/appointment" },
+  { label: "Doctors", path: "/doctors" },
+  { label: "Gallery", path: "/gallery" },
+  { label: "Blog", path: "/blog" },
   { label: "Contact", path: "/contact" },
 ];
 
@@ -18,7 +18,7 @@ function Navbar() {
           HealthCare
         </NavLink>
 
-        <nav className="navbar-links" aria-label="Primary navigation">
+        <nav className="navbar-links" aria-label="Primary Navigation">
           {navigationLinks.map((link) => (
             <NavLink
               key={link.path}
@@ -31,6 +31,17 @@ function Navbar() {
               {link.label}
             </NavLink>
           ))}
+
+          <NavLink
+            to="/appointment"
+            className={({ isActive }) =>
+              isActive
+                ? "navbar-link navbar-cta active"
+                : "navbar-link navbar-cta"
+            }
+          >
+            Book Appointment
+          </NavLink>
         </nav>
       </div>
     </header>

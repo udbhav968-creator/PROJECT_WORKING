@@ -1,4 +1,17 @@
 import { Link } from "react-router-dom";
+import {
+  Accessibility,
+  ArrowRight,
+  BadgeCheck,
+  CalendarDays,
+  CheckCircle2,
+  HeartHandshake,
+  MessageCircleMore,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+
+import TestimonialsSection from "../components/testimonials/TestimonialsSection.jsx";
 
 import clinicConsultationImage from "../assets/images/about/clinic-consultation.jpg";
 import clinicTeamImage from "../assets/images/about/clinic-consultation1.jpg";
@@ -13,6 +26,13 @@ import {
 import siteData from "../data/siteData.js";
 
 import "../styles/information-pages.css";
+
+const highlightIcons = {
+  1: HeartHandshake,
+  2: BadgeCheck,
+  3: Accessibility,
+  4: Sparkles,
+};
 
 function About() {
   return (
@@ -33,12 +53,20 @@ function About() {
             </p>
 
             <div className="info-hero-actions">
-              <Link to="/appointment" className="info-button info-button-primary">
+              <Link
+                to="/appointment"
+                className="info-button info-button-primary"
+              >
+                <CalendarDays size={18} aria-hidden="true" />
                 Book an Appointment
               </Link>
 
-              <Link to="/services" className="info-button info-button-secondary">
+              <Link
+                to="/services"
+                className="info-button info-button-secondary"
+              >
                 Explore Services
+                <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
 
@@ -68,7 +96,7 @@ function About() {
 
             <div className="info-floating-card info-floating-card-top">
               <span className="info-floating-icon" aria-hidden="true">
-                ✓
+                <ShieldCheck size={20} strokeWidth={2.1} />
               </span>
 
               <div>
@@ -85,7 +113,10 @@ function About() {
         </div>
       </section>
 
-      <section className="info-stats-section" aria-label="Clinic statistics">
+      <section
+        className="info-stats-section"
+        aria-label="Clinic statistics"
+      >
         <div className="info-container info-stats-grid">
           {healthcareStats.map((stat) => (
             <article className="info-stat-card" key={stat.id}>
@@ -132,7 +163,9 @@ function About() {
               Healthcare that begins with listening
             </h2>
 
-            <p className="info-lead-text">{siteData.introduction}</p>
+            <p className="info-lead-text">
+              {siteData.introduction}
+            </p>
 
             <p>{siteData.description}</p>
 
@@ -144,7 +177,10 @@ function About() {
 
             <div className="info-feature-list">
               <div>
-                <span aria-hidden="true">✓</span>
+                <span aria-hidden="true">
+                  <CheckCircle2 size={17} strokeWidth={2.3} />
+                </span>
+
                 <p>
                   <strong>Personalized Attention</strong>
                   Care designed around individual patient requirements.
@@ -152,7 +188,10 @@ function About() {
               </div>
 
               <div>
-                <span aria-hidden="true">✓</span>
+                <span aria-hidden="true">
+                  <CheckCircle2 size={17} strokeWidth={2.3} />
+                </span>
+
                 <p>
                   <strong>Clear Communication</strong>
                   Simple and honest guidance throughout every consultation.
@@ -160,7 +199,10 @@ function About() {
               </div>
 
               <div>
-                <span aria-hidden="true">✓</span>
+                <span aria-hidden="true">
+                  <CheckCircle2 size={17} strokeWidth={2.3} />
+                </span>
+
                 <p>
                   <strong>Comfortable Environment</strong>
                   A respectful and welcoming experience for every visitor.
@@ -186,14 +228,16 @@ function About() {
             </h2>
 
             <p>
-              Our purpose shapes how we provide care, communicate with patients,
-              and contribute to healthier communities.
+              Our purpose shapes how we provide care, communicate with
+              patients, and contribute to healthier communities.
             </p>
           </header>
 
           <div className="info-purpose-grid">
             <article className="info-purpose-card info-mission-card">
-              <span className="info-purpose-label">Our Mission</span>
+              <span className="info-purpose-label">
+                Our Mission
+              </span>
 
               <h3>Making responsible healthcare more personal</h3>
 
@@ -207,7 +251,9 @@ function About() {
             </article>
 
             <article className="info-purpose-card info-vision-card">
-              <span className="info-purpose-label">Our Vision</span>
+              <span className="info-purpose-label">
+                Our Vision
+              </span>
 
               <h3>Building long-term trust through better care</h3>
 
@@ -239,21 +285,30 @@ function About() {
           </header>
 
           <div className="info-highlights-grid">
-            {aboutHighlights.map((highlight) => (
-              <article className="info-highlight-card" key={highlight.id}>
-                <span className="info-highlight-number">
-                  {highlight.number}
-                </span>
+            {aboutHighlights.map((highlight) => {
+              const HighlightIcon = highlightIcons[highlight.id] || Sparkles;
 
-                <div className="info-highlight-icon" aria-hidden="true">
-                  +
-                </div>
+              return (
+                <article
+                  className="info-highlight-card"
+                  key={highlight.id}
+                >
+                  <span className="info-highlight-number">
+                    {highlight.number}
+                  </span>
 
-                <h3>{highlight.title}</h3>
+                  <div
+                    className="info-highlight-icon"
+                    aria-hidden="true"
+                  >
+                    <HighlightIcon size={24} strokeWidth={1.9} />
+                  </div>
 
-                <p>{highlight.description}</p>
-              </article>
-            ))}
+                  <h3>{highlight.title}</h3>
+                  <p>{highlight.description}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -276,6 +331,7 @@ function About() {
               to="/appointment"
               className="info-button info-button-primary"
             >
+              <CalendarDays size={18} aria-hidden="true" />
               Schedule Consultation
             </Link>
           </div>
@@ -288,7 +344,6 @@ function About() {
                 </span>
 
                 <h3>{value.title}</h3>
-
                 <p>{value.description}</p>
               </article>
             ))}
@@ -296,10 +351,20 @@ function About() {
         </div>
       </section>
 
+      <TestimonialsSection
+        eyebrow="Patient Experiences"
+        title="What our patients say about their care"
+        description="Patient feedback reflects our commitment to professional treatment, respectful communication, and personalized healthcare."
+        limit={3}
+        showViewAll
+      />
+
       <section className="info-cta-section">
         <div className="info-container info-cta-content">
           <div>
-            <span className="info-cta-eyebrow">Your Health Matters</span>
+            <span className="info-cta-eyebrow">
+              Your Health Matters
+            </span>
 
             <h2>Take the next step towards better health</h2>
 
@@ -314,6 +379,7 @@ function About() {
               to="/appointment"
               className="info-button info-button-light"
             >
+              <CalendarDays size={18} aria-hidden="true" />
               Book Appointment
             </Link>
 
@@ -321,6 +387,7 @@ function About() {
               to="/contact"
               className="info-button info-button-outline-light"
             >
+              <MessageCircleMore size={18} aria-hidden="true" />
               Contact Clinic
             </Link>
           </div>

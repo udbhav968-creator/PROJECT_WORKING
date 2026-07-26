@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ArrowRight, Clock3 } from "lucide-react";
 
 function ServiceCard({ service }) {
   return (
@@ -36,10 +37,13 @@ function ServiceCard({ service }) {
             className="service-card-link"
           >
             View Service
-            <span aria-hidden="true">→</span>
+            <ArrowRight size={16} aria-hidden="true" />
           </Link>
 
-          <span className="service-duration">{service.duration}</span>
+          <span className="service-duration">
+            <Clock3 size={14} aria-hidden="true" />
+            {service.duration}
+          </span>
         </div>
       </div>
     </article>

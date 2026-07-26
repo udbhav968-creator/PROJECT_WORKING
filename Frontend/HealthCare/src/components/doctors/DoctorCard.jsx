@@ -1,4 +1,10 @@
 import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  CalendarDays,
+  Clock3,
+  MessageCircleMore,
+} from "lucide-react";
 
 function DoctorCard({ doctor }) {
   const isLimited = doctor.status === "Limited Slots";
@@ -49,12 +55,18 @@ function DoctorCard({ doctor }) {
 
         <div className="doctor-schedule">
           <div>
-            <span>Available</span>
+            <span className="doctor-schedule-label">
+              <CalendarDays size={14} aria-hidden="true" />
+              Available
+            </span>
             <strong>{doctor.availability}</strong>
           </div>
 
           <div>
-            <span>Consultation</span>
+            <span className="doctor-schedule-label">
+              <Clock3 size={14} aria-hidden="true" />
+              Consultation
+            </span>
             <strong>{doctor.consultationTime}</strong>
           </div>
         </div>
@@ -64,6 +76,7 @@ function DoctorCard({ doctor }) {
             to={`/appointment?doctor=${doctor.slug}`}
             className="info-button info-button-primary doctor-book-button"
           >
+            <CalendarDays size={16} aria-hidden="true" />
             Book Appointment
           </Link>
 
@@ -72,8 +85,9 @@ function DoctorCard({ doctor }) {
             className="doctor-contact-link"
             aria-label={`Contact clinic regarding ${doctor.name}`}
           >
+            <MessageCircleMore size={16} aria-hidden="true" />
             Ask a Question
-            <span aria-hidden="true">→</span>
+            <ArrowRight size={15} aria-hidden="true" />
           </Link>
         </div>
       </div>

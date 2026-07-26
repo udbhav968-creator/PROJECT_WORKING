@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import TestimonialCard from "../components/testimonials/TestimonialCard.jsx";
+import TestimonialsSection from "../components/testimonials/TestimonialsSection.jsx";
 
 import testimonials, {
   feedbackPrinciples,
@@ -10,9 +10,9 @@ import testimonials, {
 import "../styles/information-pages.css";
 
 function Testimonials() {
-  const featuredTestimonials = testimonials.filter(
-    (testimonial) => testimonial.featured
-  );
+  const featuredTestimonials = testimonials
+    .filter((testimonial) => testimonial.featured)
+    .slice(0, 2);
 
   return (
     <main className="information-page">
@@ -27,8 +27,9 @@ function Testimonials() {
             </h1>
 
             <p>
-              Discover how patients describe their consultation, communication,
-              comfort, and overall healthcare experience with our medical team.
+              Discover how patients describe their consultation,
+              communication, comfort, and overall healthcare experience with
+              our medical team.
             </p>
 
             <div className="testimonials-hero-actions">
@@ -48,7 +49,10 @@ function Testimonials() {
             </div>
 
             <div className="testimonials-hero-rating">
-              <div className="testimonials-rating-stars" aria-hidden="true">
+              <div
+                className="testimonials-rating-stars"
+                aria-hidden="true"
+              >
                 ★★★★★
               </div>
 
@@ -68,7 +72,10 @@ function Testimonials() {
                 key={testimonial.id}
               >
                 <div className="testimonial-hero-card-top">
-                  <div className="testimonial-avatar">
+                  <div
+                    className="testimonial-avatar"
+                    aria-hidden="true"
+                  >
                     {testimonial.initials}
                   </div>
 
@@ -78,8 +85,18 @@ function Testimonials() {
                   </div>
                 </div>
 
-                <div className="testimonial-rating" aria-hidden="true">
-                  ★★★★★
+                <div
+                  className="testimonial-rating"
+                  aria-label={`${testimonial.rating} out of 5 stars`}
+                >
+                  {Array.from(
+                    { length: testimonial.rating },
+                    (_, starIndex) => (
+                      <span key={starIndex} aria-hidden="true">
+                        ★
+                      </span>
+                    ),
+                  )}
                 </div>
 
                 <p>“{testimonial.feedback}”</p>
@@ -88,17 +105,28 @@ function Testimonials() {
 
             <div className="testimonial-hero-summary">
               <strong>98%</strong>
-
-              <span>Patients report a positive consultation experience</span>
+              <span>
+                Patients report a positive consultation experience
+              </span>
             </div>
 
-            <div className="testimonial-decoration testimonial-decoration-one" />
-            <div className="testimonial-decoration testimonial-decoration-two" />
+            <div
+              className="testimonial-decoration testimonial-decoration-one"
+              aria-hidden="true"
+            />
+
+            <div
+              className="testimonial-decoration testimonial-decoration-two"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </section>
 
-      <section className="testimonial-stats-section">
+      <section
+        className="testimonial-stats-section"
+        aria-label="Patient feedback statistics"
+      >
         <div className="info-container testimonial-stats-grid">
           {testimonialStats.map((stat) => (
             <article className="testimonial-stat-item" key={stat.id}>
@@ -109,41 +137,21 @@ function Testimonials() {
         </div>
       </section>
 
-      <section
-        id="patient-stories"
-        className="info-section testimonials-list-section"
-      >
-        <div className="info-container">
-          <header className="testimonials-section-heading">
-            <div>
-              <span className="info-eyebrow">Patient Stories</span>
-
-              <h2 className="info-section-title">
-                What patients say about their care
-              </h2>
-            </div>
-
-            <p>
-              Every patient experience helps us understand how clearly,
-              comfortably, and responsibly we are delivering healthcare.
-            </p>
-          </header>
-
-          <div className="testimonials-card-grid">
-            {testimonials.map((testimonial) => (
-              <TestimonialCard
-                key={testimonial.id}
-                testimonial={testimonial}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <div id="patient-stories">
+        <TestimonialsSection
+          eyebrow="Patient Stories"
+          title="What patients say about their care"
+          description="Every patient experience helps us understand how clearly, comfortably, and responsibly we are delivering healthcare."
+          showViewAll={false}
+        />
+      </div>
 
       <section className="info-section testimonials-feedback-section">
         <div className="info-container testimonials-feedback-grid">
           <div className="testimonials-feedback-intro">
-            <span className="info-eyebrow">Your Feedback Matters</span>
+            <span className="info-eyebrow">
+              Your Feedback Matters
+            </span>
 
             <h2 className="info-section-title">
               Better healthcare starts by listening

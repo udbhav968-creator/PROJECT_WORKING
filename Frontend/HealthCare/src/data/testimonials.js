@@ -1,71 +1,68 @@
-// Temporary frontend data.
-// Replace this data with the backend API response after integration.
-
 const testimonials = [
   {
     id: 1,
-    patientName: "Priya Mehta",
-    initials: "PM",
-    location: "Mumbai",
-    service: "General Consultation",
+    patientName: "Priya Sharma",
+    initials: "PS",
+    location: "Navi Mumbai",
     rating: 5,
     feedback:
-      "The consultation was very comfortable and clearly explained. The doctor listened patiently and guided me properly about the next steps.",
+      "The doctor listened patiently and explained every part of the treatment in simple language. The entire consultation felt professional, comfortable, and reassuring.",
+    service: "General Consultation",
     featured: true,
   },
   {
     id: 2,
-    patientName: "Aarav Singh",
-    initials: "AS",
-    location: "Navi Mumbai",
-    service: "Preventive Care",
+    patientName: "Rahul Verma",
+    initials: "RV",
+    location: "Mumbai",
     rating: 5,
     feedback:
-      "I appreciated the professional approach and simple explanation. The preventive guidance was practical and easy to follow.",
-    featured: false,
+      "The appointment process was smooth and the clinic staff was helpful throughout my visit. I received clear guidance and proper attention from the medical team.",
+    service: "Preventive Healthcare",
+    featured: true,
   },
   {
     id: 3,
-    patientName: "Neha Verma",
-    initials: "NV",
-    location: "Thane",
-    service: "Health Checkup",
+    patientName: "Ayesha Khan",
+    initials: "AK",
+    location: "Sanpada",
     rating: 5,
     feedback:
-      "The clinic experience was smooth from consultation to follow-up. Everything was managed professionally and without unnecessary delay.",
+      "I appreciated the personalized care and clear communication. The clinic environment was clean, calm, and welcoming, which made the overall experience comfortable.",
+    service: "Health Checkup",
     featured: false,
   },
   {
     id: 4,
-    patientName: "Rohan Kapoor",
-    initials: "RK",
-    location: "Mumbai",
-    service: "Diagnostic Support",
+    patientName: "Rohan Mehta",
+    initials: "RM",
+    location: "Vashi",
     rating: 5,
     feedback:
-      "My medical reports were explained in very simple language. I finally understood what the reports meant and what I needed to do next.",
+      "The healthcare team carefully understood my concerns and suggested a practical treatment plan. Every step was explained clearly and responsibly.",
+    service: "Diagnostic Support",
     featured: false,
   },
   {
     id: 5,
-    patientName: "Sana Khan",
-    initials: "SK",
-    location: "Pune",
-    service: "Wellness Guidance",
+    patientName: "Neha Patil",
+    initials: "NP",
+    location: "Nerul",
     rating: 5,
     feedback:
-      "The wellness recommendations were realistic and personalized. I did not feel pressured into making difficult lifestyle changes.",
-    featured: true,
+      "The doctors and staff were respectful, organized, and supportive. I felt comfortable asking questions and received helpful answers during the consultation.",
+    service: "Chronic Care",
+    featured: false,
   },
   {
     id: 6,
-    patientName: "Vikram Joshi",
-    initials: "VJ",
-    location: "Navi Mumbai",
-    service: "Chronic Care",
+    patientName: "Arjun Singh",
+    initials: "AS",
+    location: "Kharghar",
     rating: 5,
     feedback:
-      "The regular follow-up and clear health guidance helped me manage my condition with more confidence and consistency.",
+      "The consultation was professional and focused on my individual healthcare needs. The doctor provided clear advice that was easy to understand and follow.",
+    service: "Wellness Guidance",
     featured: false,
   },
 ];
@@ -73,18 +70,18 @@ const testimonials = [
 export const testimonialStats = [
   {
     id: 1,
-    value: "98%",
-    label: "Patient Satisfaction",
+    value: "4.9/5",
+    label: "Average Patient Rating",
   },
   {
     id: 2,
-    value: "4.9/5",
-    label: "Average Rating",
+    value: "98%",
+    label: "Positive Experiences",
   },
   {
     id: 3,
-    value: "500+",
-    label: "Consultations Supported",
+    value: "1,500+",
+    label: "Patients Supported",
   },
   {
     id: 4,
@@ -99,21 +96,21 @@ export const feedbackPrinciples = [
     number: "01",
     title: "We Listen Carefully",
     description:
-      "Patient feedback helps us understand what is working well and where the healthcare experience can improve.",
+      "Every patient concern and suggestion is reviewed with attention and respect.",
   },
   {
     id: 2,
     number: "02",
     title: "We Improve Continuously",
     description:
-      "Suggestions are reviewed to improve consultation quality, communication, comfort, and clinic processes.",
+      "Feedback helps us improve communication, clinic processes, and patient comfort.",
   },
   {
     id: 3,
     number: "03",
-    title: "We Respect Privacy",
+    title: "We Protect Privacy",
     description:
-      "Patient feedback is displayed responsibly without revealing sensitive medical or personal information.",
+      "Patient feedback is handled responsibly while respecting confidentiality.",
   },
 ];
 
