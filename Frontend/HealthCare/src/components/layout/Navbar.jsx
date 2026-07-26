@@ -5,6 +5,7 @@ const navigationLinks = [
   { label: "About", path: "/about" },
   { label: "Services", path: "/services" },
   { label: "Doctors", path: "/doctors" },
+  { label: "Testimonials", path: "/testimonials" },
   { label: "Gallery", path: "/gallery" },
   { label: "Blog", path: "/blog" },
   { label: "Contact", path: "/contact" },
