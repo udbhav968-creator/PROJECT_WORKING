@@ -1,26 +1,40 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const navigationLinks = [
+  { label: "Home", path: "/" },
+  { label: "About", path: "/about" },
+  { label: "Doctors", path: "/doctors" },
+  { label: "Services", path: "/services" },
+  { label: "Testimonials", path: "/testimonials" },
+  { label: "Appointment", path: "/appointment" },
+  { label: "Contact", path: "/contact" },
+];
+
+function Navbar() {
   return (
-    <nav className="navbar">
+    <header className="navbar">
       <div className="navbar-container">
-        {/* Logo */}
-        <Link to="/" className="navbar-logo">
+        <NavLink to="/" className="navbar-logo">
           HealthCare
-        </Link>
+        </NavLink>
 
-        {/* Navigation Links */}
-        <div className="navbar-links">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/doctors">Doctors</Link>
-          <Link to="/services">Services</Link>
-          <Link to="/appointment">Appointment</Link>
-          <Link to="/contact">Contact</Link>
-        </div>
+        <nav className="navbar-links" aria-label="Primary navigation">
+          {navigationLinks.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              end={link.path === "/"}
+              className={({ isActive }) =>
+                isActive ? "navbar-link active" : "navbar-link"
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
       </div>
-    </nav>
+    </header>
   );
-};
+}
 
 export default Navbar;

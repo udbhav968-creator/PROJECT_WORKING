@@ -1,18 +1,18 @@
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "./Navbar.jsx";
+import Footer from "./Footer.jsx";
 
-const PageLayout = ({ children }) => {
+function PageLayout({ children }) {
   return (
-    <>
+    <div className="app-layout">
       <Navbar />
 
-      <main className="page-content">
+      <div className="page-content">
         {children}
-      </main>
+      </div>
 
       <Footer />
-    </>
+    </div>
   );
-};
+}
 
 export default PageLayout;
