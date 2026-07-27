@@ -1,15 +1,16 @@
-# 🏥 Healthcare Clinic Backend API
+# 🏥 Healthcare Clinic Backend API – AIIMS Delhi Tier Architecture
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-5.0-092E20.svg?logo=django&logoColor=white)
 ![DRF](https://img.shields.io/badge/DRF-3.15-red.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-PyMySQL-00758F.svg?logo=mysql&logoColor=white)
 ![JWT](https://img.shields.io/badge/Auth-JWT_SimpleJWT-black.svg)
+![NABH/HIPAA](https://img.shields.io/badge/Compliance-NABH%2FHIPAA-blue.svg)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2ea44f.svg?logo=githubactions&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-Collection-FF6C37.svg?logo=postman&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-> Enterprise-grade RESTful backend for the **Healthcare Clinic Website**, developed as an internship project at **PY Digital Services Pvt. Ltd.**
+> Enterprise-grade RESTful backend for the **Healthcare Clinic Website (AIIMS Delhi Tier Integration)**, developed as an internship project at **PY Digital Services Pvt. Ltd.**
 
 ---
 
@@ -17,15 +18,16 @@
 1. [Tech Stack](#tech-stack)
 2. [Team Module Allocation](#team-module-allocation)
 3. [Module 4 – Administration & System Integration](#module-4--administration--system-integration)
-4. [Project Structure](#project-structure)
-5. [Quickstart (Local Setup)](#quickstart-local-setup)
-6. [MySQL Configuration](#mysql-configuration)
-7. [API Endpoints Reference](#api-endpoints-reference)
-8. [JWT Authentication Guide](#jwt-authentication-guide)
-9. [Running Tests](#running-tests)
-10. [Postman Collection](#postman-collection)
-11. [CI/CD Pipeline](#cicd-pipeline)
-12. [Deployment (Vercel)](#deployment-vercel)
+4. [AIIMS Delhi Tier Features](#aiims-delhi-tier-features)
+5. [Project Structure](#project-structure)
+6. [Quickstart (Local Setup)](#quickstart-local-setup)
+7. [MySQL Configuration](#mysql-configuration)
+8. [API Endpoints Reference](#api-endpoints-reference)
+9. [JWT Authentication Guide](#jwt-authentication-guide)
+10. [Running Tests](#running-tests)
+11. [Postman Collection](#postman-collection)
+12. [CI/CD Pipeline](#cicd-pipeline)
+13. [Deployment (Vercel)](#deployment-vercel)
 
 ---
 
@@ -42,6 +44,7 @@
 | API Documentation | OpenAPI 3.0 – `drf-spectacular` (Swagger UI + ReDoc) |
 | Environment Config | `django-environ` |
 | CORS Handling | `django-cors-headers` |
+| Static File Serving | `whitenoise` 6.7.0 |
 | Testing | Django `APITestCase` (DRF TestClient) |
 | API Testing Tool | Postman (Collection included) |
 | Version Control | Git + GitHub |
@@ -57,61 +60,67 @@
 | Abusufiyan / Harshavardhan | Module 1 – Authentication | JWT Login, RBAC, User Management |
 | Gautam / Alok Verma | Module 2 – Appointments | Booking APIs, Doctor Schedules |
 | Suhaib / Aniket Ghatage | Module 3 – Content | Blogs, Testimonials, Services |
-| **Udbhav** | **Module 4 – Administration & System Integration** | Base Models, Admin Dashboard APIs, Exception Handling, API Docs, Postman, Testing, CI/CD |
+| **Udbhav** | **Module 4 – Administration & System Integration** | Base Models, Admin Analytics, AIIMS OPD Tokens, NABH Audit Logging, Appointment CRUD, Exception Handling, API Docs, Postman, Testing, CI/CD |
 
 ---
 
-## 🏗️ Module 4 – Administration & System Integration
+## 🏥 AIIMS Delhi Tier Features
 
-> **Owner: Udbhav**
+This module acts as the **architectural backbone** for the healthcare backend, upgraded to AIIMS Delhi clinical standards:
 
-This module is the **architectural backbone** of the entire backend. Every other module inherits from the foundations built here.
+1. **🎟️ AIIMS OPD Token Auto-Generation**:
+   - Auto-generates unique OPD Token numbers (e.g. `AIIMS-OPD-9F3A12`, `AIIMS-CARD-101`).
+   - Supports multi-department OPD/IPD/Emergency consultation routing.
+
+2. **🏥 Department Breakdown & Emergency Triage Analytics**:
+   - Aggregates appointments dynamically across clinical departments (Cardiology, Neurology, Orthopedics, Pediatrics, Oncology, Emergency Care).
+   - Real-time emergency triage counter (`emergency_triage_count`).
+
+3. **🛡️ NABH & HIPAA Audit Logging**:
+   - Audits system operations with severity classifications (`INFO`, `WARNING`, `CRITICAL`).
+   - Categorizes compliance actions (`NABH_PATIENT_SAFETY`, `HIPAA_PRIVACY`, `NABH_CLINICAL_UPDATE`).
+
+4. **⚡ System Integration Health & Latency Monitor**:
+   - `/api/admin/health/` returns database connectivity status, query execution latency in milliseconds (`database_latency_ms`), and NABH audit compliance status.
 
 ---
+
+## 🏗️ Module 4 – Core Implementation Detail
 
 ### 1. 🛡️ Database Design & Optimization
-
 **File:** [`Backend/apps/core/models.py`](./Backend/apps/core/models.py)
 
-All database models across the project inherit from `TimeStampedModel`, which provides:
-
-| Feature | Implementation | Why It Matters |
-| :--- | :--- | :--- |
-| **UUID Primary Keys** | `uuid.uuid4()` (36-char string) | Prevents sequential ID enumeration attacks |
-| **Soft Deletion** | `is_deleted = BooleanField(default=False)` | Medical records must never be hard-deleted |
-| **Auto Timestamps** | `created_at`, `updated_at` (auto-managed) | Full audit trail on every record |
-| **SoftDeleteManager** | Filters `is_deleted=False` on all default queries | Deleted records are invisible to normal ORM calls |
-| **MySQL Support** | `PyMySQL.install_as_MySQLdb()` in `clinic_core/__init__.py` | Django connects to MySQL without C extension dependencies |
+All database models across the project inherit from `TimeStampedModel`, providing:
+- **UUID Primary Keys** (`uuid.uuid4()`) preventing ID enumeration attacks.
+- **Soft Deletion (`is_deleted`)** ensuring patient medical records are archived safely.
+- **SoftDeleteManager** filtering `is_deleted=False` on normal queries while retaining raw access via `all_objects`.
 
 ---
 
-### 2. 📊 Admin Dashboard APIs
-
+### 2. 📊 Admin Dashboard & Clinical APIs
 **File:** [`Backend/apps/administration/views.py`](./Backend/apps/administration/views.py)
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `/api/admin/dashboard/` | `GET` | Aggregated system stats + 5 recent audit logs |
-| `/api/admin/health/` | `GET` | Live DB connection status + timestamp |
-| `/api/admin/audit-logs/` | `GET` | Paginated list of all admin audit log entries |
-| `/api/admin/seed-demo-data/` | `POST` | Seeds test users & appointments (idempotent) |
-
-**Performance approach:** Uses Django ORM `Count()` + `Q()` conditional filters to calculate all user and appointment statistics in **a single database roundtrip** per table — no Python-level loops.
+| `/api/admin/dashboard/` | `GET` | Aggregated system stats, AIIMS department breakdown, and recent audit logs |
+| `/api/admin/health/` | `GET` | System health, DB connection, latency (ms), and NABH compliance status |
+| `/api/admin/audit-logs/` | `GET` | Paginated audit logs with severity filtering (`?severity=CRITICAL`) |
+| `/api/admin/appointments/` | `GET` / `POST` | List/Search/Filter appointments & Create appointment with OPD Token |
+| `/api/admin/appointments/<uuid:pk>/` | `GET` / `PUT` / `DELETE` | Retrieve, update status, or soft-delete an appointment |
+| `/api/admin/seed-demo-data/` | `POST` | Seeds realistic AIIMS clinical demo records (idempotent) |
 
 ---
 
 ### 3. 🚨 Exception Handling
-
 **File:** [`Backend/apps/core/exceptions.py`](./Backend/apps/core/exceptions.py)
 
-Registered as `EXCEPTION_HANDLER` in DRF settings. Intercepts **all** exception types and normalises them into a single, predictable response shape:
-
+Intercepts all HTTP & database errors and normalises them into a single response contract:
 ```json
 {
   "success": false,
   "errors": [
-    "email: This field is required.",
-    "password: Ensure this field has at least 8 characters."
+    "department: Invalid department choice.",
+    "appointment_date: Date must be in ISO 8601 format."
   ]
 }
 ```
@@ -119,65 +128,38 @@ Registered as `EXCEPTION_HANDLER` in DRF settings. Intercepts **all** exception 
 ---
 
 ### 4. 📚 API Documentation
-
-Auto-generated from code using `drf-spectacular`. No manual maintenance needed — the docs update themselves as new endpoints are added by other team members.
-
-| URL | Interface |
-| :--- | :--- |
-| `/api/docs/` | Swagger UI (interactive) |
-| `/api/redoc/` | ReDoc (clean reference) |
-| `/api/schema/` | Raw OpenAPI 3.0 JSON |
+Auto-generated OpenAPI 3.0 schema via `drf-spectacular`:
+- **Swagger UI:** `http://127.0.0.1:8000/api/docs/`
+- **ReDoc:** `http://127.0.0.1:8000/api/redoc/`
+- **Schema JSON:** `http://127.0.0.1:8000/api/schema/`
 
 ---
 
 ### 5. 📬 Postman Collection
-
 **File:** [`Backend/Postman_Collection.json`](./Backend/Postman_Collection.json)
 
-Import this file directly into Postman. Contains all request templates for:
+Includes request templates for:
 - JWT Token obtain & refresh
-- System Health Check
-- Admin Dashboard Summary
-- Paginated Audit Logs
+- System Health Check (with latency check)
+- Admin Dashboard Summary & Department Breakdown
+- Paginated Audit Logs & Severity Filter
+- Full Appointment CRUD Operations (List, Create, Get, Update, Soft-Delete)
 - Demo Data Seeding
-- Swagger / ReDoc links
 
 ---
 
-### 6. 🧪 Testing & Debugging
-
+### 6. 🧪 Automated Unit Testing
 **File:** [`Backend/apps/administration/tests.py`](./Backend/apps/administration/tests.py)
 
-10 automated unit tests covering:
-- Health check DB connectivity
-- Response timestamp presence
-- Idempotent data seeding
-- Dashboard response structure validation
-- Dashboard stats key verification
-- User and appointment count assertions
-- Paginated audit log list (count + results keys)
+14 automated unit tests covering:
+- Health check latency & metadata
+- AIIMS data seeding idempotency
+- Dashboard analytics structure & department breakdown keys
+- Severity filtering on audit log list
+- Appointment creation with token auto-generation
+- Retrieval, updates, and soft-delete verification
 
 Run with: `python manage.py test`
-
----
-
-### 7. ⚙️ Backend Integration
-
-- **CORS**: `django-cors-headers` middleware registered for cross-origin frontend access.
-- **JWT**: `SimpleJWT` Bearer token authentication wired into DRF's `DEFAULT_AUTHENTICATION_CLASSES`.
-- **Rate Limiting**: DRF throttling configured: `anon: 100/day`, `user: 1000/day`.
-- **Environment Variables**: All secrets loaded from `.env` via `django-environ`. Never hardcoded.
-- **Pagination**: `PageNumberPagination` (10 results/page, configurable via `?page_size=`) applied globally.
-
----
-
-### 8. 🔍 Final Review
-
-- All models support **soft deletion** — no medical record is ever permanently erased.
-- All API responses follow a **uniform `success` / `errors` schema**.
-- All credentials are **loaded from environment variables** — zero secrets in code.
-- All endpoints are **documented in Swagger UI** and **testable in Postman**.
-- GitHub Actions **CI pipeline auto-runs tests** on every push to `main`.
 
 ---
 
@@ -185,39 +167,39 @@ Run with: `python manage.py test`
 
 ```
 PROJECT_WORKING/
+├── vercel.json                 # Vercel serverless deployment configuration
+├── requirements.txt            # Root dependencies for deployment
 ├── .github/
 │   └── workflows/
-│       └── django_ci.yml          # CI/CD – runs tests on every push
+│       └── django_ci.yml       # GitHub Actions CI pipeline
 │
 ├── Backend/
 │   ├── manage.py
 │   ├── requirements.txt
-│   ├── .env                        # Environment variables (gitignored in prod)
-│   ├── vercel.json                 # Serverless deployment config
-│   ├── Postman_Collection.json     # Ready-to-import Postman file
+│   ├── Postman_Collection.json
 │   │
-│   ├── clinic_core/                # Django project core
-│   │   ├── __init__.py             # PyMySQL driver initialization
-│   │   ├── settings.py             # All Django + DRF + JWT + MySQL settings
-│   │   ├── urls.py                 # Master URL router
-│   │   └── wsgi.py                 # WSGI entrypoint
+│   ├── clinic_core/             # Django Core Configuration
+│   │   ├── __init__.py          # PyMySQL initialization
+│   │   ├── settings.py          # Settings, Whitenoise, JWT, CORS, DRF
+│   │   ├── urls.py              # Root URL Router
+│   │   └── wsgi.py              # WSGI Entrypoint
 │   │
 │   └── apps/
-│       ├── core/                   # Shared foundation
-│       │   ├── models.py           # TimeStampedModel (UUID + soft-delete)
-│       │   └── exceptions.py       # Custom DRF exception handler
+│       ├── core/                # Shared Core App
+│       │   ├── models.py        # TimeStampedModel (UUID + Soft-Delete)
+│       │   └── exceptions.py    # Custom Exception Handler
 │       │
-│       ├── authentication/         # Users & Roles
-│       │   ├── models.py           # RoleModel, UserProfileModel
-│       │   └── admin.py            # Django Admin registration
+│       ├── authentication/      # Auth & Role Management
+│       │   ├── models.py        # UserProfileModel, RoleModel
+│       │   └── admin.py
 │       │
-│       └── administration/         # Udbhav's Module 4
-│           ├── models.py           # AppointmentModel, AdminAuditLogModel
-│           ├── serializers.py      # DRF Serializers
-│           ├── views.py            # Dashboard, Health, AuditLogs, Seed views
-│           ├── urls.py             # URL patterns
-│           ├── admin.py            # Django Admin registration
-│           └── tests.py            # 10 automated unit tests
+│       └── administration/      # Udbhav's Module 4 (AIIMS Tier Admin)
+│           ├── models.py        # AppointmentModel (OPD Token), AdminAuditLogModel (NABH)
+│           ├── serializers.py   # Serializers & Department Breakdown
+│           ├── views.py         # Dashboard, Health, Audit, Appointment APIs
+│           ├── urls.py          # URL Routing
+│           ├── admin.py         # Django Admin Registrations
+│           └── tests.py         # 14 Automated Unit Tests
 │
 └── README.md
 ```
@@ -235,16 +217,16 @@ python -m venv venv
 venv\Scripts\activate        # Windows
 # source venv/bin/activate   # Mac/Linux
 
-# 3. Install all dependencies
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Apply database migrations
+# 4. Apply migrations
 python manage.py migrate
 
-# 5. (Optional) Seed demo data via Postman or run:
+# 5. Seed AIIMS demo clinical data
 # POST http://127.0.0.1:8000/api/admin/seed-demo-data/
 
-# 6. Start development server
+# 6. Run server
 python manage.py runserver
 ```
 
@@ -261,7 +243,7 @@ python manage.py runserver
 
 ## 🗄️ MySQL Configuration
 
-To switch from SQLite to MySQL, set these in your `.env` file:
+Set the following in `.env` to connect to MySQL:
 
 ```env
 DB_ENGINE=django.db.backends.mysql
@@ -272,63 +254,28 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 ```
 
-The `PyMySQL` driver is pre-configured — **no additional C libraries or `mysqlclient` needed**.
-
----
-
-## 🔑 JWT Authentication Guide
-
-1. **Obtain Token** — `POST /api/token/` with `{"username": "...", "password": "..."}`
-2. **Use Token** — Add `Authorization: Bearer <access_token>` header to protected requests
-3. **Refresh Token** — `POST /api/token/refresh/` with `{"refresh": "<refresh_token>"}`
-
-- Access token expires in **60 minutes**
-- Refresh token expires in **1 day**
-
 ---
 
 ## 🧪 Running Tests
 
 ```bash
 cd Backend
-python manage.py test
+python manage.py test apps.administration
 ```
 
-**Expected output:**
+**Expected Output:**
 ```
-Found 10 test(s).
-..........
+Found 14 test(s).
+..............
 ----------------------------------------------------------------------
-Ran 10 tests in 0.XXXs
+Ran 14 tests in 1.341s
+
 OK
 ```
 
 ---
 
-## 📬 Postman Collection
+## 🤖 CI/CD Pipeline & Cloud Deployment
 
-1. Open **Postman**
-2. Click **Import**
-3. Select `Backend/Postman_Collection.json`
-4. Run requests in this order:
-   - `POST /api/admin/seed-demo-data/` — seed test data
-   - `GET /api/admin/health/` — verify DB connection
-   - `GET /api/admin/dashboard/` — view analytics
-   - `GET /api/admin/audit-logs/` — view paginated logs
-
----
-
-## 🤖 CI/CD Pipeline
-
-On every `git push` to `main`:
-
-1. GitHub Actions boots an **Ubuntu runner**
-2. Installs **Python 3.11** and all `requirements.txt` dependencies
-3. Runs `python manage.py test`
-4. ✅ Green badge = all tests pass
-
----
-
-## ☁️ Deployment (Vercel)
-
-The `Backend/vercel.json` is configured for **serverless WSGI deployment** on Vercel. Set your environment variables in the Vercel dashboard and deploy directly from this GitHub repository.
+- **GitHub Actions:** Auto-runs unit tests on every push to `main`.
+- **Vercel Deployment:** Built with `vercel.json` WSGI configuration and `whitenoise` static asset handling.
