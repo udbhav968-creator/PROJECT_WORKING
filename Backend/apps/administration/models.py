@@ -4,7 +4,8 @@ from apps.core.models import TimeStampedModel
 
 class AppointmentModel(TimeStampedModel):
     """
-    AIIMS Delhi Tier Clinical Appointment & OPD Token Model
+    Pure Health Clinic Tier Clinical Appointment & OPD Token Model
+    Inspired by Divit Pure Health Clinic (https://divitpurehealthclinic.com/)
     """
     STATUS_CHOICES = [
         ('scheduled', 'Scheduled'),
@@ -15,33 +16,34 @@ class AppointmentModel(TimeStampedModel):
     ]
 
     DEPARTMENT_CHOICES = [
-        ('Cardiology', 'Cardiology (CTVS)'),
-        ('Neurology', 'Neurology & Neurosurgery'),
-        ('Orthopedics', 'Orthopedics & Trauma'),
-        ('Pediatrics', 'Pediatrics & Neonatology'),
-        ('General_Medicine', 'General Medicine'),
-        ('Emergency_Care', 'Emergency & Trauma Care'),
-        ('Oncology', 'Medical & Surgical Oncology'),
+        ('General_Consultation', 'General Consultation & Preventive Care'),
+        ('Diagnostic_Support', 'Diagnostic & Laboratory Support'),
+        ('Chronic_Care', 'Chronic Disease Management (Diabetes/Hypertension)'),
+        ('Wellness_Guidance', 'Wellness & Lifestyle Guidance'),
+        ('Cardiology', 'Cardiology & Cardiovascular Care'),
+        ('Neurology', 'Neurology & Nerve Health'),
+        ('Orthopedics', 'Orthopedics & Joint Care'),
+        ('Emergency_Care', 'Emergency & Urgent Triage'),
     ]
 
     PRIORITY_CHOICES = [
-        ('routine', 'Routine OPD'),
+        ('routine', 'Routine OPD Consultation'),
         ('urgent', 'Urgent Referral'),
-        ('emergency', 'Critical / Emergency Triage'),
+        ('emergency', 'Emergency Triage'),
     ]
 
     CONSULTATION_TYPE_CHOICES = [
         ('OPD', 'Outpatient Department (OPD)'),
         ('IPD', 'Inpatient Department (IPD)'),
-        ('Emergency', 'Emergency Care Triage'),
-        ('Teleconsultation', 'AIIMS Tele-Medicine'),
+        ('Emergency', 'Emergency Triage'),
+        ('Teleconsultation', 'Tele-Health Consultation'),
     ]
 
     patient_name = models.CharField(max_length=255)
     patient_phone = models.CharField(max_length=50)
     patient_email = models.EmailField(blank=True, null=True)
     doctor_name = models.CharField(max_length=255)
-    department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES, default='General_Medicine', db_index=True)
+    department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES, default='General_Consultation', db_index=True)
     priority = models.CharField(max_length=50, choices=PRIORITY_CHOICES, default='routine', db_index=True)
     consultation_type = models.CharField(max_length=50, choices=CONSULTATION_TYPE_CHOICES, default='OPD')
     token_number = models.CharField(max_length=100, blank=True, null=True, db_index=True)
@@ -53,7 +55,7 @@ class AppointmentModel(TimeStampedModel):
         db_table = 'appointments'
 
     def __str__(self):
-        return f"[{self.token_number or 'OPD'}] {self.patient_name} - {self.department} ({self.status})"
+        return f"[{self.token_number or 'OPD'}] {self.patient_name} - {self.get_department_display()} ({self.status})"
 
 
 class AdminAuditLogModel(TimeStampedModel):

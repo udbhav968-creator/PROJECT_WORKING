@@ -30,7 +30,7 @@ class StandardPagination(PageNumberPagination):
 
 class SystemHealthView(APIView):
     """
-    **Enterprise Healthcare System Integration Health Monitor**
+    **Pure Health Clinic Integration & System Health Monitor**
 
     Validates DB connections, measures query latency, framework version,
     and returns NABH / HIPAA compliance health metrics.
@@ -51,7 +51,7 @@ class SystemHealthView(APIView):
         return Response(
             {
                 "success": True,
-                "institute": "Healthcare Clinic Integration Core",
+                "institute": "Pure Health Clinic Integration Core",
                 "status": "healthy" if db_ok else "degraded",
                 "database_connected": db_ok,
                 "database_latency_ms": latency_ms,
@@ -65,7 +65,7 @@ class SystemHealthView(APIView):
 
 class AdminDashboardView(APIView):
     """
-    **Enterprise Admin Dashboard Analytics** (Udbhav – Module 4)
+    **Pure Health Clinic Dashboard & Clinical Analytics** (Udbhav – Module 4)
 
     High-performance aggregation engine returning OPD statistics,
     Emergency Triage metrics, Department Breakdown, and Audit Trail summaries.
@@ -101,18 +101,18 @@ class AdminDashboardView(APIView):
 
         client_ip = request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@healthcare-clinic.com",
+            admin_email="admin@purehealthclinic.com",
             action="VIEW_ADMIN_DASHBOARD",
             resource="CLINICAL_ANALYTICS",
             severity="INFO",
             compliance_category="NABH_PATIENT_SAFETY",
             ip_address=client_ip,
-            details="Accessed healthcare admin dashboard analytics and OPD summary",
+            details="Accessed Pure Health Clinic admin dashboard analytics and OPD summary",
         )
 
         payload = {
             "success": True,
-            "institute": "Healthcare Clinic Enterprise Core",
+            "institute": "Pure Health Clinic Core",
             "stats": {
                 "total_users": user_stats["total_users"] or 0,
                 "active_users": user_stats["active_users"] or 0,
@@ -160,10 +160,10 @@ class AuditLogListView(APIView):
 
 class AppointmentListCreateView(ListCreateAPIView):
     """
-    **Clinical OPD Appointment & Triage Management – List & Create** (Udbhav – Module 4)
+    **Pure Health Clinic OPD Appointment & Triage Management – List & Create** (Udbhav – Module 4)
 
-    Supports filtering by department (`?department=Cardiology`), priority (`?priority=emergency`), and search (`?search=Rajesh`).
-    Auto-generates Clinical OPD Token Numbers (`CLINIC-OPD-XXXX`).
+    Supports filtering by department (`?department=General_Consultation`), priority (`?priority=emergency`), and search (`?search=Divit`).
+    Auto-generates Clinical OPD Token Numbers (`PURE-OPD-XXXX`).
     """
 
     serializer_class = AppointmentSerializer
@@ -191,14 +191,14 @@ class AppointmentListCreateView(ListCreateAPIView):
     def perform_create(self, serializer):
         token = serializer.validated_data.get("token_number")
         if not token:
-            token = f"CLINIC-OPD-{uuid.uuid4().hex[:6].upper()}"
+            token = f"PURE-OPD-{uuid.uuid4().hex[:6].upper()}"
 
         appointment = serializer.save(token_number=token)
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
 
         severity = "CRITICAL" if appointment.priority == "emergency" else "INFO"
         AdminAuditLogModel.objects.create(
-            admin_email="admin@healthcare-clinic.com",
+            admin_email="admin@purehealthclinic.com",
             action="CREATE_OPD_APPOINTMENT",
             resource=f"TOKEN_{appointment.token_number}",
             severity=severity,
@@ -210,7 +210,7 @@ class AppointmentListCreateView(ListCreateAPIView):
 
 class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
     """
-    **Clinical OPD Appointment Detail, Status Update & Soft-Delete** (Udbhav – Module 4)
+    **Pure Health Clinic OPD Appointment Detail, Status Update & Soft-Delete** (Udbhav – Module 4)
     """
 
     queryset = AppointmentModel.objects.all()
@@ -221,7 +221,7 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
         appointment = serializer.save()
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@healthcare-clinic.com",
+            admin_email="admin@purehealthclinic.com",
             action="UPDATE_APPOINTMENT",
             resource=f"TOKEN_{appointment.token_number}",
             severity="INFO",
@@ -234,7 +234,7 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
         instance.delete()
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@healthcare-clinic.com",
+            admin_email="admin@purehealthclinic.com",
             action="DELETE_APPOINTMENT",
             resource=f"TOKEN_{instance.token_number}",
             severity="WARNING",
@@ -246,7 +246,7 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
 
 class SeedDemoDataView(APIView):
     """
-    **Seed Healthcare Clinic Demo Data** – for testing & Postman verification.
+    **Seed Pure Health Clinic Clinical Demo Data** – based on Divit Pure Health Clinic.
     """
 
     def post(self, request):
@@ -254,53 +254,53 @@ class SeedDemoDataView(APIView):
 
         if UserProfileModel.objects.count() == 0:
             UserProfileModel.objects.create(
-                email="admin@healthcare-clinic.com",
-                full_name="Clinic Admin",
+                email="admin@purehealthclinic.com",
+                full_name="Dr. Divit Shah (Medical Director)",
                 is_active=True,
             )
-            created.append("Clinic Admin user")
+            created.append("Medical Director user")
 
         if AppointmentModel.objects.count() == 0:
             AppointmentModel.objects.create(
                 patient_name="Rajesh Sharma",
                 patient_phone="+91 9811122233",
                 patient_email="rajesh.sharma@example.com",
-                doctor_name="Dr. Smith",
-                department="Cardiology",
+                doctor_name="Dr. Divit Shah",
+                department="General_Consultation",
                 priority="urgent",
                 consultation_type="OPD",
-                token_number="CLINIC-CARD-101",
+                token_number="PURE-GEN-101",
                 appointment_date=timezone.now(),
                 status="scheduled",
-                notes="Cardiovascular risk assessment & ECG examination",
+                notes="Personalized Health Checkup & Comprehensive Assessment",
             )
             AppointmentModel.objects.create(
                 patient_name="Priya Verma",
                 patient_phone="+91 9877766655",
                 patient_email="priya.v@example.com",
-                doctor_name="Dr. Mehta",
-                department="Neurology",
+                doctor_name="Dr. Rahul Mehta",
+                department="Cardiology",
                 priority="emergency",
                 consultation_type="Emergency",
-                token_number="CLINIC-NEURO-EMG-909",
+                token_number="PURE-CARD-EMG-909",
                 appointment_date=timezone.now(),
                 status="in_consultation",
-                notes="Acute triage evaluation",
+                notes="Acute cardiovascular triage evaluation",
             )
             AppointmentModel.objects.create(
                 patient_name="Amitabh Gupta",
                 patient_phone="+91 9123456780",
                 patient_email="agupta@example.com",
-                doctor_name="Dr. Sharma",
-                department="Orthopedics",
+                doctor_name="Dr. Anjali Sharma",
+                department="Chronic_Care",
                 priority="routine",
                 consultation_type="OPD",
-                token_number="CLINIC-ORTHO-304",
+                token_number="PURE-CHRONIC-304",
                 appointment_date=timezone.now(),
                 status="completed",
-                notes="Post-operative follow-up consultation",
+                notes="Diabetes & Hypertension routine management follow-up",
             )
-            created.append("3 Clinical Records")
+            created.append("3 Pure Health Clinic OPD Records")
 
         msg = f"Seeded: {', '.join(created)}" if created else "Demo data already exists."
         return Response(

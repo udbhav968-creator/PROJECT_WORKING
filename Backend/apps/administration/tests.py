@@ -83,14 +83,14 @@ class AppointmentManagementTests(APITestCase):
             patient_name="Rajesh Sharma",
             patient_phone="+91 9811122233",
             patient_email="rajesh@example.com",
-            doctor_name="Dr. Smith",
-            department="Cardiology",
+            doctor_name="Dr. Divit Shah",
+            department="General_Consultation",
             priority="urgent",
             consultation_type="OPD",
-            token_number="CLINIC-CARD-101",
+            token_number="PURE-GEN-101",
             appointment_date=timezone.now(),
             status="scheduled",
-            notes="Initial ECG examination",
+            notes="Initial consultation",
         )
 
     def test_list_appointments(self):
@@ -113,7 +113,7 @@ class AppointmentManagementTests(APITestCase):
         }
         response = self.client.post(reverse("appointment-list-create"), payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertIn("CLINIC-OPD-", response.data["token_number"])
+        self.assertIn("PURE-OPD-", response.data["token_number"])
         self.assertEqual(AppointmentModel.objects.count(), 2)
         self.assertTrue(AdminAuditLogModel.objects.filter(severity="CRITICAL").exists())
 
@@ -121,7 +121,7 @@ class AppointmentManagementTests(APITestCase):
         url = reverse("appointment-detail", kwargs={"pk": self.appointment.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["token_number"], "CLINIC-CARD-101")
+        self.assertEqual(response.data["token_number"], "PURE-GEN-101")
 
     def test_update_appointment(self):
         url = reverse("appointment-detail", kwargs={"pk": self.appointment.id})
@@ -129,14 +129,14 @@ class AppointmentManagementTests(APITestCase):
             "patient_name": "Rajesh Sharma",
             "patient_phone": "+91 9811122233",
             "patient_email": "rajesh@example.com",
-            "doctor_name": "Dr. Smith",
-            "department": "Cardiology",
+            "doctor_name": "Dr. Divit Shah",
+            "department": "General_Consultation",
             "priority": "urgent",
             "consultation_type": "OPD",
-            "token_number": "CLINIC-CARD-101",
+            "token_number": "PURE-GEN-101",
             "appointment_date": timezone.now().isoformat(),
             "status": "completed",
-            "notes": "ECG completed successfully",
+            "notes": "Consultation completed successfully",
         }
         response = self.client.put(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

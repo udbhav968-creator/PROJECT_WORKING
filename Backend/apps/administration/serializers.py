@@ -38,7 +38,7 @@ class SystemStatsSerializer(serializers.Serializer):
 
 class AdminDashboardResponseSerializer(serializers.Serializer):
     success = serializers.BooleanField(default=True)
-    institute = serializers.CharField(default="Healthcare Clinic Enterprise Core")
+    institute = serializers.CharField(default="Pure Health Clinic Core")
     stats = SystemStatsSerializer()
     department_breakdown = DepartmentStatsSerializer(many=True)
     recent_logs = AdminAuditLogSerializer(many=True)
