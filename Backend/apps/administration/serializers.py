@@ -11,23 +11,29 @@ class AdminAuditLogSerializer(serializers.ModelSerializer):
 class DoctorRosterSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorRosterModel
-        fields = ["id", "doctor_name", "department", "shift_hours", "duty_status", "room_number", "updated_at"]
+        fields = ["id", "doctor_name", "department", "consultation_fee_inr", "shift_hours", "duty_status", "room_number", "max_daily_patients", "current_queue_count", "updated_at"]
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
     whatsapp_confirmation_text = serializers.SerializerMethodField()
+    sms_notification_payload = serializers.SerializerMethodField()
 
     class Meta:
         model = AppointmentModel
         fields = [
             "id", "patient_name", "patient_phone", "patient_email",
             "doctor_name", "department", "priority", "consultation_type",
-            "token_number", "video_room_url", "appointment_date", "status", "notes",
-            "whatsapp_confirmation_text", "created_at", "updated_at",
+            "consultation_fee_inr", "token_number", "video_room_url", "emergency_escalation_code",
+            "appointment_date", "status", "notes",
+            "whatsapp_confirmation_text", "sms_notification_payload",
+            "created_at", "updated_at",
         ]
 
     def get_whatsapp_confirmation_text(self, obj):
         return obj.generate_whatsapp_confirmation_message()
+
+    def get_sms_notification_payload(self, obj):
+        return obj.generate_sms_notification_payload()
 
 
 class DepartmentStatsSerializer(serializers.Serializer):
@@ -45,6 +51,7 @@ class SystemStatsSerializer(serializers.Serializer):
     cancelled_appointments = serializers.IntegerField()
     emergency_triage_count = serializers.IntegerField()
     on_duty_doctors_count = serializers.IntegerField()
+    total_estimated_revenue_inr = serializers.DecimalField(max_digits=12, decimal_places=2)
     total_audit_logs = serializers.IntegerField()
 
 

@@ -53,7 +53,7 @@ class AdminDashboardTests(APITestCase):
             "total_users", "active_users", "total_appointments",
             "scheduled_appointments", "in_consultation_appointments",
             "completed_appointments", "cancelled_appointments",
-            "emergency_triage_count", "on_duty_doctors_count", "total_audit_logs",
+            "emergency_triage_count", "on_duty_doctors_count", "total_estimated_revenue_inr", "total_audit_logs",
         ]:
             self.assertIn(key, stats)
 
@@ -83,6 +83,7 @@ class AppointmentManagementTests(APITestCase):
             department="General_Consultation",
             priority="urgent",
             consultation_type="OPD",
+            consultation_fee_inr=600.00,
             token_number="PURE-GEN-101",
             appointment_date=timezone.now(),
             status="scheduled",
@@ -103,6 +104,7 @@ class AppointmentManagementTests(APITestCase):
             "department": "Cardiology",
             "priority": "emergency",
             "consultation_type": "Teleconsultation",
+            "consultation_fee_inr": 1000.00,
             "appointment_date": timezone.now().isoformat(),
             "status": "scheduled",
             "notes": "Emergency telehealth consultation",
@@ -110,8 +112,10 @@ class AppointmentManagementTests(APITestCase):
         response = self.client.post(reverse("appointment-list-create"), payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("PURE-OPD-", response.data["token_number"])
+        self.assertIn("EMG-ALERT-", response.data["emergency_escalation_code"])
         self.assertIn("https://meet.jit.si/purehealth-opd-", response.data["video_room_url"])
         self.assertIn("PURE HEALTH CLINIC OPD CONFIRMATION", response.data["whatsapp_confirmation_text"])
+        self.assertIn("recipient_phone", response.data["sms_notification_payload"])
 
     def test_printable_opd_slip_endpoint(self):
         url = reverse("appointment-pdf-slip", kwargs={"pk": self.appointment.id})
@@ -136,6 +140,7 @@ class AppointmentManagementTests(APITestCase):
             "department": "General_Consultation",
             "priority": "urgent",
             "consultation_type": "OPD",
+            "consultation_fee_inr": 600.00,
             "token_number": "PURE-GEN-101",
             "appointment_date": timezone.now().isoformat(),
             "status": "completed",
