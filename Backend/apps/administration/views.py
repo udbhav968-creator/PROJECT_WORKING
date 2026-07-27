@@ -3,6 +3,7 @@ from django.db import connection
 from django.db.models import Count, Q
 from django.utils import timezone
 from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -13,6 +14,7 @@ from apps.administration.models import AppointmentModel, AdminAuditLogModel
 from apps.administration.serializers import (
     AdminDashboardResponseSerializer,
     AdminAuditLogSerializer,
+    AppointmentSerializer,
 )
 
 logger = logging.getLogger("clinic_core")
@@ -126,6 +128,78 @@ class AuditLogListView(APIView):
         page = paginator.paginate_queryset(logs, request)
         serializer = AdminAuditLogSerializer(page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+
+class AppointmentListCreateView(ListCreateAPIView):
+    """
+    **Appointment Management – List & Create** (Udbhav – Module 4)
+
+    Supports filtering by status (`?status=scheduled`) and searching by patient/doctor name (`?search=Smith`).
+    Automatically logs `CREATE_APPOINTMENT` audit logs on creation.
+    """
+
+    serializer_class = AppointmentSerializer
+    pagination_class = StandardPagination
+
+    def get_queryset(self):
+        queryset = AppointmentModel.objects.order_by("-created_at")
+        status_param = self.request.query_params.get("status")
+        search_param = self.request.query_params.get("search")
+
+        if status_param:
+            queryset = queryset.filter(status=status_param)
+        if search_param:
+            queryset = queryset.filter(
+                Q(patient_name__icontains=search_param) | Q(doctor_name__icontains=search_param)
+            )
+        return queryset
+
+    def perform_create(self, serializer):
+        appointment = serializer.save()
+        client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
+        AdminAuditLogModel.objects.create(
+            admin_email="admin@py-digital.com",
+            action="CREATE_APPOINTMENT",
+            resource=f"APPOINTMENT_{appointment.id}",
+            ip_address=client_ip,
+            details=f"Created appointment for {appointment.patient_name} with {appointment.doctor_name}",
+        )
+
+
+class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
+    """
+    **Appointment Management – Detail, Update & Soft-Delete** (Udbhav – Module 4)
+
+    Allows retrieve, update, and soft-delete of individual appointments.
+    Automatically logs audit trail on update and delete.
+    """
+
+    queryset = AppointmentModel.objects.all()
+    serializer_class = AppointmentSerializer
+    lookup_field = "pk"
+
+    def perform_update(self, serializer):
+        appointment = serializer.save()
+        client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
+        AdminAuditLogModel.objects.create(
+            admin_email="admin@py-digital.com",
+            action="UPDATE_APPOINTMENT",
+            resource=f"APPOINTMENT_{appointment.id}",
+            ip_address=client_ip,
+            details=f"Updated appointment for {appointment.patient_name} (Status: {appointment.status})",
+        )
+
+    def perform_destroy(self, instance):
+        # Soft-delete execution using TimeStampedModel soft delete
+        instance.delete()
+        client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
+        AdminAuditLogModel.objects.create(
+            admin_email="admin@py-digital.com",
+            action="DELETE_APPOINTMENT",
+            resource=f"APPOINTMENT_{instance.id}",
+            ip_address=client_ip,
+            details=f"Soft-deleted appointment for {instance.patient_name}",
+        )
 
 
 class SeedDemoDataView(APIView):

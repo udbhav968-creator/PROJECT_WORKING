@@ -2,7 +2,7 @@
     "info": {
         "_postman_id": "udbhav-module4-final-2026",
         "name": "🏥 Healthcare Clinic API – Udbhav Module 4 (Admin & Integration)",
-        "description": "Complete Postman Collection for Module 4: Administration & System Integration.\n\n**Endpoints covered:**\n- JWT Authentication\n- System Health Check\n- Admin Dashboard Analytics\n- Audit Log List (paginated)\n- Demo Data Seeding\n\n**Base URL:** http://127.0.0.1:8000",
+        "description": "Complete Postman Collection for Module 4: Administration & System Integration.\n\n**Endpoints covered:**\n- JWT Authentication\n- System Health Check\n- Admin Dashboard Analytics\n- Audit Log List (paginated)\n- Appointment Management (List, Create, Detail, Update, Soft-Delete)\n- Demo Data Seeding\n\n**Base URL:** http://127.0.0.1:8000",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -112,6 +112,93 @@
                                 {"key": "page", "value": "1"},
                                 {"key": "page_size", "value": "10"}
                             ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📅 Appointment Management APIs",
+            "item": [
+                {
+                    "name": "List All Appointments",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/appointments/?status=scheduled&search=Smith",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "appointments", ""],
+                            "query": [
+                                {"key": "status", "value": "scheduled"},
+                                {"key": "search", "value": "Smith"}
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Appointment",
+                    "request": {
+                        "method": "POST",
+                        "header": [{"key": "Content-Type", "value": "application/json"}],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"patient_name\": \"Robert Paulson\",\n    \"patient_phone\": \"+91 9876543210\",\n    \"patient_email\": \"robert@example.com\",\n    \"doctor_name\": \"Dr. Watson\",\n    \"appointment_date\": \"2026-08-01T10:00:00Z\",\n    \"status\": \"scheduled\",\n    \"notes\": \"General Health Checkup\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/appointments/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "appointments", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Appointment Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/appointments/<appointment_uuid>/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "appointments", "<appointment_uuid>", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Appointment Status/Details",
+                    "request": {
+                        "method": "PUT",
+                        "header": [{"key": "Content-Type", "value": "application/json"}],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"patient_name\": \"Robert Paulson\",\n    \"patient_phone\": \"+91 9876543210\",\n    \"patient_email\": \"robert@example.com\",\n    \"doctor_name\": \"Dr. Watson\",\n    \"appointment_date\": \"2026-08-01T10:00:00Z\",\n    \"status\": \"completed\",\n    \"notes\": \"Checkup completed, prescription issued\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/appointments/<appointment_uuid>/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "appointments", "<appointment_uuid>", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Soft-Delete Appointment",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "http://127.0.0.1:8000/api/admin/appointments/<appointment_uuid>/",
+                            "protocol": "http",
+                            "host": ["127", "0", "0", "1"],
+                            "port": "8000",
+                            "path": ["api", "admin", "appointments", "<appointment_uuid>", ""]
                         }
                     }
                 }
