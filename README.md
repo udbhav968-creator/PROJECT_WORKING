@@ -1,4 +1,4 @@
-# 🏥 Healthcare Clinic Backend API – AIIMS Delhi Tier Architecture
+# 🏥 Healthcare Clinic Backend API – Enterprise Architecture
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-5.0-092E20.svg?logo=django&logoColor=white)
@@ -10,7 +10,7 @@
 ![Postman](https://img.shields.io/badge/Postman-Collection-FF6C37.svg?logo=postman&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-> Enterprise-grade RESTful backend for the **Healthcare Clinic Website (AIIMS Delhi Tier Integration)**, developed as an internship project at **PY Digital Services Pvt. Ltd.**
+> Enterprise-grade RESTful backend for the **Healthcare Clinic Website**, developed as an internship project at **PY Digital Services Pvt. Ltd.**
 
 ---
 
@@ -18,7 +18,7 @@
 1. [Tech Stack](#tech-stack)
 2. [Team Module Allocation](#team-module-allocation)
 3. [Module 4 – Administration & System Integration](#module-4--administration--system-integration)
-4. [AIIMS Delhi Tier Features](#aiims-delhi-tier-features)
+4. [Enterprise Healthcare Features](#enterprise-healthcare-features)
 5. [Project Structure](#project-structure)
 6. [Quickstart (Local Setup)](#quickstart-local-setup)
 7. [MySQL Configuration](#mysql-configuration)
@@ -60,28 +60,28 @@
 | Abusufiyan / Harshavardhan | Module 1 – Authentication | JWT Login, RBAC, User Management |
 | Gautam / Alok Verma | Module 2 – Appointments | Booking APIs, Doctor Schedules |
 | Suhaib / Aniket Ghatage | Module 3 – Content | Blogs, Testimonials, Services |
-| **Udbhav** | **Module 4 – Administration & System Integration** | Base Models, Admin Analytics, AIIMS OPD Tokens, NABH Audit Logging, Appointment CRUD, Exception Handling, API Docs, Postman, Testing, CI/CD |
+| **Udbhav** | **Module 4 – Administration & System Integration** | Base Models, Admin Analytics, OPD Tokens, Audit Logging, Appointment CRUD, Exception Handling, API Docs, Postman, Testing, CI/CD |
 
 ---
 
-## 🏥 AIIMS Delhi Tier Features
+## 🏥 Enterprise Healthcare Features
 
-This module acts as the **architectural backbone** for the healthcare backend, upgraded to AIIMS Delhi clinical standards:
+Module 4 serves as the **architectural backbone** for the entire backend system, incorporating clinical & administrative best practices:
 
-1. **🎟️ AIIMS OPD Token Auto-Generation**:
-   - Auto-generates unique OPD Token numbers (e.g. `AIIMS-OPD-9F3A12`, `AIIMS-CARD-101`).
-   - Supports multi-department OPD/IPD/Emergency consultation routing.
+1. **🎟️ Clinical OPD Token Auto-Generation**:
+   - Auto-generates unique OPD Token numbers (e.g. `CLINIC-OPD-9F3A12`, `CLINIC-CARD-101`).
+   - Supports OPD, IPD, Emergency Care, and Teleconsultation routing.
 
-2. **🏥 Department Breakdown & Emergency Triage Analytics**:
-   - Aggregates appointments dynamically across clinical departments (Cardiology, Neurology, Orthopedics, Pediatrics, Oncology, Emergency Care).
-   - Real-time emergency triage counter (`emergency_triage_count`).
+2. **🏥 Department Breakdown & Priority Triage Analytics**:
+   - Dynamic clinical statistics across departments (Cardiology, Neurology, Orthopedics, Pediatrics, Oncology, Emergency Care).
+   - Real-time emergency triage monitoring (`emergency_triage_count`).
 
-3. **🛡️ NABH & HIPAA Audit Logging**:
-   - Audits system operations with severity classifications (`INFO`, `WARNING`, `CRITICAL`).
-   - Categorizes compliance actions (`NABH_PATIENT_SAFETY`, `HIPAA_PRIVACY`, `NABH_CLINICAL_UPDATE`).
+3. **🛡️ NABH & HIPAA Audit Trail**:
+   - Audits administrative & clinical actions with severity classifications (`INFO`, `WARNING`, `CRITICAL`).
+   - Tracks compliance categories (`NABH_PATIENT_SAFETY`, `HIPAA_PRIVACY`, `NABH_CLINICAL_UPDATE`).
 
 4. **⚡ System Integration Health & Latency Monitor**:
-   - `/api/admin/health/` returns database connectivity status, query execution latency in milliseconds (`database_latency_ms`), and NABH audit compliance status.
+   - `/api/admin/health/` returns database connectivity status, query execution latency in milliseconds (`database_latency_ms`), and compliance audit status.
 
 ---
 
@@ -92,7 +92,7 @@ This module acts as the **architectural backbone** for the healthcare backend, u
 
 All database models across the project inherit from `TimeStampedModel`, providing:
 - **UUID Primary Keys** (`uuid.uuid4()`) preventing ID enumeration attacks.
-- **Soft Deletion (`is_deleted`)** ensuring patient medical records are archived safely.
+- **Soft Deletion (`is_deleted`)** ensuring patient medical records are archived safely rather than hard-deleted.
 - **SoftDeleteManager** filtering `is_deleted=False` on normal queries while retaining raw access via `all_objects`.
 
 ---
@@ -102,12 +102,12 @@ All database models across the project inherit from `TimeStampedModel`, providin
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `/api/admin/dashboard/` | `GET` | Aggregated system stats, AIIMS department breakdown, and recent audit logs |
+| `/api/admin/dashboard/` | `GET` | Aggregated system stats, clinical department breakdown, and recent audit logs |
 | `/api/admin/health/` | `GET` | System health, DB connection, latency (ms), and NABH compliance status |
 | `/api/admin/audit-logs/` | `GET` | Paginated audit logs with severity filtering (`?severity=CRITICAL`) |
 | `/api/admin/appointments/` | `GET` / `POST` | List/Search/Filter appointments & Create appointment with OPD Token |
 | `/api/admin/appointments/<uuid:pk>/` | `GET` / `PUT` / `DELETE` | Retrieve, update status, or soft-delete an appointment |
-| `/api/admin/seed-demo-data/` | `POST` | Seeds realistic AIIMS clinical demo records (idempotent) |
+| `/api/admin/seed-demo-data/` | `POST` | Seeds realistic clinical demo records (idempotent) |
 
 ---
 
@@ -153,7 +153,7 @@ Includes request templates for:
 
 14 automated unit tests covering:
 - Health check latency & metadata
-- AIIMS data seeding idempotency
+- Clinical data seeding idempotency
 - Dashboard analytics structure & department breakdown keys
 - Severity filtering on audit log list
 - Appointment creation with token auto-generation
@@ -193,7 +193,7 @@ PROJECT_WORKING/
 │       │   ├── models.py        # UserProfileModel, RoleModel
 │       │   └── admin.py
 │       │
-│       └── administration/      # Udbhav's Module 4 (AIIMS Tier Admin)
+│       └── administration/      # Udbhav's Module 4 (Administration & System Integration)
 │           ├── models.py        # AppointmentModel (OPD Token), AdminAuditLogModel (NABH)
 │           ├── serializers.py   # Serializers & Department Breakdown
 │           ├── views.py         # Dashboard, Health, Audit, Appointment APIs
@@ -223,7 +223,7 @@ pip install -r requirements.txt
 # 4. Apply migrations
 python manage.py migrate
 
-# 5. Seed AIIMS demo clinical data
+# 5. Seed clinical demo data
 # POST http://127.0.0.1:8000/api/admin/seed-demo-data/
 
 # 6. Run server
@@ -268,7 +268,7 @@ python manage.py test apps.administration
 Found 14 test(s).
 ..............
 ----------------------------------------------------------------------
-Ran 14 tests in 1.341s
+Ran 14 tests in 1.288s
 
 OK
 ```

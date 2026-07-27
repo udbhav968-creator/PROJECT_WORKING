@@ -30,7 +30,7 @@ class StandardPagination(PageNumberPagination):
 
 class SystemHealthView(APIView):
     """
-    **AIIMS Tier System & Integration Health Monitor**
+    **Enterprise Healthcare System Integration Health Monitor**
 
     Validates DB connections, measures query latency, framework version,
     and returns NABH / HIPAA compliance health metrics.
@@ -51,7 +51,7 @@ class SystemHealthView(APIView):
         return Response(
             {
                 "success": True,
-                "institute": "AIIMS Delhi Integration Core",
+                "institute": "Healthcare Clinic Integration Core",
                 "status": "healthy" if db_ok else "degraded",
                 "database_connected": db_ok,
                 "database_latency_ms": latency_ms,
@@ -65,10 +65,10 @@ class SystemHealthView(APIView):
 
 class AdminDashboardView(APIView):
     """
-    **AIIMS Delhi Tier Clinical & Admin Dashboard Analytics** (Udbhav – Module 4)
+    **Enterprise Admin Dashboard Analytics** (Udbhav – Module 4)
 
     High-performance aggregation engine returning OPD statistics,
-    Emergency Triage metrics, Department Breakdown, and NABH Audit Trail summaries.
+    Emergency Triage metrics, Department Breakdown, and Audit Trail summaries.
     """
 
     @extend_schema(responses={200: AdminDashboardResponseSerializer})
@@ -87,7 +87,6 @@ class AdminDashboardView(APIView):
             emergency_triage_count=Count("id", filter=Q(priority="emergency")),
         )
 
-        # Department breakdown aggregation query
         dept_qs = (
             AppointmentModel.objects.values("department")
             .annotate(count=Count("id"))
@@ -102,18 +101,18 @@ class AdminDashboardView(APIView):
 
         client_ip = request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@aiims.edu",
-            action="VIEW_AIIMS_DASHBOARD",
+            admin_email="admin@healthcare-clinic.com",
+            action="VIEW_ADMIN_DASHBOARD",
             resource="CLINICAL_ANALYTICS",
             severity="INFO",
             compliance_category="NABH_PATIENT_SAFETY",
             ip_address=client_ip,
-            details="Accessed AIIMS clinical analytics and OPD dashboard summary",
+            details="Accessed healthcare admin dashboard analytics and OPD summary",
         )
 
         payload = {
             "success": True,
-            "institute": "AIIMS Delhi Healthcare Core",
+            "institute": "Healthcare Clinic Enterprise Core",
             "stats": {
                 "total_users": user_stats["total_users"] or 0,
                 "active_users": user_stats["active_users"] or 0,
@@ -161,10 +160,10 @@ class AuditLogListView(APIView):
 
 class AppointmentListCreateView(ListCreateAPIView):
     """
-    **AIIMS OPD Appointment & Triage Management – List & Create** (Udbhav – Module 4)
+    **Clinical OPD Appointment & Triage Management – List & Create** (Udbhav – Module 4)
 
     Supports filtering by department (`?department=Cardiology`), priority (`?priority=emergency`), and search (`?search=Rajesh`).
-    Auto-generates AIIMS OPD Token Numbers (`AIIMS-OPD-XXXX`).
+    Auto-generates Clinical OPD Token Numbers (`CLINIC-OPD-XXXX`).
     """
 
     serializer_class = AppointmentSerializer
@@ -190,18 +189,17 @@ class AppointmentListCreateView(ListCreateAPIView):
         return queryset
 
     def perform_create(self, serializer):
-        # Auto-generate AIIMS OPD Token Number if not provided
         token = serializer.validated_data.get("token_number")
         if not token:
-            token = f"AIIMS-OPD-{uuid.uuid4().hex[:6].upper()}"
+            token = f"CLINIC-OPD-{uuid.uuid4().hex[:6].upper()}"
 
         appointment = serializer.save(token_number=token)
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
 
         severity = "CRITICAL" if appointment.priority == "emergency" else "INFO"
         AdminAuditLogModel.objects.create(
-            admin_email="admin@aiims.edu",
-            action="CREATE_AIIMS_OPD_APPOINTMENT",
+            admin_email="admin@healthcare-clinic.com",
+            action="CREATE_OPD_APPOINTMENT",
             resource=f"TOKEN_{appointment.token_number}",
             severity=severity,
             compliance_category="NABH_PATIENT_REGISTRATION",
@@ -212,7 +210,7 @@ class AppointmentListCreateView(ListCreateAPIView):
 
 class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
     """
-    **AIIMS OPD Appointment Detail, Status Update & Soft-Delete** (Udbhav – Module 4)
+    **Clinical OPD Appointment Detail, Status Update & Soft-Delete** (Udbhav – Module 4)
     """
 
     queryset = AppointmentModel.objects.all()
@@ -223,8 +221,8 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
         appointment = serializer.save()
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@aiims.edu",
-            action="UPDATE_AIIMS_APPOINTMENT",
+            admin_email="admin@healthcare-clinic.com",
+            action="UPDATE_APPOINTMENT",
             resource=f"TOKEN_{appointment.token_number}",
             severity="INFO",
             compliance_category="NABH_CLINICAL_UPDATE",
@@ -236,8 +234,8 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
         instance.delete()
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@aiims.edu",
-            action="DELETE_AIIMS_APPOINTMENT",
+            admin_email="admin@healthcare-clinic.com",
+            action="DELETE_APPOINTMENT",
             resource=f"TOKEN_{instance.token_number}",
             severity="WARNING",
             compliance_category="NABH_PATIENT_RECORD_ARCHIVE",
@@ -248,7 +246,7 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
 
 class SeedDemoDataView(APIView):
     """
-    **Seed AIIMS Delhi Clinical Demo Data** – for testing & Postman verification.
+    **Seed Healthcare Clinic Demo Data** – for testing & Postman verification.
     """
 
     def post(self, request):
@@ -256,22 +254,22 @@ class SeedDemoDataView(APIView):
 
         if UserProfileModel.objects.count() == 0:
             UserProfileModel.objects.create(
-                email="admin@aiims.edu",
-                full_name="Dr. Randeep Guleria (AIIMS Admin)",
+                email="admin@healthcare-clinic.com",
+                full_name="Clinic Admin",
                 is_active=True,
             )
-            created.append("AIIMS Admin user")
+            created.append("Clinic Admin user")
 
         if AppointmentModel.objects.count() == 0:
             AppointmentModel.objects.create(
                 patient_name="Rajesh Sharma",
                 patient_phone="+91 9811122233",
                 patient_email="rajesh.sharma@example.com",
-                doctor_name="Dr. Balram Bhargava",
+                doctor_name="Dr. Smith",
                 department="Cardiology",
                 priority="urgent",
                 consultation_type="OPD",
-                token_number="AIIMS-CARD-101",
+                token_number="CLINIC-CARD-101",
                 appointment_date=timezone.now(),
                 status="scheduled",
                 notes="Cardiovascular risk assessment & ECG examination",
@@ -280,31 +278,31 @@ class SeedDemoDataView(APIView):
                 patient_name="Priya Verma",
                 patient_phone="+91 9877766655",
                 patient_email="priya.v@example.com",
-                doctor_name="Dr. M.V. Padma Srivastava",
+                doctor_name="Dr. Mehta",
                 department="Neurology",
                 priority="emergency",
                 consultation_type="Emergency",
-                token_number="AIIMS-NEURO-EMG-909",
+                token_number="CLINIC-NEURO-EMG-909",
                 appointment_date=timezone.now(),
                 status="in_consultation",
-                notes="Acute stroke triage evaluation",
+                notes="Acute triage evaluation",
             )
             AppointmentModel.objects.create(
                 patient_name="Amitabh Gupta",
                 patient_phone="+91 9123456780",
                 patient_email="agupta@example.com",
-                doctor_name="Dr. Rajesh Malhotra",
+                doctor_name="Dr. Sharma",
                 department="Orthopedics",
                 priority="routine",
                 consultation_type="OPD",
-                token_number="AIIMS-ORTHO-304",
+                token_number="CLINIC-ORTHO-304",
                 appointment_date=timezone.now(),
                 status="completed",
-                notes="Post-operative knee replacement follow-up",
+                notes="Post-operative follow-up consultation",
             )
-            created.append("3 AIIMS OPD Clinical Records")
+            created.append("3 Clinical Records")
 
-        msg = f"Seeded: {', '.join(created)}" if created else "AIIMS demo data already exists."
+        msg = f"Seeded: {', '.join(created)}" if created else "Demo data already exists."
         return Response(
             {"success": True, "message": msg},
             status=status.HTTP_201_CREATED,
