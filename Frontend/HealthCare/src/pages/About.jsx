@@ -11,7 +11,6 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import TestimonialsSection from "../components/testimonials/TestimonialsSection.jsx";
 
 import clinicConsultationImage from "../assets/images/about/clinic-consultation.jpg";
 import clinicTeamImage from "../assets/images/about/clinic-consultation1.jpg";
@@ -351,13 +350,6 @@ function About() {
         </div>
       </section>
 
-      <TestimonialsSection
-        eyebrow="Patient Experiences"
-        title="What our patients say about their care"
-        description="Patient feedback reflects our commitment to professional treatment, respectful communication, and personalized healthcare."
-        limit={3}
-        showViewAll
-      />
 
       <section className="info-cta-section">
         <div className="info-container info-cta-content">
