@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import PageLayout from "./components/layout/PageLayout.jsx";
 import ScrollToTop from "./components/common/ScrollToTop.jsx";
-
+import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Services from "./pages/Services.jsx";
 import ServiceDetails from "./pages/ServiceDetails.jsx";
@@ -11,22 +11,6 @@ import Testimonials from "./pages/Testimonials.jsx";
 
 import "./styles/layout.css";
 
-function HomePlaceholder() {
-  return (
-    <main className="integration-placeholder">
-      <div className="integration-placeholder-container">
-        <span>Healthcare Clinic</span>
-
-        <h1>Professional Healthcare for Every Family</h1>
-
-        <p>
-          The Home page is currently being developed by the assigned team
-          member.
-        </p>
-      </div>
-    </main>
-  );
-}
 
 function PlaceholderPage({ title }) {
   return (
@@ -49,7 +33,7 @@ function App() {
 
       <PageLayout>
         <Routes>
-          <Route path="/" element={<HomePlaceholder />} />
+          <Route path="/" element={<Home />} />
 
           <Route path="/about" element={<About />} />
 
