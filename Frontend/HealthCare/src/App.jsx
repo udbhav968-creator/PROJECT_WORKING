@@ -9,6 +9,8 @@ import ServiceDetails from "./pages/ServiceDetails.jsx";
 import Doctors from "./pages/Doctors.jsx";
 import Testimonials from "./pages/Testimonials.jsx";
 
+import "./styles/global.css";
+import "./styles/components.css";
 import "./styles/layout.css";
 
 
