@@ -32,6 +32,14 @@ jobs:
         cd Backend
         python manage.py check
 
+    - name: Collect Static Files
+      env:
+        SECRET_KEY: django-insecure-ci-test-key-udbhav-2026
+        DEBUG: "True"
+      run: |
+        cd Backend
+        python manage.py collectstatic --noinput
+
     - name: Run Automated Unit Tests (apps.core, apps.authentication, apps.administration)
       env:
         SECRET_KEY: django-insecure-ci-test-key-udbhav-2026
