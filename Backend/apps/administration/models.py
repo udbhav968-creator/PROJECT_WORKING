@@ -47,6 +47,7 @@ class AppointmentModel(TimeStampedModel):
     priority = models.CharField(max_length=50, choices=PRIORITY_CHOICES, default='routine', db_index=True)
     consultation_type = models.CharField(max_length=50, choices=CONSULTATION_TYPE_CHOICES, default='OPD')
     token_number = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    video_room_url = models.URLField(blank=True, null=True)
     appointment_date = models.DateTimeField()
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='scheduled', db_index=True)
     notes = models.TextField(blank=True, null=True)
@@ -56,6 +57,42 @@ class AppointmentModel(TimeStampedModel):
 
     def __str__(self):
         return f"[{self.token_number or 'OPD'}] {self.patient_name} - {self.get_department_display()} ({self.status})"
+
+    def generate_whatsapp_confirmation_message(self):
+        return (
+            f"🏥 *PURE HEALTH CLINIC OPD CONFIRMATION*\n"
+            f"Patient: {self.patient_name}\n"
+            f"Token No: *{self.token_number}*\n"
+            f"Department: {self.get_department_display()}\n"
+            f"Doctor: {self.doctor_name}\n"
+            f"Date & Time: {self.appointment_date.strftime('%Y-%m-%d %H:%M')}\n"
+            f"Status: {self.status.upper()}\n"
+            f"Tele-Link: {self.video_room_url or 'N/A (In-Clinic OPD)'}"
+        )
+
+
+class DoctorRosterModel(TimeStampedModel):
+    """
+    Doctor Duty Roster & Shift Availability Tracker
+    """
+    DUTY_STATUS_CHOICES = [
+        ('on_duty', 'On Duty (OPD Active)'),
+        ('in_surgery', 'In Surgery / Procedure'),
+        ('on_break', 'On Break'),
+        ('off_duty', 'Off Duty'),
+    ]
+
+    doctor_name = models.CharField(max_length=255, unique=True)
+    department = models.CharField(max_length=100, choices=AppointmentModel.DEPARTMENT_CHOICES, default='General_Consultation')
+    shift_hours = models.CharField(max_length=100, default='09:00 AM - 05:00 PM')
+    duty_status = models.CharField(max_length=50, choices=DUTY_STATUS_CHOICES, default='on_duty')
+    room_number = models.CharField(max_length=50, default='OPD Room 101')
+
+    class Meta:
+        db_table = 'doctor_roster'
+
+    def __str__(self):
+        return f"{self.doctor_name} ({self.get_duty_status_display()}) - {self.room_number}"
 
 
 class AdminAuditLogModel(TimeStampedModel):

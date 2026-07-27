@@ -40,6 +40,23 @@ CREATE TABLE IF NOT EXISTS `user_profiles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
+-- Table: doctor_roster (Inherits TimeStampedModel)
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `doctor_roster` (
+    `id` CHAR(36) NOT NULL PRIMARY KEY,
+    `created_at` DATETIME(6) NOT NULL,
+    `updated_at` DATETIME(6) NOT NULL,
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+    `doctor_name` VARCHAR(255) NOT NULL UNIQUE,
+    `department` VARCHAR(100) NOT NULL DEFAULT 'General_Consultation',
+    `shift_hours` VARCHAR(100) NOT NULL DEFAULT '09:00 AM - 05:00 PM',
+    `duty_status` VARCHAR(50) NOT NULL DEFAULT 'on_duty',
+    `room_number` VARCHAR(50) NOT NULL DEFAULT 'OPD Room 101',
+    INDEX `idx_roster_duty_status` (`duty_status`),
+    INDEX `idx_roster_is_deleted` (`is_deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
 -- Table: appointments (Inherits TimeStampedModel)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `appointments` (
@@ -52,9 +69,10 @@ CREATE TABLE IF NOT EXISTS `appointments` (
     `patient_phone` VARCHAR(50) NOT NULL,
     `patient_email` VARCHAR(254) NULL,
     `doctor_name` VARCHAR(255) NOT NULL,
-    `department` VARCHAR(100) NOT NULL DEFAULT 'General_Medicine',
+    `department` VARCHAR(100) NOT NULL DEFAULT 'General_Consultation',
     `priority` VARCHAR(50) NOT NULL DEFAULT 'routine',
     `consultation_type` VARCHAR(50) NOT NULL DEFAULT 'OPD',
+    `video_room_url` VARCHAR(200) NULL,
     `appointment_date` DATETIME(6) NOT NULL,
     `status` VARCHAR(50) NOT NULL DEFAULT 'scheduled',
     `notes` LONGTEXT NULL,

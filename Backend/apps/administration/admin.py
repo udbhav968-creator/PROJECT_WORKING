@@ -1,10 +1,10 @@
 from django.contrib import admin
-from apps.administration.models import AppointmentModel, AdminAuditLogModel
+from apps.administration.models import AppointmentModel, AdminAuditLogModel, DoctorRosterModel
 
 # Customizing Django Admin Site Header & Titles for Enterprise Medical Hospital Portal
-admin.site.site_header = "🏥 Healthcare Hospital & Clinic Administration Portal"
-admin.site.site_title = "Hospital Portal Admin"
-admin.site.index_title = "Clinical Operations & System Integration Control Center"
+admin.site.site_header = "🏥 Pure Health Clinic Operations Administration Portal"
+admin.site.site_title = "Pure Health Clinic Admin"
+admin.site.index_title = "Clinical Operations, Doctor Roster & System Integration Control Center"
 
 
 @admin.register(AppointmentModel)
@@ -33,7 +33,7 @@ class AppointmentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('OPD & Triage Identification', {
-            'fields': ('token_number', 'department', 'priority', 'consultation_type')
+            'fields': ('token_number', 'department', 'priority', 'consultation_type', 'video_room_url')
         }),
         ('Patient Details', {
             'fields': ('patient_name', 'patient_phone', 'patient_email')
@@ -60,6 +60,13 @@ class AppointmentAdmin(admin.ModelAdmin):
     @admin.action(description="Restore selected soft-deleted records")
     def restore_records(self, request, queryset):
         queryset.update(is_deleted=False)
+
+
+@admin.register(DoctorRosterModel)
+class DoctorRosterAdmin(admin.ModelAdmin):
+    list_display = ('doctor_name', 'department', 'duty_status', 'room_number', 'shift_hours', 'updated_at')
+    list_filter = ('duty_status', 'department')
+    search_fields = ('doctor_name', 'room_number', 'department')
 
 
 @admin.register(AdminAuditLogModel)

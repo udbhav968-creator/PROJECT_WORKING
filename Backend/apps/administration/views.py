@@ -12,11 +12,12 @@ from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from apps.authentication.models import UserProfileModel
-from apps.administration.models import AppointmentModel, AdminAuditLogModel
+from apps.administration.models import AppointmentModel, AdminAuditLogModel, DoctorRosterModel
 from apps.administration.serializers import (
     AdminDashboardResponseSerializer,
     AdminAuditLogSerializer,
     AppointmentSerializer,
+    DoctorRosterSerializer,
 )
 
 logger = logging.getLogger("clinic_core")
@@ -68,7 +69,7 @@ class AdminDashboardView(APIView):
     **Pure Health Clinic Dashboard & Clinical Analytics** (Udbhav – Module 4)
 
     High-performance aggregation engine returning OPD statistics,
-    Emergency Triage metrics, Department Breakdown, and Audit Trail summaries.
+    Doctor Duty Roster status, Emergency Triage metrics, and Audit Trail summaries.
     """
 
     @extend_schema(responses={200: AdminDashboardResponseSerializer})
@@ -86,6 +87,9 @@ class AdminDashboardView(APIView):
             cancelled_appointments=Count("id", filter=Q(status="cancelled")),
             emergency_triage_count=Count("id", filter=Q(priority="emergency")),
         )
+
+        on_duty_doctors = DoctorRosterModel.objects.filter(duty_status="on_duty").count()
+        roster_list = DoctorRosterModel.objects.order_by("room_number")
 
         dept_qs = (
             AppointmentModel.objects.values("department")
@@ -107,7 +111,7 @@ class AdminDashboardView(APIView):
             severity="INFO",
             compliance_category="NABH_PATIENT_SAFETY",
             ip_address=client_ip,
-            details="Accessed Pure Health Clinic admin dashboard analytics and OPD summary",
+            details="Accessed Pure Health Clinic admin dashboard analytics and doctor roster",
         )
 
         payload = {
@@ -122,8 +126,10 @@ class AdminDashboardView(APIView):
                 "completed_appointments": appt_stats["completed_appointments"] or 0,
                 "cancelled_appointments": appt_stats["cancelled_appointments"] or 0,
                 "emergency_triage_count": appt_stats["emergency_triage_count"] or 0,
+                "on_duty_doctors_count": on_duty_doctors,
                 "total_audit_logs": total_logs,
             },
+            "doctor_roster_status": roster_list,
             "department_breakdown": department_breakdown,
             "recent_logs": recent_logs,
         }
@@ -163,7 +169,7 @@ class AppointmentListCreateView(ListCreateAPIView):
     **Pure Health Clinic OPD Appointment & Triage Management – List & Create** (Udbhav – Module 4)
 
     Supports filtering by department (`?department=General_Consultation`), priority (`?priority=emergency`), and search (`?search=Divit`).
-    Auto-generates Clinical OPD Token Numbers (`PURE-OPD-XXXX`).
+    Auto-generates Clinical OPD Token Numbers (`PURE-OPD-XXXX`) and Tele-Consultation Video Room URLs.
     """
 
     serializer_class = AppointmentSerializer
@@ -193,7 +199,12 @@ class AppointmentListCreateView(ListCreateAPIView):
         if not token:
             token = f"PURE-OPD-{uuid.uuid4().hex[:6].upper()}"
 
-        appointment = serializer.save(token_number=token)
+        consult_type = serializer.validated_data.get("consultation_type", "OPD")
+        video_url = serializer.validated_data.get("video_room_url")
+        if consult_type == "Teleconsultation" and not video_url:
+            video_url = f"https://meet.jit.si/purehealth-opd-{token.lower()}"
+
+        appointment = serializer.save(token_number=token, video_room_url=video_url)
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
 
         severity = "CRITICAL" if appointment.priority == "emergency" else "INFO"
@@ -244,9 +255,63 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
         )
 
 
+class AppointmentPDFSlipView(APIView):
+    """
+    **Printable OPD Slip / Receipt Generator** (Udbhav – Module 4)
+    Returns printable HTML token slip data for clinical reception desks.
+    """
+
+    def get(self, request, pk):
+        try:
+            appointment = AppointmentModel.objects.get(pk=pk)
+        except AppointmentModel.DoesNotExist:
+            return Response({"success": False, "errors": ["Appointment record not found."]}, status=status.HTTP_404_NOT_FOUND)
+
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>OPD Token Slip - {appointment.token_number}</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; color: #333; }}
+                .card {{ border: 2px solid #0056b3; border-radius: 8px; padding: 20px; max-width: 500px; margin: auto; }}
+                .header {{ text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }}
+                .token {{ font-size: 28px; font-weight: bold; color: #0056b3; margin: 10px 0; }}
+                .row {{ margin: 8px 0; display: flex; justify-content: space-between; }}
+                .footer {{ text-align: center; margin-top: 20px; font-size: 12px; color: #777; }}
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <div class="header">
+                    <h2>🏥 Pure Health Clinic</h2>
+                    <p>Personalized Healthcare & Medical Care</p>
+                    <div class="token">{appointment.token_number}</div>
+                </div>
+                <div class="row"><strong>Patient:</strong> <span>{appointment.patient_name}</span></div>
+                <div class="row"><strong>Phone:</strong> <span>{appointment.patient_phone}</span></div>
+                <div class="row"><strong>Department:</strong> <span>{appointment.get_department_display()}</span></div>
+                <div class="row"><strong>Doctor:</strong> <span>{appointment.doctor_name}</span></div>
+                <div class="row"><strong>Priority:</strong> <span>{appointment.get_priority_display()}</span></div>
+                <div class="row"><strong>Status:</strong> <span>{appointment.get_status_display()}</span></div>
+                <div class="row"><strong>Date:</strong> <span>{appointment.appointment_date.strftime('%Y-%m-%d %H:%M')}</span></div>
+                {f'<div class="row"><strong>Tele-Link:</strong> <span>{appointment.video_room_url}</span></div>' if appointment.video_room_url else ''}
+                <div class="footer">Please bring this slip to OPD Reception Room 101</div>
+            </div>
+        </body>
+        </html>
+        """
+        return Response({
+            "success": True,
+            "token_number": appointment.token_number,
+            "patient_name": appointment.patient_name,
+            "printable_opd_slip_html": html_content.strip()
+        })
+
+
 class SeedDemoDataView(APIView):
     """
-    **Seed Pure Health Clinic Clinical Demo Data** – based on Divit Pure Health Clinic.
+    **Seed Pure Health Clinic Clinical Demo Data & Doctor Roster** – based on Divit Pure Health Clinic.
     """
 
     def post(self, request):
@@ -259,6 +324,30 @@ class SeedDemoDataView(APIView):
                 is_active=True,
             )
             created.append("Medical Director user")
+
+        if DoctorRosterModel.objects.count() == 0:
+            DoctorRosterModel.objects.create(
+                doctor_name="Dr. Divit Shah",
+                department="General_Consultation",
+                shift_hours="09:00 AM - 05:00 PM",
+                duty_status="on_duty",
+                room_number="OPD Room 101",
+            )
+            DoctorRosterModel.objects.create(
+                doctor_name="Dr. Rahul Mehta",
+                department="Cardiology",
+                shift_hours="10:00 AM - 04:00 PM",
+                duty_status="on_duty",
+                room_number="OPD Room 204",
+            )
+            DoctorRosterModel.objects.create(
+                doctor_name="Dr. Anjali Sharma",
+                department="Chronic_Care",
+                shift_hours="02:00 PM - 08:00 PM",
+                duty_status="in_surgery",
+                room_number="Operation Theater 2",
+            )
+            created.append("3 Doctor Duty Roster records")
 
         if AppointmentModel.objects.count() == 0:
             AppointmentModel.objects.create(
@@ -294,13 +383,14 @@ class SeedDemoDataView(APIView):
                 doctor_name="Dr. Anjali Sharma",
                 department="Chronic_Care",
                 priority="routine",
-                consultation_type="OPD",
+                consultation_type="Teleconsultation",
                 token_number="PURE-CHRONIC-304",
+                video_room_url="https://meet.jit.si/purehealth-opd-pure-chronic-304",
                 appointment_date=timezone.now(),
                 status="completed",
                 notes="Diabetes & Hypertension routine management follow-up",
             )
-            created.append("3 Pure Health Clinic OPD Records")
+            created.append("3 Clinical Records")
 
         msg = f"Seeded: {', '.join(created)}" if created else "Demo data already exists."
         return Response(
