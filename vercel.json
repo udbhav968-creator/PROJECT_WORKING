@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "healthcare-clinic-backend",
   "builds": [
     {
       "src": "Backend/clinic_core/wsgi.py",
