@@ -18,11 +18,18 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, ['*']),
 )
 
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# Read .env if present (local dev); Vercel uses dashboard env vars
+try:
+    environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+except Exception:
+    pass
 
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
-ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env(
+    'ALLOWED_HOSTS',
+    default=['*', '.vercel.app', '127.0.0.1', 'localhost']
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files on Vercel
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -111,7 +119,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Config
