@@ -24,20 +24,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run Django System Check
+    - name: Run System Check
       env:
         SECRET_KEY: django-insecure-ci-test-key-udbhav-2026
         DEBUG: "True"
-        PYTHONPATH: Backend
       run: |
         cd Backend
         python manage.py check
 
-    - name: Run Django Automated Unit Tests
+    - name: Run All Automated Unit Tests (23/23)
       env:
         SECRET_KEY: django-insecure-ci-test-key-udbhav-2026
         DEBUG: "True"
-        PYTHONPATH: Backend
       run: |
         cd Backend
-        python manage.py test apps.administration
+        python manage.py test
