@@ -4,6 +4,7 @@
 ![Django](https://img.shields.io/badge/Django-5.0.7-092E20.svg?logo=django&logoColor=white)
 ![DRF](https://img.shields.io/badge/DRF-3.15.2-red.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-PyMySQL-00758F.svg?logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg?logo=docker&logoColor=white)
 ![JWT](https://img.shields.io/badge/Auth-SimpleJWT_Bearer-black.svg)
 ![Telehealth](https://img.shields.io/badge/Telehealth-Jitsi_Video-blue.svg)
 ![Compliance](https://img.shields.io/badge/Compliance-NABH%2FHIPAA_Audit-green.svg)
@@ -11,7 +12,7 @@
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2ea44f.svg?logo=githubactions&logoColor=white)
 ![Deployment](https://img.shields.io/badge/Deployment-Vercel_Serverless-000000.svg?logo=vercel&logoColor=white)
 
-> Enterprise-grade RESTful API backend for the **Healthcare Clinic Website & Appointment Management System**, developed as an engineering project at **PY Digital Services Pvt. Ltd.** Reference Inspiration: [Divit Pure Health Clinic](https://divitpurehealthclinic.com/).
+> Enterprise-grade, production-scaled RESTful API backend for the **Healthcare Clinic Website & Appointment Management System**, developed as an engineering project at **PY Digital Services Pvt. Ltd.** Reference Inspiration: [Divit Pure Health Clinic](https://divitpurehealthclinic.com/).
 
 ---
 
@@ -20,15 +21,16 @@
 2. [Technology Stack](#-technology-stack)
 3. [Team Module Allocation](#-team-module-allocation)
 4. [Module 4 — Administration & System Integration](#-module-4--administration--system-integration)
-5. [Advanced Clinical & Enterprise Features](#-advanced-clinical--enterprise-features)
-6. [Core Architecture & Design Patterns](#-core-architecture--design-patterns)
-7. [Comprehensive API Reference Table](#-comprehensive-api-reference-table)
-8. [Project Directory Structure](#-project-directory-structure)
-9. [Automated Testing & Quality Assurance](#-automated-testing--quality-assurance)
-10. [Local Setup & Quickstart](#-local-setup--quickstart)
-11. [MySQL Database Schema](#-mysql-database-schema)
-12. [Postman Collection Guide](#-postman-collection-guide)
-13. [CI/CD Pipeline & Vercel Cloud Deployment](#-cicd-pipeline--vercel-cloud-deployment)
+5. [Enterprise Production Scaling & Hardening](#-enterprise-production-scaling--hardening)
+6. [Advanced Clinical & Enterprise Features](#-advanced-clinical--enterprise-features)
+7. [Core Architecture & Design Patterns](#-core-architecture--design-patterns)
+8. [Comprehensive API Reference Table](#-comprehensive-api-reference-table)
+9. [Project Directory Structure](#-project-directory-structure)
+10. [Automated Testing & Quality Assurance](#-automated-testing--quality-assurance)
+11. [Local Setup & Docker Deployment](#-local-setup--docker-deployment)
+12. [MySQL Database Schema](#-mysql-database-schema)
+13. [Postman Collection Guide](#-postman-collection-guide)
+14. [CI/CD Pipeline & Cloud Deployment](#-cicd-pipeline--cloud-deployment)
 
 ---
 
@@ -36,7 +38,7 @@
 
 The **Healthcare Clinic Backend** is an enterprise-tier Django REST Framework application designed for scalable clinical management, OPD appointment scheduling, patient record tracking, and administrative analytics.
 
-Built with compliance-ready data structures, this project incorporates **UUID primary keys**, **soft deletion**, **Doctor Duty Roster tracking**, **Tele-consultation video room auto-generation**, **WhatsApp notification formatting**, **Printable OPD Slip HTML generation**, **NABH/HIPAA-compliant audit logging**, **real-time DB latency monitoring**, **OpenAPI 3.0 auto-documentation**, **GitHub Actions CI/CD automation**, and **serverless Vercel cloud deployment**.
+Built with compliance-ready data structures, this project incorporates **UUID primary keys**, **soft deletion**, **Doctor Duty Roster tracking**, **Tele-consultation video room auto-generation**, **WhatsApp notification formatting**, **Printable OPD Slip HTML generation**, **NABH/HIPAA-compliant audit logging**, **MySQL connection pooling**, **DRF rate limiting throttles**, **production Docker containerization**, **real-time DB latency monitoring**, **OpenAPI 3.0 auto-documentation**, **GitHub Actions CI/CD automation**, and **serverless Vercel cloud deployment**.
 
 ---
 
@@ -46,10 +48,11 @@ Built with compliance-ready data structures, this project incorporates **UUID pr
 | :--- | :--- | :--- | :--- |
 | **Language** | **Python** | `3.10+` | Core backend programming language powering models, views, and business logic. |
 | **Web Framework** | **Django** | `5.0.7` | Web framework managing ORM, security middleware, routing, and migrations. |
-| **REST API Engine** | **Django REST Framework** | `3.15.2` | Building RESTful endpoints, serializers, viewsets, and pagination. |
-| **Production Database** | **MySQL** | `8.0+` | Enterprise relational database storage engine. |
+| **REST API Engine** | **Django REST Framework** | `3.15.2` | Building RESTful endpoints, serializers, viewsets, and rate limiting. |
+| **Production Database** | **MySQL** | `8.0+` | Enterprise relational database storage engine with connection pooling (`CONN_MAX_AGE=600`). |
 | **Database Driver** | **PyMySQL** | `1.1.1` | Pure-Python driver enabling MySQL connectivity without C-compile dependencies. |
 | **Local Dev Database** | **SQLite** | `3` (Built-in) | Embedded database for zero-configuration local development and rapid testing. |
+| **Containerization** | **Docker & Compose** | `3.8 Spec` | Containerized microservice deployment with Gunicorn (4 workers, 2 threads). |
 | **Authentication** | **SimpleJWT** | `5.3.1` | JSON Web Token (JWT) access & refresh authentication scheme (`/api/token/`). |
 | **Video Telehealth** | **Jitsi Meet API** | Open Protocol | Auto-generates instant video room links for remote tele-consultations. |
 | **API Documentation** | **drf-spectacular** | `0.27.2` | OpenAPI 3.0 auto-generator powering **Swagger UI** (`/api/docs/`) and **ReDoc**. |
@@ -69,7 +72,7 @@ Built with compliance-ready data structures, this project incorporates **UUID pr
 | Thota Harshavardhan Reddy | Module 1 — Authentication | User Registration, RBAC, User Profiles, Login APIs |
 | Alok Verma | Module 2 — Appointments | OPD Booking Engine, Doctor Availability |
 | Aniket Ghatage | Module 3 — Content | Medical Blogs, Testimonials, Service Catalog |
-| **Udbhav** | **Module 4 — Administration & System Integration** | Core Abstract Models, Admin Dashboard APIs, Doctor Duty Roster, Tele-Consultation Video Links, WhatsApp Notification Generator, Printable OPD Slips, Audit Logging, Exception Handling, Swagger/ReDoc Docs, Postman Collection, MySQL DDL Schema, 100% Test Coverage, Vercel CI/CD |
+| **Udbhav** | **Module 4 — Administration & System Integration** | Core Abstract Models, Admin Dashboard APIs, Doctor Duty Roster, Tele-Consultation Video Links, WhatsApp Notification Generator, Printable OPD Slips, Audit Logging, Exception Handling, Swagger/ReDoc Docs, Postman Collection, MySQL DDL Schema, Dockerization, Production Connection Pooling, 100% Test Coverage, Vercel CI/CD |
 
 ---
 
@@ -90,6 +93,19 @@ Module 4 serves as the **core foundation** of the backend system. All other doma
 8. **🛡️ NABH & HIPAA Compliance Audit Logging**: Tracks administrative actions with severity tagging (`INFO`, `WARNING`, `CRITICAL`) and compliance categories.
 9. **⚡ System Integration Health & Latency Monitor**: Real-time database connection test with microsecond-level query execution latency tracking (`database_latency_ms`).
 10. **🚨 Custom Unified Exception Handler**: Intercepts all validation, database, HTTP, and system errors into a uniform JSON response contract (`{"success": false, "errors": [...]}`).
+
+---
+
+## 🔒 Enterprise Production Scaling & Hardening
+
+| Feature | Production Configuration | Architectural Benefit |
+| :--- | :--- | :--- |
+| 🛡️ **Rate Limiting (DRF Throttling)** | `anon: 100/minute`, `user: 1000/minute` | Prevents DDoS attacks, brute-force login attempts, and API scraping. |
+| 🗄️ **MySQL Connection Pooling** | `CONN_MAX_AGE = 600`, `CONN_HEALTH_CHECKS = True` | Reuses active MySQL database connections for 10 minutes, eliminating connection overhead. |
+| 🔒 **Security Headers** | `SECURE_BROWSER_XSS_FILTER = True`, `SECURE_CONTENT_TYPE_NOSNIFF = True`, `X_FRAME_OPTIONS = 'DENY'` | Protects against XSS attacks, MIME-sniffing vulnerabilities, and Clickjacking. |
+| 📝 **Structured Process Logging** | Verbose formatters for `clinic_core` and `django.request` with ISO timestamps | Real-time production auditing compatible with Datadog / Sentry / ELK. |
+| 🐳 **Production Docker Container** | `Dockerfile` (Python 3.10-slim + Gunicorn 4 workers / 2 threads) | 1-command reproducible production container deployment. |
+| 🐙 **Docker Compose** | `docker-compose.yml` linking MySQL 8.0 & Django Gunicorn service | Production multi-container orchestration. |
 
 ---
 
@@ -120,7 +136,7 @@ Endpoint `GET /api/admin/appointments/<id>/slip/` returns printable HTML OPD tok
 
 ## 📐 Core Architecture & Design Patterns
 
-### 1. Secure Base Model (`TimeStampedModel`)
+### Secure Base Model (`TimeStampedModel`)
 **File:** [`Backend/apps/core/models.py`](./Backend/apps/core/models.py)
 
 ```python
@@ -132,21 +148,6 @@ class TimeStampedModel(models.Model):
 
     objects = SoftDeleteManager()  # Returns only non-deleted records
     all_objects = models.Manager()   # Returns raw DB records including archived
-```
-- **UUID Primary Keys**: Prevents sequential ID guessing and enumeration attacks.
-- **Soft Deletion**: Medical records are soft-deleted (`is_deleted=True`), preserving data retention compliance.
-
-### 2. Unified Exception Response Contract
-**File:** [`Backend/apps/core/exceptions.py`](./Backend/apps/core/exceptions.py)
-
-```json
-{
-  "success": false,
-  "errors": [
-    "department: Invalid choice selected.",
-    "appointment_date: Date must be in ISO 8601 format."
-  ]
-}
 ```
 
 ---
@@ -178,6 +179,8 @@ class TimeStampedModel(models.Model):
 
 ```
 PROJECT_WORKING/
+├── Dockerfile                  # Enterprise Gunicorn production Docker container
+├── docker-compose.yml          # Multi-container orchestration (MySQL 8.0 + Django)
 ├── vercel.json                 # Vercel serverless deployment configuration
 ├── requirements.txt            # Root dependencies for deployment
 ├── .github/
@@ -192,7 +195,7 @@ PROJECT_WORKING/
 │   │
 │   ├── clinic_core/            # Django Core System Configuration
 │   │   ├── __init__.py         # PyMySQL driver initialization
-│   │   ├── settings.py         # App config, JWT, CORS, DRF, Whitenoise
+│   │   ├── settings.py         # App config, JWT, CORS, DRF, Whitenoise, Throttles, Connection Pooling
 │   │   ├── urls.py             # Master URL Router & Root Landing Page
 │   │   └── wsgi.py             # WSGI Serverless Entrypoint
 │   │
@@ -235,7 +238,7 @@ Found 23 test(s).
 System check identified no issues (0 silenced).
 .......................
 ----------------------------------------------------------------------
-Ran 23 tests in 16.815s
+Ran 23 tests in 20.482s
 
 OK
 Destroying test database for alias 'default'...
@@ -243,39 +246,28 @@ Destroying test database for alias 'default'...
 
 ---
 
-## 🚀 Local Setup & Quickstart
+## 🚀 Local Setup & Docker Deployment
 
+### Option A: Local Python Environment
 ```bash
-# 1. Clone the repository
+# 1. Clone repository
 git clone https://github.com/pydigitalservices/HealthCare.git
 cd HealthCare/Backend
 
-# 2. Create and activate a virtual environment
+# 2. Virtual environment & dependencies
 python -m venv venv
 venv\Scripts\activate        # Windows
-# source venv/bin/activate   # Mac / Linux
-
-# 3. Install required dependencies
 pip install -r requirements.txt
 
-# 4. Apply database migrations
+# 3. Migrate and run
 python manage.py migrate
-
-# 5. Seed clinical test data & Doctor Roster
-# POST http://127.0.0.1:8000/api/admin/seed-demo-data/
-
-# 6. Start the development server
 python manage.py runserver
 ```
 
-| Local Interface | Local URL |
-| :--- | :--- |
-| 🏠 **Root API Landing** | http://127.0.0.1:8000/ |
-| 📄 **Swagger UI** | http://127.0.0.1:8000/api/docs/ |
-| 📘 **ReDoc** | http://127.0.0.1:8000/api/redoc/ |
-| 📊 **Admin Dashboard API** | http://127.0.0.1:8000/api/admin/dashboard/ |
-| 🏥 **System Health Check API** | http://127.0.0.1:8000/api/admin/health/ |
-| ⚙️ **Django Admin Portal** | http://127.0.0.1:8000/admin/ |
+### Option B: Production Docker Deployment (1 Command)
+```bash
+docker-compose up --build -d
+```
 
 ---
 
@@ -289,16 +281,9 @@ An exported MySQL DDL schema file is located at **`Backend/database_schema.sql`*
 
 An importable Postman collection is located at **`Backend/Postman_Collection.json`**.
 
-### Included Request Folders:
-1. **🔐 Authentication**: JWT Obtain Token & Refresh Token requests.
-2. **⚙️ System Integration**: Health check with database latency metrics.
-3. **📊 Admin Dashboard APIs**: Seed demo data, dashboard summary, paginated audit logs.
-4. **📅 Appointment Management APIs**: List, filter by department/priority, create with auto token & video link, update status, soft-delete, print OPD slip.
-5. **📚 API Documentation**: Direct links to Swagger UI and ReDoc.
-
 ---
 
-## 🤖 CI/CD Pipeline & Vercel Cloud Deployment
+## 🤖 CI/CD Pipeline & Cloud Deployment
 
 - **GitHub Actions CI (`.github/workflows/django_ci.yml`)**: Executes system check (`python manage.py check`), static asset compilation (`collectstatic`), and runs all 23 unit tests on every push.
 - **Vercel Cloud Deployment (`vercel.json`)**: Pre-configured for serverless WSGI execution on Vercel with Whitenoise static asset handling.
