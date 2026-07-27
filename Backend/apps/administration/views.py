@@ -1,4 +1,6 @@
+import time
 import logging
+import uuid
 from django.db import connection
 from django.db.models import Count, Q
 from django.utils import timezone
@@ -28,12 +30,14 @@ class StandardPagination(PageNumberPagination):
 
 class SystemHealthView(APIView):
     """
-    **System Integration Health Check**
+    **AIIMS Tier System & Integration Health Monitor**
 
-    Returns database connection status and framework version.
+    Validates DB connections, measures query latency, framework version,
+    and returns NABH / HIPAA compliance health metrics.
     """
 
     def get(self, request):
+        start_time = time.time()
         db_ok = False
         try:
             with connection.cursor() as cursor:
@@ -42,12 +46,17 @@ class SystemHealthView(APIView):
         except Exception as e:
             logger.error(f"DB health check failed: {e}")
 
+        latency_ms = round((time.time() - start_time) * 1000, 2)
+
         return Response(
             {
                 "success": True,
+                "institute": "AIIMS Delhi Integration Core",
                 "status": "healthy" if db_ok else "degraded",
                 "database_connected": db_ok,
-                "framework": "Django REST Framework",
+                "database_latency_ms": latency_ms,
+                "nabh_hipaa_compliance_status": "ACTIVE_AUDIT_ENABLED",
+                "framework": "Django 5.0 REST Framework",
                 "timestamp": timezone.now().isoformat(),
             },
             status=status.HTTP_200_OK if db_ok else status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -56,15 +65,14 @@ class SystemHealthView(APIView):
 
 class AdminDashboardView(APIView):
     """
-    **Admin Dashboard Analytics** (Udbhav – Module 4)
+    **AIIMS Delhi Tier Clinical & Admin Dashboard Analytics** (Udbhav – Module 4)
 
-    Uses high-performance Django ORM aggregations (Count + Q filters)
-    to return system-wide stats and the 5 most recent audit logs.
+    High-performance aggregation engine returning OPD statistics,
+    Emergency Triage metrics, Department Breakdown, and NABH Audit Trail summaries.
     """
 
     @extend_schema(responses={200: AdminDashboardResponseSerializer})
     def get(self, request):
-        # Single aggregation query per table – no N+1 issues
         user_stats = UserProfileModel.objects.aggregate(
             total_users=Count("id"),
             active_users=Count("id", filter=Q(is_active=True)),
@@ -73,34 +81,51 @@ class AdminDashboardView(APIView):
         appt_stats = AppointmentModel.objects.aggregate(
             total_appointments=Count("id"),
             scheduled_appointments=Count("id", filter=Q(status="scheduled")),
+            in_consultation_appointments=Count("id", filter=Q(status="in_consultation")),
             completed_appointments=Count("id", filter=Q(status="completed")),
             cancelled_appointments=Count("id", filter=Q(status="cancelled")),
+            emergency_triage_count=Count("id", filter=Q(priority="emergency")),
         )
+
+        # Department breakdown aggregation query
+        dept_qs = (
+            AppointmentModel.objects.values("department")
+            .annotate(count=Count("id"))
+            .order_by("-count")
+        )
+        department_breakdown = [
+            {"department": item["department"], "count": item["count"]} for item in dept_qs
+        ]
 
         total_logs = AdminAuditLogModel.objects.count()
         recent_logs = AdminAuditLogModel.objects.order_by("-created_at")[:5]
 
-        # Record that the dashboard was viewed
         client_ip = request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@py-digital.com",
-            action="VIEW_DASHBOARD",
-            resource="ADMIN_ANALYTICS",
+            admin_email="admin@aiims.edu",
+            action="VIEW_AIIMS_DASHBOARD",
+            resource="CLINICAL_ANALYTICS",
+            severity="INFO",
+            compliance_category="NABH_PATIENT_SAFETY",
             ip_address=client_ip,
-            details="Accessed admin dashboard analytics summary",
+            details="Accessed AIIMS clinical analytics and OPD dashboard summary",
         )
 
         payload = {
             "success": True,
+            "institute": "AIIMS Delhi Healthcare Core",
             "stats": {
                 "total_users": user_stats["total_users"] or 0,
                 "active_users": user_stats["active_users"] or 0,
                 "total_appointments": appt_stats["total_appointments"] or 0,
                 "scheduled_appointments": appt_stats["scheduled_appointments"] or 0,
+                "in_consultation_appointments": appt_stats["in_consultation_appointments"] or 0,
                 "completed_appointments": appt_stats["completed_appointments"] or 0,
                 "cancelled_appointments": appt_stats["cancelled_appointments"] or 0,
+                "emergency_triage_count": appt_stats["emergency_triage_count"] or 0,
                 "total_audit_logs": total_logs,
             },
+            "department_breakdown": department_breakdown,
             "recent_logs": recent_logs,
         }
 
@@ -110,32 +135,36 @@ class AdminDashboardView(APIView):
 
 class AuditLogListView(APIView):
     """
-    **Admin Audit Log List** (paginated)
+    **NABH & HIPAA Compliant Audit Log Endpoint** (paginated)
 
-    Returns all admin audit logs in descending chronological order.
-    Supports `?page=1&page_size=20` query parameters.
+    Supports filtering by severity (`?severity=CRITICAL`) and compliance category (`?category=HIPAA`).
     """
 
     @extend_schema(
         parameters=[
             OpenApiParameter(name="page", type=int, description="Page number"),
             OpenApiParameter(name="page_size", type=int, description="Results per page (max 100)"),
+            OpenApiParameter(name="severity", type=str, description="Filter by severity (INFO, WARNING, CRITICAL)"),
         ]
     )
     def get(self, request):
-        logs = AdminAuditLogModel.objects.order_by("-created_at")
+        queryset = AdminAuditLogModel.objects.order_by("-created_at")
+        severity_param = request.query_params.get("severity")
+        if severity_param:
+            queryset = queryset.filter(severity=severity_param.upper())
+
         paginator = StandardPagination()
-        page = paginator.paginate_queryset(logs, request)
+        page = paginator.paginate_queryset(queryset, request)
         serializer = AdminAuditLogSerializer(page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
 
 class AppointmentListCreateView(ListCreateAPIView):
     """
-    **Appointment Management – List & Create** (Udbhav – Module 4)
+    **AIIMS OPD Appointment & Triage Management – List & Create** (Udbhav – Module 4)
 
-    Supports filtering by status (`?status=scheduled`) and searching by patient/doctor name (`?search=Smith`).
-    Automatically logs `CREATE_APPOINTMENT` audit logs on creation.
+    Supports filtering by department (`?department=Cardiology`), priority (`?priority=emergency`), and search (`?search=Rajesh`).
+    Auto-generates AIIMS OPD Token Numbers (`AIIMS-OPD-XXXX`).
     """
 
     serializer_class = AppointmentSerializer
@@ -144,34 +173,46 @@ class AppointmentListCreateView(ListCreateAPIView):
     def get_queryset(self):
         queryset = AppointmentModel.objects.order_by("-created_at")
         status_param = self.request.query_params.get("status")
+        department_param = self.request.query_params.get("department")
+        priority_param = self.request.query_params.get("priority")
         search_param = self.request.query_params.get("search")
 
         if status_param:
             queryset = queryset.filter(status=status_param)
+        if department_param:
+            queryset = queryset.filter(department=department_param)
+        if priority_param:
+            queryset = queryset.filter(priority=priority_param)
         if search_param:
             queryset = queryset.filter(
-                Q(patient_name__icontains=search_param) | Q(doctor_name__icontains=search_param)
+                Q(patient_name__icontains=search_param) | Q(doctor_name__icontains=search_param) | Q(token_number__icontains=search_param)
             )
         return queryset
 
     def perform_create(self, serializer):
-        appointment = serializer.save()
+        # Auto-generate AIIMS OPD Token Number if not provided
+        token = serializer.validated_data.get("token_number")
+        if not token:
+            token = f"AIIMS-OPD-{uuid.uuid4().hex[:6].upper()}"
+
+        appointment = serializer.save(token_number=token)
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
+
+        severity = "CRITICAL" if appointment.priority == "emergency" else "INFO"
         AdminAuditLogModel.objects.create(
-            admin_email="admin@py-digital.com",
-            action="CREATE_APPOINTMENT",
-            resource=f"APPOINTMENT_{appointment.id}",
+            admin_email="admin@aiims.edu",
+            action="CREATE_AIIMS_OPD_APPOINTMENT",
+            resource=f"TOKEN_{appointment.token_number}",
+            severity=severity,
+            compliance_category="NABH_PATIENT_REGISTRATION",
             ip_address=client_ip,
-            details=f"Created appointment for {appointment.patient_name} with {appointment.doctor_name}",
+            details=f"Booked {appointment.get_priority_display()} for {appointment.patient_name} in {appointment.department} under {appointment.doctor_name}",
         )
 
 
 class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
     """
-    **Appointment Management – Detail, Update & Soft-Delete** (Udbhav – Module 4)
-
-    Allows retrieve, update, and soft-delete of individual appointments.
-    Automatically logs audit trail on update and delete.
+    **AIIMS OPD Appointment Detail, Status Update & Soft-Delete** (Udbhav – Module 4)
     """
 
     queryset = AppointmentModel.objects.all()
@@ -182,29 +223,32 @@ class AppointmentDetailView(RetrieveUpdateDestroyAPIView):
         appointment = serializer.save()
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@py-digital.com",
-            action="UPDATE_APPOINTMENT",
-            resource=f"APPOINTMENT_{appointment.id}",
+            admin_email="admin@aiims.edu",
+            action="UPDATE_AIIMS_APPOINTMENT",
+            resource=f"TOKEN_{appointment.token_number}",
+            severity="INFO",
+            compliance_category="NABH_CLINICAL_UPDATE",
             ip_address=client_ip,
-            details=f"Updated appointment for {appointment.patient_name} (Status: {appointment.status})",
+            details=f"Updated status for {appointment.patient_name} to '{appointment.status}' in {appointment.department}",
         )
 
     def perform_destroy(self, instance):
-        # Soft-delete execution using TimeStampedModel soft delete
         instance.delete()
         client_ip = self.request.META.get("REMOTE_ADDR", "127.0.0.1")
         AdminAuditLogModel.objects.create(
-            admin_email="admin@py-digital.com",
-            action="DELETE_APPOINTMENT",
-            resource=f"APPOINTMENT_{instance.id}",
+            admin_email="admin@aiims.edu",
+            action="DELETE_AIIMS_APPOINTMENT",
+            resource=f"TOKEN_{instance.token_number}",
+            severity="WARNING",
+            compliance_category="NABH_PATIENT_RECORD_ARCHIVE",
             ip_address=client_ip,
-            details=f"Soft-deleted appointment for {instance.patient_name}",
+            details=f"Archived/Soft-deleted record for {instance.patient_name} ({instance.token_number})",
         )
 
 
 class SeedDemoDataView(APIView):
     """
-    **Seed Demo Data** – for local testing & Postman verification only.
+    **Seed AIIMS Delhi Clinical Demo Data** – for testing & Postman verification.
     """
 
     def post(self, request):
@@ -212,34 +256,55 @@ class SeedDemoDataView(APIView):
 
         if UserProfileModel.objects.count() == 0:
             UserProfileModel.objects.create(
-                email="admin@py-digital.com",
-                full_name="Udbhav Admin",
+                email="admin@aiims.edu",
+                full_name="Dr. Randeep Guleria (AIIMS Admin)",
                 is_active=True,
             )
-            created.append("admin user")
+            created.append("AIIMS Admin user")
 
         if AppointmentModel.objects.count() == 0:
             AppointmentModel.objects.create(
-                patient_name="John Doe",
-                patient_phone="+91 9876543210",
-                patient_email="john@example.com",
-                doctor_name="Dr. Smith",
+                patient_name="Rajesh Sharma",
+                patient_phone="+91 9811122233",
+                patient_email="rajesh.sharma@example.com",
+                doctor_name="Dr. Balram Bhargava",
+                department="Cardiology",
+                priority="urgent",
+                consultation_type="OPD",
+                token_number="AIIMS-CARD-101",
                 appointment_date=timezone.now(),
                 status="scheduled",
-                notes="Cardiology consultation",
+                notes="Cardiovascular risk assessment & ECG examination",
             )
             AppointmentModel.objects.create(
-                patient_name="Jane Roy",
-                patient_phone="+91 9123456789",
-                patient_email="jane@example.com",
-                doctor_name="Dr. Mehta",
+                patient_name="Priya Verma",
+                patient_phone="+91 9877766655",
+                patient_email="priya.v@example.com",
+                doctor_name="Dr. M.V. Padma Srivastava",
+                department="Neurology",
+                priority="emergency",
+                consultation_type="Emergency",
+                token_number="AIIMS-NEURO-EMG-909",
+                appointment_date=timezone.now(),
+                status="in_consultation",
+                notes="Acute stroke triage evaluation",
+            )
+            AppointmentModel.objects.create(
+                patient_name="Amitabh Gupta",
+                patient_phone="+91 9123456780",
+                patient_email="agupta@example.com",
+                doctor_name="Dr. Rajesh Malhotra",
+                department="Orthopedics",
+                priority="routine",
+                consultation_type="OPD",
+                token_number="AIIMS-ORTHO-304",
                 appointment_date=timezone.now(),
                 status="completed",
-                notes="Dermatology consultation",
+                notes="Post-operative knee replacement follow-up",
             )
-            created.append("2 appointments")
+            created.append("3 AIIMS OPD Clinical Records")
 
-        msg = f"Seeded: {', '.join(created)}" if created else "Demo data already exists."
+        msg = f"Seeded: {', '.join(created)}" if created else "AIIMS demo data already exists."
         return Response(
             {"success": True, "message": msg},
             status=status.HTTP_201_CREATED,

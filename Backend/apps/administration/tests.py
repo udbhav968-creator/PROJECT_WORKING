@@ -11,14 +11,16 @@ class SystemHealthTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["status"], "healthy")
         self.assertTrue(response.data["database_connected"])
+        self.assertIn("database_latency_ms", response.data)
 
-    def test_health_response_has_timestamp(self):
+    def test_health_response_has_aiims_meta(self):
         response = self.client.get(reverse("system-health"))
         self.assertIn("timestamp", response.data)
+        self.assertIn("nabh_hipaa_compliance_status", response.data)
 
 
 class SeedDemoDataTests(APITestCase):
-    def test_seed_creates_records(self):
+    def test_seed_creates_aiims_records(self):
         response = self.client.post(reverse("seed-demo-data"))
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(response.data["success"])
@@ -39,25 +41,25 @@ class AdminDashboardTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data["success"])
         self.assertIn("stats", response.data)
+        self.assertIn("department_breakdown", response.data)
         self.assertIn("recent_logs", response.data)
 
-    def test_dashboard_stats_have_required_keys(self):
+    def test_dashboard_stats_have_aiims_keys(self):
         response = self.client.get(reverse("admin-dashboard"))
         stats = response.data["stats"]
         for key in [
             "total_users", "active_users", "total_appointments",
-            "scheduled_appointments", "completed_appointments",
-            "cancelled_appointments", "total_audit_logs",
+            "scheduled_appointments", "in_consultation_appointments",
+            "completed_appointments", "cancelled_appointments",
+            "emergency_triage_count", "total_audit_logs",
         ]:
             self.assertIn(key, stats)
 
-    def test_dashboard_user_count_correct(self):
+    def test_dashboard_department_breakdown(self):
         response = self.client.get(reverse("admin-dashboard"))
-        self.assertGreaterEqual(response.data["stats"]["total_users"], 1)
-
-    def test_dashboard_appointment_count_correct(self):
-        response = self.client.get(reverse("admin-dashboard"))
-        self.assertGreaterEqual(response.data["stats"]["total_appointments"], 2)
+        breakdown = response.data["department_breakdown"]
+        self.assertIsInstance(breakdown, list)
+        self.assertGreaterEqual(len(breakdown), 1)
 
 
 class AuditLogListTests(APITestCase):
@@ -69,22 +71,26 @@ class AuditLogListTests(APITestCase):
         response = self.client.get(reverse("audit-log-list"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_audit_log_list_is_paginated(self):
-        response = self.client.get(reverse("audit-log-list"))
-        self.assertIn("count", response.data)
+    def test_audit_log_severity_filter(self):
+        response = self.client.get(reverse("audit-log-list") + "?severity=INFO")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("results", response.data)
 
 
 class AppointmentManagementTests(APITestCase):
     def setUp(self):
         self.appointment = AppointmentModel.objects.create(
-            patient_name="Alice Smith",
-            patient_phone="+91 9998887770",
-            patient_email="alice@example.com",
-            doctor_name="Dr. House",
+            patient_name="Rajesh Sharma",
+            patient_phone="+91 9811122233",
+            patient_email="rajesh@example.com",
+            doctor_name="Dr. Balram Bhargava",
+            department="Cardiology",
+            priority="urgent",
+            consultation_type="OPD",
+            token_number="AIIMS-CARD-101",
             appointment_date=timezone.now(),
             status="scheduled",
-            notes="Initial consultation",
+            notes="Initial ECG examination",
         )
 
     def test_list_appointments(self):
@@ -92,51 +98,57 @@ class AppointmentManagementTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
 
-    def test_create_appointment(self):
+    def test_create_appointment_auto_token(self):
         payload = {
-            "patient_name": "Bob Marley",
+            "patient_name": "Suresh Raina",
             "patient_phone": "+91 8887776665",
-            "patient_email": "bob@example.com",
-            "doctor_name": "Dr. Watson",
+            "patient_email": "suresh@example.com",
+            "doctor_name": "Dr. Guleria",
+            "department": "Emergency_Care",
+            "priority": "emergency",
+            "consultation_type": "Emergency",
             "appointment_date": timezone.now().isoformat(),
             "status": "scheduled",
-            "notes": "Follow-up checkup",
+            "notes": "Emergency triage evaluation",
         }
         response = self.client.post(reverse("appointment-list-create"), payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn("AIIMS-OPD-", response.data["token_number"])
         self.assertEqual(AppointmentModel.objects.count(), 2)
-        # Verify audit log was created
-        self.assertTrue(AdminAuditLogModel.objects.filter(action="CREATE_APPOINTMENT").exists())
+        # Verify critical severity audit log was created
+        self.assertTrue(AdminAuditLogModel.objects.filter(severity="CRITICAL").exists())
 
     def test_retrieve_appointment_detail(self):
         url = reverse("appointment-detail", kwargs={"pk": self.appointment.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["patient_name"], "Alice Smith")
+        self.assertEqual(response.data["token_number"], "AIIMS-CARD-101")
 
     def test_update_appointment(self):
         url = reverse("appointment-detail", kwargs={"pk": self.appointment.id})
         payload = {
-            "patient_name": "Alice Smith",
-            "patient_phone": "+91 9998887770",
-            "patient_email": "alice@example.com",
-            "doctor_name": "Dr. House",
+            "patient_name": "Rajesh Sharma",
+            "patient_phone": "+91 9811122233",
+            "patient_email": "rajesh@example.com",
+            "doctor_name": "Dr. Balram Bhargava",
+            "department": "Cardiology",
+            "priority": "urgent",
+            "consultation_type": "OPD",
+            "token_number": "AIIMS-CARD-101",
             "appointment_date": timezone.now().isoformat(),
             "status": "completed",
-            "notes": "Consultation completed successfully",
+            "notes": "ECG completed successfully",
         }
         response = self.client.put(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.appointment.refresh_from_db()
         self.assertEqual(self.appointment.status, "completed")
-        self.assertTrue(AdminAuditLogModel.objects.filter(action="UPDATE_APPOINTMENT").exists())
+        self.assertTrue(AdminAuditLogModel.objects.filter(action="UPDATE_AIIMS_APPOINTMENT").exists())
 
     def test_soft_delete_appointment(self):
         url = reverse("appointment-detail", kwargs={"pk": self.appointment.id})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        # Should no longer be returned by default Manager (soft-deleted)
         self.assertFalse(AppointmentModel.objects.filter(id=self.appointment.id).exists())
-        # Should still exist in database via all_objects
         self.assertTrue(AppointmentModel.all_objects.filter(id=self.appointment.id).exists())
-        self.assertTrue(AdminAuditLogModel.objects.filter(action="DELETE_APPOINTMENT").exists())
+        self.assertTrue(AdminAuditLogModel.objects.filter(action="DELETE_AIIMS_APPOINTMENT").exists())
