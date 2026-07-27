@@ -21,8 +21,8 @@
   letter-spacing: 0.05em;
 }
 
-/* AIIMS Hero Header Section */
-.hero-aiims-banner {
+/* Enterprise Hero Header Section */
+.hero-enterprise-banner {
   background: linear-gradient(135deg, #0a2540 0%, #004080 50%, #00a896 100%);
   color: #ffffff;
   padding: 60px 24px 80px;
@@ -31,7 +31,7 @@
   overflow: hidden;
 }
 
-.hero-aiims-banner::before {
+.hero-enterprise-banner::before {
   content: '';
   position: absolute;
   top: -50%;

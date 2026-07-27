@@ -9,13 +9,13 @@ export default function Home() {
     <div style={{ minHeight: '100vh' }}>
       <TopHeaderBar />
 
-      <section className="hero-aiims-banner">
+      <section className="hero-enterprise-banner">
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <span style={{ background: 'rgba(255, 255, 255, 0.15)', padding: '6px 18px', borderRadius: '30px', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.05em' }}>
             PURE HEALTH CLINIC & HOSPITAL SYSTEMS
           </span>
           <h1 style={{ fontSize: '3rem', margin: '16px 0', lineHeight: 1.15 }}>
-            Personalized Patient Care & AIIMS-Grade Clinical Excellence
+            Personalized Patient Care & Enterprise Clinical Excellence
           </h1>
           <p style={{ fontSize: '1.2rem', color: '#e2e8f0', maxWidth: '750px', margin: '0 auto 24px' }}>
             Led by <strong>Dr. Divit Shah</strong> (Medical Director), providing compassionate, high-quality, tailored medical OPD services, tele-consultation video rooms, and 24x7 emergency triage.
