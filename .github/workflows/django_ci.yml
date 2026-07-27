@@ -24,14 +24,23 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run Django System Check
+    - name: Apply Migrations
       env:
         SECRET_KEY: ci-secret-key-testing-udbhav-2026
         DEBUG: "True"
         PYTHONPATH: Backend
       run: |
         cd Backend
-        python manage.py check
+        python manage.py migrate
+
+    - name: Collect Static Files
+      env:
+        SECRET_KEY: ci-secret-key-testing-udbhav-2026
+        DEBUG: "True"
+        PYTHONPATH: Backend
+      run: |
+        cd Backend
+        python manage.py collectstatic --noinput
 
     - name: Run Django Automated Unit Tests
       env:
@@ -40,4 +49,4 @@ jobs:
         PYTHONPATH: Backend
       run: |
         cd Backend
-        python manage.py test apps.administration
+        python manage.py test apps.administration --verbosity=2
