@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: purehealth_mysql_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: clinic_db
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: clinic_user
+      MYSQL_PASSWORD: clinic_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: .
+    container_name: purehealth_backend_api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_ENGINE=django.db.backends.mysql
+      - DB_NAME=clinic_db
+      - DB_USER=clinic_user
+      - DB_PASSWORD=clinic_password
+      - DB_HOST=db
+      - DB_PORT=3306
+      - SECRET_KEY=production-secure-key-udbhav-purehealth-2026
+      - DEBUG=False
+      - ALLOWED_HOSTS=*
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:

@@ -83,7 +83,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'clinic_core.wsgi.application'
 
-# Database Configuration (MySQL support with SQLite fallback)
+# Production Database Connection Pooling & Retries
 if os.environ.get('DB_ENGINE') == 'django.db.backends.mysql':
     DATABASES = {
         'default': {
@@ -93,6 +93,8 @@ if os.environ.get('DB_ENGINE') == 'django.db.backends.mysql':
             'PASSWORD': os.environ.get('DB_PASSWORD', ''),
             'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
             'PORT': os.environ.get('DB_PORT', '3306'),
+            'CONN_MAX_AGE': 600,
+            'CONN_HEALTH_CHECKS': True,
             'OPTIONS': {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 'charset': 'utf8mb4',
@@ -127,7 +129,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS Config
 CORS_ALLOW_ALL_ORIGINS = True
 
-# Django REST Framework Settings
+# Production Security Headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# Django REST Framework Enterprise Production Settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -141,11 +148,11 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
+        'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/day',
-        'user': '1000/day'
+        'anon': '100/minute',
+        'user': '1000/minute',
     }
 }
 
@@ -160,8 +167,38 @@ SIMPLE_JWT = {
 
 # DRF Spectacular OpenAPI Config
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Healthcare Clinic Backend API',
-    'DESCRIPTION': 'Enterprise Backend for Healthcare Clinic Website (Udbhav Module)',
-    'VERSION': '1.0.0',
+    'TITLE': 'Healthcare Clinic Backend API — Enterprise Production',
+    'DESCRIPTION': 'Enterprise Healthcare Clinic Backend (Divit Pure Health Clinic Specification)',
+    'VERSION': '2.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+}
+
+# Production Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] [{levelname}] [{name}] [{process:d}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'clinic_core': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
 }
