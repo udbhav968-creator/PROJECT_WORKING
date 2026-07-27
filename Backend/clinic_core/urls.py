@@ -1,9 +1,37 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import redirect
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+
+@api_view(['GET'])
+def root_api_landing_view(request):
+    """
+    Root API Landing Endpoint for Pure Health Clinic Vercel Deployment
+    """
+    return Response({
+        "success": True,
+        "service": "Pure Health Clinic Backend REST API Core",
+        "institute": "Pure Health Clinic & Hospital Systems",
+        "status": "online",
+        "endpoints": {
+            "swagger_documentation": "/api/docs/",
+            "redoc_documentation": "/api/redoc/",
+            "system_health": "/api/admin/health/",
+            "admin_dashboard": "/api/admin/dashboard/",
+            "appointments_list": "/api/admin/appointments/",
+            "jwt_obtain_token": "/api/token/",
+        }
+    })
+
+
 urlpatterns = [
+    # Root API Welcome Landing
+    path('', root_api_landing_view, name='root-api-landing'),
+
     path('admin/', admin.site.urls),
     
     # OpenAPI Schema & Interactive Docs
