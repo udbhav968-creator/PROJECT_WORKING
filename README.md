@@ -1,5 +1,5 @@
 # 🏥 Pure Health Clinic Backend & Full-Stack Medical System
-### Enterprise Healthcare Portal, OPD Token Management & Administration Integration
+### Enterprise Healthcare Portal, AI Symptom Checker, OPD Token Management & Administration Integration
 
 ![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(28%2F28%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
@@ -16,10 +16,20 @@
 
 | Component / Layer | Live Cloud URL | Description |
 | :--- | :--- | :--- |
-| 🚀 **Live Production REST API Core** | [https://project-working-snojkumar968-9939s-projects.vercel.app](https://project-working-snojkumar968-9939s-projects.vercel.app) | Root JSON directory & live backend REST service |
+| 🚀 **Live Production Full-Stack Website** | [https://project-working-snojkumar968-9939s-projects.vercel.app](https://project-working-snojkumar968-9939s-projects.vercel.app) | Live website with AI Symptom Checker, OPD booking & TV display board |
 | ⚡ **Interactive Swagger UI (OpenAPI 3.0)** | [https://project-working-snojkumar968-9939s-projects.vercel.app/api/docs/](https://project-working-snojkumar968-9939s-projects.vercel.app/api/docs/) | Interactive API testing documentation portal |
 | 📖 **ReDoc Technical Schema** | [https://project-working-snojkumar968-9939s-projects.vercel.app/api/redoc/](https://project-working-snojkumar968-9939s-projects.vercel.app/api/redoc/) | Comprehensive OpenAPI schema documentation |
 | 👤 **GitHub Personal Repository** | [https://github.com/udbhav968-creator/PROJECT_WORKING](https://github.com/udbhav968-creator/PROJECT_WORKING) | Synchronized code repository |
+
+---
+
+## 🚀 Next-Gen Enterprise Features Included
+
+- 🤖 **AI Clinical Symptom Checker Assistant**: Analyzes patient symptom descriptions and automatically recommends clinical departments (e.g. Cardiology) and attending specialist doctors.
+- 🌐 **Multi-Language English / Hindi Toggle**: 1-Click header switcher translating OPD labels and emergency helpline text for regional accessibility.
+- 💳 **Razorpay / UPI Payment Gateway Simulator**: Allows patients to choose between Cash/Card at Reception and Instant Online UPI Payment.
+- 📺 **Live Reception OPD TV Display Board**: Real-time waiting lounge callout screen displaying active tokens (`NOW CALLING: PURE-GEN-101 TO ROOM 101`).
+- 📄 **Multi-Page Web Portal Navigation**: Navigation bar routing **Home**, **AI Symptom Checker**, **Reception Token Board**, **About Us**, **Medical Services**, **Doctors Directory**, and **Contact Helpdesk**.
 
 ---
 
@@ -27,8 +37,8 @@
 
 | Architectural Layer | Primary Technologies Used | Features & Capabilities |
 | :--- | :--- | :--- |
-| **Frontend UI** | React 18, React Router v6, TypeScript 5, Vite, Vanilla CSS | Glassmorphism UI, OPD Booking Widget, Doctor Duty Roster Ticker, 24x7 Emergency Triage Bar |
-| **Backend Core** | Python 3.10, Django 5.0, DRF 3.14, Node.js Express TypeScript | SimpleJWT Auth, OPD Token Generator, Telehealth Video Link Generator, Emergency Alerts |
+| **Frontend UI** | HTML5, JavaScript ES6+, React 18, TypeScript 5, Vite | Microsoft Fluent UI Design, AI Symptom Checker, OPD Token Booking, TV Board |
+| **Backend Core** | Python 3.10 / 3.12, Django 5.0, DRF 3.14, Node.js Express TS | SimpleJWT Auth, OPD Token Generator, Telehealth Video Link Generator, Emergency Alerts |
 | **Database** | MySQL 8.0 & SQLite3 with Django ORM & Mongoose | Composite Indexes, UUID Keys, Soft-Deletion Manager, Raw DDL Dump (`database_schema.sql`) |
 | **Security** | SimpleJWT, Bcrypt, CORS Headers, DRF Throttling | Role-Based Access Control (`IsAdminUserRole`), Rate Limiting (100/min), Security Headers |
 | **DevOps & Cloud** | Vercel Serverless, Docker, Docker-Compose, GitHub Actions CI | 1-Command Docker Setup, Automated CI Test Pipeline (28 Tests), Static File Serving |
@@ -81,7 +91,7 @@ Output:
 Found 28 test(s).
 System check identified no issues (0 silenced).
 ----------------------------------------------------------------------
-Ran 28 tests in 5.414s
+Ran 28 tests in 4.532s
 
 OK (100% Pass Rate Across All 4 Modules)
 ```
