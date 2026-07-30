@@ -108,6 +108,7 @@ class DoctorRosterModel(TimeStampedModel):
     room_number = models.CharField(max_length=50, default='OPD Room 101')
     max_daily_patients = models.IntegerField(default=30)
     current_queue_count = models.IntegerField(default=0)
+    estimated_wait_time_minutes = models.IntegerField(default=15)
 
     class Meta:
         db_table = 'doctor_roster'
