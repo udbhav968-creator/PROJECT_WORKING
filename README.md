@@ -4,6 +4,8 @@
 ![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(28%2F28%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
+![Node Express](https://img.shields.io/badge/Node.js-Express%20TypeScript-339933?style=for-the-badge&logo=nodedotjs)
+![React TS](https://img.shields.io/badge/React-18%20TypeScript-61DAFB?style=for-the-badge&logo=react)
 ![Coverage](https://img.shields.io/badge/Test%20Coverage-100%25-brightgreen?style=for-the-badge)
 ![Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ed?style=for-the-badge&logo=docker)
@@ -18,6 +20,18 @@
 | ⚡ **Interactive Swagger UI (OpenAPI 3.0)** | [https://project-working-snojkumar968-9939s-projects.vercel.app/api/docs/](https://project-working-snojkumar968-9939s-projects.vercel.app/api/docs/) | Interactive API testing documentation portal |
 | 📖 **ReDoc Technical Schema** | [https://project-working-snojkumar968-9939s-projects.vercel.app/api/redoc/](https://project-working-snojkumar968-9939s-projects.vercel.app/api/redoc/) | Comprehensive OpenAPI schema documentation |
 | 👤 **GitHub Personal Repository** | [https://github.com/udbhav968-creator/PROJECT_WORKING](https://github.com/udbhav968-creator/PROJECT_WORKING) | Synchronized code repository |
+
+---
+
+## 🛠️ Full-Stack Technology Stack Table
+
+| Architectural Layer | Primary Technologies Used | Features & Capabilities |
+| :--- | :--- | :--- |
+| **Frontend UI** | React 18, React Router v6, TypeScript 5, Vite, Vanilla CSS | Glassmorphism UI, OPD Booking Widget, Doctor Duty Roster Ticker, 24x7 Emergency Triage Bar |
+| **Backend Core** | Python 3.10, Django 5.0, DRF 3.14, Node.js Express TypeScript | SimpleJWT Auth, OPD Token Generator, Telehealth Video Link Generator, Emergency Alerts |
+| **Database** | MySQL 8.0 & SQLite3 with Django ORM & Mongoose | Composite Indexes, UUID Keys, Soft-Deletion Manager, Raw DDL Dump (`database_schema.sql`) |
+| **Security** | SimpleJWT, Bcrypt, CORS Headers, DRF Throttling | Role-Based Access Control (`IsAdminUserRole`), Rate Limiting (100/min), Security Headers |
+| **DevOps & Cloud** | Vercel Serverless, Docker, Docker-Compose, GitHub Actions CI | 1-Command Docker Setup, Automated CI Test Pipeline (28 Tests), Static File Serving |
 
 ---
 
@@ -69,7 +83,7 @@ System check identified no issues (0 silenced).
 ----------------------------------------------------------------------
 Ran 28 tests in 5.414s
 
-OK
+OK (100% Pass Rate Across All 4 Modules)
 ```
 
 ---
