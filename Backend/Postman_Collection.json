@@ -1,237 +1,171 @@
 {
-    "info": {
-        "_postman_id": "udbhav-module4-final-2026",
-        "name": "🏥 Healthcare Clinic API – Udbhav Module 4 (Admin & Integration)",
-        "description": "Complete Postman Collection for Module 4: Administration & System Integration.\n\n**Endpoints covered:**\n- JWT Authentication\n- System Health Check\n- Admin Dashboard Analytics\n- Audit Log List (paginated)\n- Appointment Management (List, Create, Detail, Update, Soft-Delete)\n- Demo Data Seeding\n\n**Base URL:** http://127.0.0.1:8000",
-        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-    },
-    "item": [
-        {
-            "name": "🔐 Authentication",
-            "item": [
-                {
-                    "name": "Obtain JWT Access Token",
-                    "request": {
-                        "method": "POST",
-                        "header": [{"key": "Content-Type", "value": "application/json"}],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"adminpassword\"\n}"
-                        },
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/token/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "token", ""]
-                        }
-                    }
-                },
-                {
-                    "name": "Refresh JWT Token",
-                    "request": {
-                        "method": "POST",
-                        "header": [{"key": "Content-Type", "value": "application/json"}],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"refresh\": \"<your_refresh_token_here>\"\n}"
-                        },
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/token/refresh/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "token", "refresh", ""]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "⚙️ System Integration",
-            "item": [
-                {
-                    "name": "System Health Check",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/health/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "health", ""]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "📊 Admin Dashboard APIs",
-            "item": [
-                {
-                    "name": "Seed Demo Testing Data",
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/seed-demo-data/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "seed-demo-data", ""]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Admin Dashboard Summary",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/dashboard/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "dashboard", ""]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Audit Logs (Paginated)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/audit-logs/?page=1&page_size=10",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "audit-logs", ""],
-                            "query": [
-                                {"key": "page", "value": "1"},
-                                {"key": "page_size", "value": "10"}
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "📅 Appointment Management APIs",
-            "item": [
-                {
-                    "name": "List All Appointments",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/appointments/?status=scheduled&search=Smith",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "appointments", ""],
-                            "query": [
-                                {"key": "status", "value": "scheduled"},
-                                {"key": "search", "value": "Smith"}
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Create Appointment",
-                    "request": {
-                        "method": "POST",
-                        "header": [{"key": "Content-Type", "value": "application/json"}],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"patient_name\": \"Robert Paulson\",\n    \"patient_phone\": \"+91 9876543210\",\n    \"patient_email\": \"robert@example.com\",\n    \"doctor_name\": \"Dr. Watson\",\n    \"appointment_date\": \"2026-08-01T10:00:00Z\",\n    \"status\": \"scheduled\",\n    \"notes\": \"General Health Checkup\"\n}"
-                        },
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/appointments/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "appointments", ""]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Appointment Detail",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/appointments/<appointment_uuid>/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "appointments", "<appointment_uuid>", ""]
-                        }
-                    }
-                },
-                {
-                    "name": "Update Appointment Status/Details",
-                    "request": {
-                        "method": "PUT",
-                        "header": [{"key": "Content-Type", "value": "application/json"}],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"patient_name\": \"Robert Paulson\",\n    \"patient_phone\": \"+91 9876543210\",\n    \"patient_email\": \"robert@example.com\",\n    \"doctor_name\": \"Dr. Watson\",\n    \"appointment_date\": \"2026-08-01T10:00:00Z\",\n    \"status\": \"completed\",\n    \"notes\": \"Checkup completed, prescription issued\"\n}"
-                        },
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/appointments/<appointment_uuid>/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "appointments", "<appointment_uuid>", ""]
-                        }
-                    }
-                },
-                {
-                    "name": "Soft-Delete Appointment",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [],
-                        "url": {
-                            "raw": "http://127.0.0.1:8000/api/admin/appointments/<appointment_uuid>/",
-                            "protocol": "http",
-                            "host": ["127", "0", "0", "1"],
-                            "port": "8000",
-                            "path": ["api", "admin", "appointments", "<appointment_uuid>", ""]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "📚 API Documentation",
-            "item": [
-                {
-                    "name": "Swagger UI (Open in Browser)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {"raw": "http://127.0.0.1:8000/api/docs/"}
-                    }
-                },
-                {
-                    "name": "ReDoc (Open in Browser)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {"raw": "http://127.0.0.1:8000/api/redoc/"}
-                    }
-                },
-                {
-                    "name": "OpenAPI JSON Schema",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {"raw": "http://127.0.0.1:8000/api/schema/"}
-                    }
-                }
-            ]
-        }
-    ]
+	"info": {
+		"_postman_id": "pure-health-clinic-fullstack-2026",
+		"name": "Pure Health Clinic & Hospital Systems - Full Stack Enterprise API Collection (Modules 1, 2, 3 & 4)",
+		"description": "Complete Postman Collection covering All 4 Team Modules: Auth, Appointments, Content Management & Administration Integration.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Module 1: Authentication & User Management",
+			"item": [
+				{
+					"name": "User Registration (/api/auth/register/)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"dr_divit\",\n  \"email\": \"divit.shah@purehealthclinic.com\",\n  \"password\": \"PureHealth@2026!\",\n  \"full_name\": \"Dr. Divit Shah\",\n  \"role_name\": \"Doctor\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/auth/register/", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register", ""] }
+					}
+				},
+				{
+					"name": "User Login & JWT Acquisition (/api/auth/login/)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"dr_divit\",\n  \"password\": \"PureHealth@2026!\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/auth/login/", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login", ""] }
+					}
+				},
+				{
+					"name": "User Profile (/api/auth/profile/)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{jwt_access_token}}" }
+						],
+						"url": { "raw": "{{baseUrl}}/api/auth/profile/", "host": ["{{baseUrl}}"], "path": ["api", "auth", "profile", ""] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Module 2: OPD Appointments & Queue Management",
+			"item": [
+				{
+					"name": "List OPD Appointments (/api/admin/appointments/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/admin/appointments/?status=scheduled", "host": ["{{baseUrl}}"], "path": ["api", "admin", "appointments", ""], "query": [{"key": "status", "value": "scheduled"}] }
+					}
+				},
+				{
+					"name": "Book OPD Token & Telehealth Link (/api/admin/appointments/)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"patient_name\": \"Udbhav Sharma\",\n  \"patient_phone\": \"+91 9811122233\",\n  \"patient_email\": \"udbhav@example.com\",\n  \"doctor_name\": \"Dr. Divit Shah\",\n  \"department\": \"General_Consultation\",\n  \"priority\": \"emergency\",\n  \"consultation_type\": \"Teleconsultation\",\n  \"consultation_fee_inr\": 600.00,\n  \"appointment_date\": \"2026-07-31T10:00:00Z\",\n  \"notes\": \"Emergency telemedicine consultation\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/admin/appointments/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "appointments", ""] }
+					}
+				},
+				{
+					"name": "Printable Reception OPD Slip (/api/admin/appointments/{id}/slip/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/admin/appointments/{{appointment_id}}/slip/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "appointments", "{{appointment_id}}", "slip", ""] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Module 3: Content Management APIs",
+			"item": [
+				{
+					"name": "List Medical Services (/api/content/services/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/content/services/", "host": ["{{baseUrl}}"], "path": ["api", "content", "services", ""] }
+					}
+				},
+				{
+					"name": "List Board-Certified Doctors (/api/content/doctors/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/content/doctors/", "host": ["{{baseUrl}}"], "path": ["api", "content", "doctors", ""] }
+					}
+				},
+				{
+					"name": "List Medical Blogs (/api/content/blogs/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/content/blogs/", "host": ["{{baseUrl}}"], "path": ["api", "content", "blogs", ""] }
+					}
+				},
+				{
+					"name": "List Testimonials (/api/content/testimonials/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/content/testimonials/", "host": ["{{baseUrl}}"], "path": ["api", "content", "testimonials", ""] }
+					}
+				},
+				{
+					"name": "Submit Contact Inquiry (/api/content/contact/)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"full_name\": \"Rahul Verma\",\n  \"email\": \"rahul@example.com\",\n  \"phone\": \"+91 9876543210\",\n  \"subject\": \"OPD Appointment Query\",\n  \"message\": \"Please inform about Dr. Divit Shah's consultation hours.\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/content/contact/", "host": ["{{baseUrl}}"], "path": ["api", "content", "contact", ""] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Module 4: Administration & System Integration",
+			"item": [
+				{
+					"name": "System Health Monitor (/api/admin/health/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/admin/health/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "health", ""] }
+					}
+				},
+				{
+					"name": "Admin Dashboard Analytics & Revenue (/api/admin/dashboard/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/admin/dashboard/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "dashboard", ""] }
+					}
+				},
+				{
+					"name": "Audit Logs (/api/admin/audit-logs/)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "{{baseUrl}}/api/admin/audit-logs/?severity=CRITICAL", "host": ["{{baseUrl}}"], "path": ["api", "admin", "audit-logs", ""], "query": [{"key": "severity", "value": "CRITICAL"}] }
+					}
+				},
+				{
+					"name": "Seed Demo Data (/api/admin/seed/)",
+					"request": {
+						"method": "POST",
+						"url": { "raw": "{{baseUrl}}/api/admin/seed/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "seed", ""] }
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{ "key": "baseUrl", "value": "https://project-working-snojkumar968-9939s-projects.vercel.app", "type": "string" },
+		{ "key": "jwt_access_token", "value": "", "type": "string" },
+		{ "key": "appointment_id", "value": "", "type": "string" }
+	]
 }

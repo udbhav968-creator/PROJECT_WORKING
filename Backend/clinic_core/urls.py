@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
@@ -23,6 +22,12 @@ def root_api_landing_view(request):
             "system_health": "/api/admin/health/",
             "admin_dashboard": "/api/admin/dashboard/",
             "appointments_list": "/api/admin/appointments/",
+            "user_auth": "/api/auth/register/",
+            "medical_services": "/api/content/services/",
+            "doctors_directory": "/api/content/doctors/",
+            "blog_articles": "/api/content/blogs/",
+            "patient_testimonials": "/api/content/testimonials/",
+            "contact_inquiries": "/api/content/contact/",
             "jwt_obtain_token": "/api/token/",
         }
     })
@@ -43,6 +48,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    # Application Modules
+    # Application Modules (Modules 1, 2, 3, 4)
+    path('api/auth/', include('apps.authentication.urls')),
     path('api/admin/', include('apps.administration.urls')),
+    path('api/content/', include('apps.content.urls')),
 ]

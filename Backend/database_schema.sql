@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Healthcare Clinic Website Backend Database Schema (MySQL DDL Dump)
 -- Company: PY Digital Services Pvt. Ltd.
--- Module Owner: Udbhav (Module 4 - Administration & System Integration)
+-- Complete Enterprise Full-Stack Architecture (Modules 1, 2, 3 & 4)
 -- Reference: https://divitpurehealthclinic.com/
 -- ============================================================================
 
@@ -9,7 +9,7 @@ CREATE DATABASE IF NOT EXISTS `clinic_db` DEFAULT CHARACTER SET utf8mb4 COLLATE 
 USE `clinic_db`;
 
 -- ----------------------------------------------------------------------------
--- Table: roles (Inherits TimeStampedModel)
+-- Module 1: roles (Inherits TimeStampedModel)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `roles` (
     `id` CHAR(36) NOT NULL PRIMARY KEY,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- Table: user_profiles (Inherits TimeStampedModel)
+-- Module 1: user_profiles (Inherits TimeStampedModel)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `user_profiles` (
     `id` CHAR(36) NOT NULL PRIMARY KEY,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `user_profiles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- Table: doctor_roster (Inherits TimeStampedModel)
+-- Module 2 & 4: doctor_roster (Inherits TimeStampedModel)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `doctor_roster` (
     `id` CHAR(36) NOT NULL PRIMARY KEY,
@@ -49,15 +49,18 @@ CREATE TABLE IF NOT EXISTS `doctor_roster` (
     `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
     `doctor_name` VARCHAR(255) NOT NULL UNIQUE,
     `department` VARCHAR(100) NOT NULL DEFAULT 'General_Consultation',
+    `consultation_fee_inr` DECIMAL(10, 2) NOT NULL DEFAULT 500.00,
     `shift_hours` VARCHAR(100) NOT NULL DEFAULT '09:00 AM - 05:00 PM',
     `duty_status` VARCHAR(50) NOT NULL DEFAULT 'on_duty',
     `room_number` VARCHAR(50) NOT NULL DEFAULT 'OPD Room 101',
+    `max_daily_patients` INT NOT NULL DEFAULT 30,
+    `current_queue_count` INT NOT NULL DEFAULT 0,
     INDEX `idx_roster_duty_status` (`duty_status`),
     INDEX `idx_roster_is_deleted` (`is_deleted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- Table: appointments (Inherits TimeStampedModel)
+-- Module 2 & 4: appointments (Inherits TimeStampedModel)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `appointments` (
     `id` CHAR(36) NOT NULL PRIMARY KEY,
@@ -72,7 +75,9 @@ CREATE TABLE IF NOT EXISTS `appointments` (
     `department` VARCHAR(100) NOT NULL DEFAULT 'General_Consultation',
     `priority` VARCHAR(50) NOT NULL DEFAULT 'routine',
     `consultation_type` VARCHAR(50) NOT NULL DEFAULT 'OPD',
+    `consultation_fee_inr` DECIMAL(10, 2) NOT NULL DEFAULT 500.00,
     `video_room_url` VARCHAR(200) NULL,
+    `emergency_escalation_code` VARCHAR(50) NULL,
     `appointment_date` DATETIME(6) NOT NULL,
     `status` VARCHAR(50) NOT NULL DEFAULT 'scheduled',
     `notes` LONGTEXT NULL,
@@ -84,7 +89,113 @@ CREATE TABLE IF NOT EXISTS `appointments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- Table: admin_audit_logs (Inherits TimeStampedModel)
+-- Module 3: medical_services
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `medical_services` (
+    `id` CHAR(36) NOT NULL PRIMARY KEY,
+    `created_at` DATETIME(6) NOT NULL,
+    `updated_at` DATETIME(6) NOT NULL,
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+    `title` VARCHAR(255) NOT NULL,
+    `slug` VARCHAR(255) NOT NULL UNIQUE,
+    `category` VARCHAR(100) NOT NULL DEFAULT 'General',
+    `description` LONGTEXT NOT NULL,
+    `full_details` LONGTEXT NULL,
+    `icon_name` VARCHAR(100) NOT NULL DEFAULT 'Stethoscope',
+    `image_url` VARCHAR(200) NULL,
+    `consultation_fee_inr` DECIMAL(10, 2) NOT NULL DEFAULT 500.00,
+    `is_featured` TINYINT(1) NOT NULL DEFAULT 1,
+    INDEX `idx_services_slug` (`slug`),
+    INDEX `idx_services_category` (`category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- Module 3: doctors
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `doctors` (
+    `id` CHAR(36) NOT NULL PRIMARY KEY,
+    `created_at` DATETIME(6) NOT NULL,
+    `updated_at` DATETIME(6) NOT NULL,
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+    `name` VARCHAR(255) NOT NULL,
+    `specialty` VARCHAR(255) NOT NULL,
+    `qualifications` VARCHAR(255) NOT NULL DEFAULT 'MBBS, MD',
+    `experience_years` INT NOT NULL DEFAULT 10,
+    `bio` LONGTEXT NOT NULL,
+    `image_url` VARCHAR(200) NULL,
+    `consultation_fee_inr` DECIMAL(10, 2) NOT NULL DEFAULT 600.00,
+    `opd_timings` VARCHAR(100) NOT NULL DEFAULT '09:00 AM - 05:00 PM',
+    `is_available` TINYINT(1) NOT NULL DEFAULT 1,
+    INDEX `idx_doctors_specialty` (`specialty`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- Module 3: blog_posts
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `blog_posts` (
+    `id` CHAR(36) NOT NULL PRIMARY KEY,
+    `created_at` DATETIME(6) NOT NULL,
+    `updated_at` DATETIME(6) NOT NULL,
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+    `title` VARCHAR(255) NOT NULL,
+    `slug` VARCHAR(255) NOT NULL UNIQUE,
+    `author` VARCHAR(255) NOT NULL DEFAULT 'Dr. Divit Shah',
+    `category` VARCHAR(100) NOT NULL DEFAULT 'Preventive Health',
+    `summary` LONGTEXT NOT NULL,
+    `content` LONGTEXT NOT NULL,
+    `image_url` VARCHAR(200) NULL,
+    `published_date` DATE NOT NULL,
+    `is_published` TINYINT(1) NOT NULL DEFAULT 1,
+    INDEX `idx_blogs_slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- Module 3: testimonials
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `testimonials` (
+    `id` CHAR(36) NOT NULL PRIMARY KEY,
+    `created_at` DATETIME(6) NOT NULL,
+    `updated_at` DATETIME(6) NOT NULL,
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+    `patient_name` VARCHAR(255) NOT NULL,
+    `treatment` VARCHAR(255) NOT NULL DEFAULT 'General OPD Care',
+    `rating` INT NOT NULL DEFAULT 5,
+    `comment` LONGTEXT NOT NULL,
+    `is_approved` TINYINT(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- Module 3: gallery_images
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gallery_images` (
+    `id` CHAR(36) NOT NULL PRIMARY KEY,
+    `created_at` DATETIME(6) NOT NULL,
+    `updated_at` DATETIME(6) NOT NULL,
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+    `title` VARCHAR(255) NOT NULL,
+    `category` VARCHAR(100) NOT NULL DEFAULT 'Facility',
+    `image_url` VARCHAR(200) NOT NULL,
+    `caption` VARCHAR(255) NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- Module 3: contact_inquiries
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `contact_inquiries` (
+    `id` CHAR(36) NOT NULL PRIMARY KEY,
+    `created_at` DATETIME(6) NOT NULL,
+    `updated_at` DATETIME(6) NOT NULL,
+    `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+    `full_name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(254) NOT NULL,
+    `phone` VARCHAR(50) NOT NULL,
+    `subject` VARCHAR(255) NOT NULL,
+    `message` LONGTEXT NOT NULL,
+    `is_resolved` TINYINT(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------------------------
+-- Module 4: admin_audit_logs (Inherits TimeStampedModel)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `admin_audit_logs` (
     `id` CHAR(36) NOT NULL PRIMARY KEY,

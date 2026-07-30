@@ -40,10 +40,10 @@ jobs:
         cd Backend
         python manage.py collectstatic --noinput
 
-    - name: Run Automated Unit Tests (apps.core, apps.authentication, apps.administration)
+    - name: Run Automated Unit Tests (All 4 Modules: core, authentication, administration, content)
       env:
         SECRET_KEY: django-insecure-ci-test-key-udbhav-2026
         DEBUG: "True"
       run: |
         cd Backend
-        python manage.py test apps.core apps.authentication apps.administration
+        python manage.py test apps.core apps.authentication apps.administration apps.content
