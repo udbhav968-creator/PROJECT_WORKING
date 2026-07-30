@@ -8,7 +8,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
@@ -176,6 +176,7 @@ class AppointmentListCreateView(ListCreateAPIView):
     """
 
     serializer_class = AppointmentSerializer
+    permission_classes = [permissions.AllowAny]
     pagination_class = StandardPagination
 
     def get_queryset(self):
