@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-const API_BASE_URL = 'https://project-working-snojkumar968-9939s-projects.vercel.app/api/admin/appointments/';
+const API_BASE_URL = window.location.origin.includes('localhost')
+  ? 'http://127.0.0.1:8000/api/admin/appointments/'
+  : '/api/admin/appointments/';
 
 export default function OpdBookingWidget() {
   const [formData, setFormData] = useState({
@@ -205,7 +207,7 @@ export default function OpdBookingWidget() {
 
           <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
             <button
-              onClick={() => window.open(`https://project-working-snojkumar968-9939s-projects.vercel.app/api/admin/appointments/${bookingResult.id}/slip/`, '_blank')}
+              onClick={() => window.open(`/api/admin/appointments/${bookingResult.id}/slip/`, '_blank')}
               style={{ flex: 1, padding: '12px', background: '#0a2540', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}
             >
               🖨️ Print Reception OPD Slip

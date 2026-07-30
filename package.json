@@ -1,0 +1,8 @@
+{
+  "name": "project-working-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "vercel-build": "cd Frontend/HealthCare && npm install && npm run build"
+  }
+}

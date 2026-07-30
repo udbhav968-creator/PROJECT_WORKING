@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "healthcare-clinic-backend",
+  "name": "healthcare-clinic-fullstack",
   "builds": [
     {
       "src": "Backend/clinic_core/wsgi.py",
@@ -12,6 +12,14 @@
     }
   ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "Backend/clinic_core/wsgi.py"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "Backend/clinic_core/wsgi.py"
+    },
     {
       "src": "/(.*)",
       "dest": "Backend/clinic_core/wsgi.py"
