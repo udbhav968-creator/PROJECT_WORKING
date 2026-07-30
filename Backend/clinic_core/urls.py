@@ -5,11 +5,13 @@ from rest_framework.response import Response
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from clinic_core.views import visual_frontend_home_view
+
 
 @api_view(['GET'])
-def root_api_landing_view(request):
+def root_api_directory_view(request):
     """
-    Root API Landing Endpoint for Pure Health Clinic Vercel Deployment
+    JSON API Directory Endpoint
     """
     return Response({
         "success": True,
@@ -25,17 +27,17 @@ def root_api_landing_view(request):
             "user_auth": "/api/auth/register/",
             "medical_services": "/api/content/services/",
             "doctors_directory": "/api/content/doctors/",
-            "blog_articles": "/api/content/blogs/",
-            "patient_testimonials": "/api/content/testimonials/",
-            "contact_inquiries": "/api/content/contact/",
             "jwt_obtain_token": "/api/token/",
         }
     })
 
 
 urlpatterns = [
-    # Root API Welcome Landing
-    path('', root_api_landing_view, name='root-api-landing'),
+    # Root Visual Website Landing (HTML Frontend UI)
+    path('', visual_frontend_home_view, name='visual-frontend-home'),
+
+    # JSON API Directory
+    path('api/', root_api_directory_view, name='root-api-directory'),
 
     path('admin/', admin.site.urls),
     
