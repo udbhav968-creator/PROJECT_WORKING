@@ -3,7 +3,7 @@ from django.http import HttpResponse
 def visual_frontend_home_view(request):
     """
     Renders World-Class, Ultra-Smooth, Fully Interactive Healthcare Web Portal at root URL '/'.
-    Includes global script definitions in head, no element overlaps, and 100% working button clicks.
+    Includes bulletproof inline and DOM-attached tab switching handlers so every button click works 100%.
     """
     html_content = """
     <!DOCTYPE html>
@@ -52,7 +52,7 @@ def visual_frontend_home_view(request):
                 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
             }
 
-            /* Navigation Header - Fixed Non-Overlapping Layout */
+            /* Navigation Header */
             .main-nav {
                 background: rgba(10, 25, 47, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
                 padding: 16px 32px; display: flex; justify-content: space-between; align-items: center;
@@ -146,30 +146,46 @@ def visual_frontend_home_view(request):
             }
         </style>
         <script>
-            // Global Script Definitions in <head> for 100% Guaranteed Execution
             let isHindi = false;
             
             function toggleLanguage() {
                 isHindi = !isHindi;
-                document.getElementById('lang-label').innerText = isHindi ? '🌐 हिंदी (Hindi Active)' : '🌐 English / हिंदी';
-                document.getElementById('txt-helpline').innerText = isHindi ? 'हेल्पलाइन: +91 9811122233 | 1800-11-2233' : 'Helpline: +91 9811122233 | 1800-11-2233';
-                document.getElementById('hdr-booking').innerText = isHindi ? 'त्वरित ओपीडी टोकन एवं परामर्श बुकिंग' : 'Instant OPD Token & Tele-Health Scheduling';
+                const langLabel = document.getElementById('lang-label');
+                const txtHelpline = document.getElementById('txt-helpline');
+                const hdrBooking = document.getElementById('hdr-booking');
+                
+                if (langLabel) langLabel.innerText = isHindi ? '🌐 हिंदी (Hindi Active)' : '🌐 English / हिंदी';
+                if (txtHelpline) txtHelpline.innerText = isHindi ? 'हेल्पलाइन: +91 9811122233 | 1800-11-2233' : 'Helpline: +91 9811122233 | 1800-11-2233';
+                if (hdrBooking) hdrBooking.innerText = isHindi ? 'त्वरित ओपीडी टोकन एवं परामर्श बुकिंग' : 'Instant OPD Token & Tele-Health Scheduling';
             }
 
             function switchTab(pageId) {
-                console.log('Switching tab to:', pageId);
-                const pages = document.querySelectorAll('.page-view');
-                pages.forEach(p => p.classList.remove('active'));
+                console.log('Explicitly switching tab to:', pageId);
                 
+                // Hide all page views
+                const pages = document.querySelectorAll('.page-view');
+                pages.forEach(function(p) {
+                    p.style.display = 'none';
+                    p.classList.remove('active');
+                });
+                
+                // Deactivate all nav buttons
                 const buttons = document.querySelectorAll('.nav-btn');
-                buttons.forEach(b => b.classList.remove('active'));
+                buttons.forEach(function(b) {
+                    b.classList.remove('active');
+                });
 
+                // Show target page view
                 const target = document.getElementById('page-' + pageId);
                 const btnTarget = document.getElementById('nav-' + pageId);
                 
                 if (target) {
+                    target.style.display = 'block';
                     target.classList.add('active');
+                } else {
+                    console.warn('Page element not found: page-' + pageId);
                 }
+                
                 if (btnTarget) {
                     btnTarget.classList.add('active');
                 }
@@ -237,7 +253,7 @@ def visual_frontend_home_view(request):
 
         <div class="container">
             <!-- PAGE 1: HOME PAGE -->
-            <div id="page-home" class="page-view active">
+            <div id="page-home" class="page-view active" style="display: block;">
                 <div class="glass-card">
                     <div style="text-align: center; margin-bottom: 20px;">
                         <span style="background: #03071e; color: var(--neon-teal); padding: 5px 18px; border-radius: 30px; font-size: 0.8rem; font-weight: 800; border: 1px solid rgba(0, 245, 212, 0.3);">
@@ -311,7 +327,7 @@ def visual_frontend_home_view(request):
             </div>
 
             <!-- PAGE 2: AI SYMPTOM CHECKER -->
-            <div id="page-ai-triage" class="page-view">
+            <div id="page-ai-triage" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">🤖 AI Clinical Symptom Checker Assistant</h2>
                     <p style="color: #64748b; margin-top: 6px; font-size: 1rem;">
@@ -330,7 +346,7 @@ def visual_frontend_home_view(request):
             </div>
 
             <!-- PAGE 3: RECEPTION TV DISPLAY BOARD -->
-            <div id="page-tv-board" class="page-view">
+            <div id="page-tv-board" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">📺 Live Reception OPD Token TV Display Board</h2>
                     <p style="color: #64748b; margin-top: 4px;">Real-Time Waiting Lounge Token Display Screen.</p>
@@ -345,7 +361,7 @@ def visual_frontend_home_view(request):
             </div>
 
             <!-- PAGE 4: ABOUT US -->
-            <div id="page-about" class="page-view">
+            <div id="page-about" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">About Pure Health Clinic & Hospital Systems</h2>
                     <p style="margin-top: 10px; font-size: 1.05rem; color: #334155;">
@@ -372,7 +388,7 @@ def visual_frontend_home_view(request):
             </div>
 
             <!-- PAGE 5: SERVICES -->
-            <div id="page-services" class="page-view">
+            <div id="page-services" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">Clinical Services & Medical Specialties</h2>
                     <div class="grid-3">
@@ -399,7 +415,7 @@ def visual_frontend_home_view(request):
             </div>
 
             <!-- PAGE 6: DOCTORS -->
-            <div id="page-doctors" class="page-view">
+            <div id="page-doctors" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">Attending Specialist Doctor Faculty</h2>
                     <div class="grid-3">
@@ -435,7 +451,7 @@ def visual_frontend_home_view(request):
             </div>
 
             <!-- PAGE 7: CONTACT -->
-            <div id="page-contact" class="page-view">
+            <div id="page-contact" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">Contact Patient Helpdesk</h2>
                     <p style="color: #64748b; margin-top: 4px;">Submit an inquiry or reach out to clinic administration.</p>
@@ -464,8 +480,17 @@ def visual_frontend_home_view(request):
         </footer>
 
         <script>
-            // Ensure OPD form submission works flawlessly
             document.addEventListener('DOMContentLoaded', function() {
+                // Attach explicit click event listeners to all nav buttons
+                const navButtons = document.querySelectorAll('.nav-btn');
+                navButtons.forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const pageId = btn.id.replace('nav-', '');
+                        switchTab(pageId);
+                    });
+                });
+
                 const opdForm = document.getElementById('opdForm');
                 if (opdForm) {
                     opdForm.addEventListener('submit', async function(e) {
@@ -508,7 +533,7 @@ def visual_frontend_home_view(request):
                                             <p><strong>Doctor:</strong> \${data.doctor_name} &nbsp;|&nbsp; <strong>Department:</strong> \${data.department}</p>
                                             <p><strong>Fee:</strong> ₹\${data.consultation_fee_inr} &nbsp;|&nbsp; <strong>Status:</strong> \${data.status.toUpperCase()}</p>
                                             \${data.video_room_url ? `<div style="background: #e0f2fe; padding: 12px; border-radius: 12px; margin-top: 14px;">📹 <strong>Tele-Health Video Room:</strong> <a href="\${data.video_room_url}" target="_blank" style="color: #0284c7; font-weight: 800;">\${data.video_room_url}</a></div>` : ''}
-                                            \${data.emergency_escalation_code ? `<div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 12px; margin-top: 14px; font-weight: 800;">🚨 EMERGENCY ALERT CODE: \${data.emergency_escalation_code}</div>` : ''}
+                                            \${data.emergency_escalation_code ? `<div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 14px; margin-top: 14px; font-weight: 800;">🚨 EMERGENCY ALERT CODE: \${data.emergency_escalation_code}</div>` : ''}
                                             <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center;">
                                                 <button type="button" onclick="window.open('/api/admin/appointments/' + '\${data.id}' + '/slip/', '_blank')" style="background: linear-gradient(135deg, #0078d4 0%, #00b4d8 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer;">🖨️ Print Reception OPD Slip</button>
                                                 <button type="button" onclick="location.reload()" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer;">Book Another OPD</button>
