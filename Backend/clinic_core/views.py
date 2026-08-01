@@ -2,8 +2,8 @@ from django.http import HttpResponse
 
 def visual_frontend_home_view(request):
     """
-    Renders World-Class, Ultra-Smooth, Fully Interactive Healthcare Web Portal at root URL '/'.
-    Includes auto-scrolling to main content container when switching tabs for instant visual feedback.
+    Renders World-Class, Ultra-Smooth Healthcare Web Portal at root URL '/'.
+    Updates both Hero Title/Subtitle and Main Content Container on every button click for instant visual feedback.
     """
     html_content = """
     <!DOCTYPE html>
@@ -92,7 +92,7 @@ def visual_frontend_home_view(request):
             }
 
             /* Container & Glass Cards */
-            .container { max-width: 1200px; margin: -50px auto 80px; padding: 0 24px; position: relative; z-index: 10; scroll-margin-top: 100px; }
+            .container { max-width: 1200px; margin: -50px auto 80px; padding: 0 24px; position: relative; z-index: 10; }
             .page-view { display: none; }
             .page-view.active { display: block; }
 
@@ -159,8 +159,39 @@ def visual_frontend_home_view(request):
                 if (hdrBooking) hdrBooking.innerText = isHindi ? 'त्वरित ओपीडी टोकन एवं परामर्श बुकिंग' : 'Instant OPD Token & Tele-Health Scheduling';
             }
 
+            const pageMetaData = {
+                home: {
+                    title: 'Personalized Patient Care & Enterprise OPD Portal',
+                    subtitle: 'Led by Medical Director Dr. Divit Shah, delivering AI symptom analysis, auto-generated OPD tokens, Jitsi video rooms, and sub-millisecond cloud performance.'
+                },
+                'ai-triage': {
+                    title: '🤖 AI Clinical Symptom Checker Assistant',
+                    subtitle: 'Describe symptoms or medical concerns to receive instant AI department recommendations and specialist doctor matching.'
+                },
+                'tv-board': {
+                    title: '📺 Live Reception OPD Token TV Display Screen',
+                    subtitle: 'Real-time callout screen for waiting lounges displaying active clinical tokens and OPD room assignments.'
+                },
+                about: {
+                    title: 'About Pure Health Clinic & Hospital Systems',
+                    subtitle: 'Learn about our NABH & HIPAA compliance, 50+ board-certified faculty, and clinical leadership under Medical Director Dr. Divit Shah.'
+                },
+                services: {
+                    title: 'Clinical Services & Medical Specialties',
+                    subtitle: 'Explore our diagnostic support, Cardiology heart care, General Consultation primary care, and Chronic Care management.'
+                },
+                doctors: {
+                    title: 'Attending Specialist Doctor Faculty Roster',
+                    subtitle: 'View real-time duty status, qualifications, consultation fees, shift hours, and room assignments for clinic doctors.'
+                },
+                contact: {
+                    title: 'Contact Patient Helpdesk & Emergency Enquiries',
+                    subtitle: 'Reach out to clinic administration, submit patient feedback, or connect with our 24x7 emergency helpline team.'
+                }
+            };
+
             function switchTab(pageId) {
-                console.log('Explicitly switching tab to:', pageId);
+                console.log('Switching tab to:', pageId);
                 
                 // Hide all page views
                 const pages = document.querySelectorAll('.page-view');
@@ -188,11 +219,14 @@ def visual_frontend_home_view(request):
                     btnTarget.classList.add('active');
                 }
 
-                // Smoothly scroll straight down to content container so user sees the active page immediately
-                const containerEl = document.querySelector('.container');
-                if (containerEl) {
-                    containerEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                // Update Hero Title & Subtitle for instant visual feedback
+                const meta = pageMetaData[pageId] || pageMetaData.home;
+                const heroTitle = document.getElementById('hero-title');
+                const heroSubtitle = document.getElementById('hero-subtitle');
+                if (heroTitle) heroTitle.innerText = meta.title;
+                if (heroSubtitle) heroSubtitle.innerText = meta.subtitle;
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
             function runAiCheck() {
