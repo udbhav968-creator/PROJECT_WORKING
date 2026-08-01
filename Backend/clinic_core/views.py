@@ -3,7 +3,7 @@ from django.http import HttpResponse
 def visual_frontend_home_view(request):
     """
     Renders World-Class, Ultra-Smooth, Fully Interactive Healthcare Web Portal at root URL '/'.
-    Includes bulletproof inline and DOM-attached tab switching handlers so every button click works 100%.
+    Includes auto-scrolling to main content container when switching tabs for instant visual feedback.
     """
     html_content = """
     <!DOCTYPE html>
@@ -92,7 +92,7 @@ def visual_frontend_home_view(request):
             }
 
             /* Container & Glass Cards */
-            .container { max-width: 1200px; margin: -50px auto 80px; padding: 0 24px; position: relative; z-index: 10; }
+            .container { max-width: 1200px; margin: -50px auto 80px; padding: 0 24px; position: relative; z-index: 10; scroll-margin-top: 100px; }
             .page-view { display: none; }
             .page-view.active { display: block; }
 
@@ -182,15 +182,17 @@ def visual_frontend_home_view(request):
                 if (target) {
                     target.style.display = 'block';
                     target.classList.add('active');
-                } else {
-                    console.warn('Page element not found: page-' + pageId);
                 }
                 
                 if (btnTarget) {
                     btnTarget.classList.add('active');
                 }
 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Smoothly scroll straight down to content container so user sees the active page immediately
+                const containerEl = document.querySelector('.container');
+                if (containerEl) {
+                    containerEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             }
 
             function runAiCheck() {
@@ -481,7 +483,6 @@ def visual_frontend_home_view(request):
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Attach explicit click event listeners to all nav buttons
                 const navButtons = document.querySelectorAll('.nav-btn');
                 navButtons.forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
