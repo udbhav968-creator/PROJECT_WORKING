@@ -6,6 +6,10 @@ from apps.administration.models import AppointmentModel, AdminAuditLogModel, Doc
 
 
 class TokenTrackerTests(APITestCase):
+    """
+    Automated Unit Test Suite for TokenTrackerView API
+    Author: Udbhav (udbhav968-creator <snojkumar968@gmail.com>)
+    """
     def setUp(self):
         self.appointment = AppointmentModel.objects.create(
             patient_name="Tracking Test Patient",
