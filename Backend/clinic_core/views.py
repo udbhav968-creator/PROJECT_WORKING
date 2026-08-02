@@ -3,6 +3,7 @@ from django.http import HttpResponse
 def visual_frontend_home_view(request):
     """
     Renders a State-of-the-Art, Real-World Multi-Page Healthcare Web Portal at root URL '/'.
+    Author: Udbhav (udbhav968-creator <snojkumar968@gmail.com>)
     Features dynamic keyframe animations, floating glassmorphism depth, interactive AI triage,
     live OPD token tracking, reception TV display board, and 100% working multi-page routing.
     """
