@@ -430,6 +430,7 @@ class SeedDemoDataView(APIView):
 class TokenTrackerView(APIView):
     """
     Public Live OPD Token Status Tracker API
+    Author: Udbhav (udbhav968-creator <snojkumar968@gmail.com>)
     Allows patients to query OPD Token status, room assignment, and estimated wait time.
     """
     permission_classes = [permissions.AllowAny]
