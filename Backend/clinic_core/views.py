@@ -3,8 +3,7 @@ from django.http import HttpResponse
 def visual_frontend_home_view(request):
     """
     Renders World-Class, Ultra-Smooth Healthcare Web Portal at root URL '/'.
-    Includes Live OPD Token Tracker Widget, AI Symptom Checker Assistant,
-    Reception TV Board, and sub-millisecond cloud API integration.
+    Clean single-handler tab switching, instant scrollIntoView to card content, and zero click conflicts.
     """
     html_content = """
     <!DOCTYPE html>
@@ -192,23 +191,29 @@ def visual_frontend_home_view(request):
             };
 
             function switchTab(pageId) {
+                console.log('Explicitly switching tab to:', pageId);
+                
+                // Hide all page views
                 const pages = document.querySelectorAll('.page-view');
                 pages.forEach(function(p) {
                     p.style.display = 'none';
                     p.classList.remove('active');
                 });
                 
+                // Deactivate all nav buttons
                 const buttons = document.querySelectorAll('.nav-btn');
                 buttons.forEach(function(b) {
                     b.classList.remove('active');
                 });
 
+                // Show target page view
                 const target = document.getElementById('page-' + pageId);
                 const btnTarget = document.getElementById('nav-' + pageId);
                 
                 if (target) {
                     target.style.display = 'block';
                     target.classList.add('active');
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
                 
                 if (btnTarget) {
@@ -220,8 +225,6 @@ def visual_frontend_home_view(request):
                 const heroSubtitle = document.getElementById('hero-subtitle');
                 if (heroTitle) heroTitle.innerText = meta.title;
                 if (heroSubtitle) heroSubtitle.innerText = meta.subtitle;
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
             function runAiCheck() {
@@ -253,7 +256,7 @@ def visual_frontend_home_view(request):
                 }
 
                 resultBox.style.display = 'block';
-                resultBox.innerHTML = '<p>⏳ Fetching live token status from cloud database...</p>';
+                resultBox.innerHTML = '<p style="font-weight:700; color:#0078d4;">⏳ Fetching live token status from cloud database...</p>';
 
                 try {
                     const response = await fetch('/api/admin/appointments/track/' + encodeURIComponent(tokenVal) + '/');
@@ -569,15 +572,6 @@ def visual_frontend_home_view(request):
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                const navButtons = document.querySelectorAll('.nav-btn');
-                navButtons.forEach(function(btn) {
-                    btn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const pageId = btn.id.replace('nav-', '');
-                        switchTab(pageId);
-                    });
-                });
-
                 const opdForm = document.getElementById('opdForm');
                 if (opdForm) {
                     opdForm.addEventListener('submit', async function(e) {
