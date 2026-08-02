@@ -5,6 +5,33 @@ from rest_framework.test import APITestCase
 from apps.administration.models import AppointmentModel, AdminAuditLogModel, DoctorRosterModel
 
 
+class TokenTrackerTests(APITestCase):
+    def setUp(self):
+        self.appointment = AppointmentModel.objects.create(
+            patient_name="Tracking Test Patient",
+            patient_phone="+91 9999888877",
+            doctor_name="Dr. Divit Shah",
+            department="General_Consultation",
+            token_number="PURE-TRACK-101",
+            appointment_date=timezone.now(),
+            status="scheduled",
+        )
+
+    def test_token_tracking_success(self):
+        url = reverse("appointment-track", kwargs={"token_number": "PURE-TRACK-101"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["token_number"], "PURE-TRACK-101")
+        self.assertEqual(response.data["patient_name"], "Tracking Test Patient")
+
+    def test_token_tracking_not_found(self):
+        url = reverse("appointment-track", kwargs={"token_number": "INVALID-TOKEN-999"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertFalse(response.data["success"])
+
+
 class SystemHealthTests(APITestCase):
     def test_health_check_returns_200(self):
         response = self.client.get(reverse("system-health"))

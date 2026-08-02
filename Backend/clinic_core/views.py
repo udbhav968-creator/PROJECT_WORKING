@@ -3,7 +3,8 @@ from django.http import HttpResponse
 def visual_frontend_home_view(request):
     """
     Renders World-Class, Ultra-Smooth Healthcare Web Portal at root URL '/'.
-    Updates both Hero Title/Subtitle and Main Content Container on every button click for instant visual feedback.
+    Includes Live OPD Token Tracker Widget, AI Symptom Checker Assistant,
+    Reception TV Board, and sub-millisecond cloud API integration.
     """
     html_content = """
     <!DOCTYPE html>
@@ -34,7 +35,6 @@ def visual_frontend_home_view(request):
             body { font-family: var(--font-body); background-color: #03071e; color: #f8fafc; line-height: 1.6; overflow-x: hidden; }
             h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.02em; }
             
-            /* Top Bar */
             .top-bar {
                 background: linear-gradient(90deg, #03071e 0%, #0a192f 50%, #0078d4 100%);
                 color: #ffffff; padding: 12px 32px; display: flex; justify-content: space-between;
@@ -52,7 +52,6 @@ def visual_frontend_home_view(request):
                 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
             }
 
-            /* Navigation Header */
             .main-nav {
                 background: rgba(10, 25, 47, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
                 padding: 16px 32px; display: flex; justify-content: space-between; align-items: center;
@@ -80,7 +79,6 @@ def visual_frontend_home_view(request):
             }
             .lang-btn:hover { transform: scale(1.05); }
 
-            /* Hero Banner */
             .hero-section {
                 background: radial-gradient(circle at 50% 30%, #0a192f 0%, #03071e 80%);
                 color: white; padding: 60px 24px 90px; text-align: center; position: relative; overflow: hidden;
@@ -91,7 +89,6 @@ def visual_frontend_home_view(request):
                 border: 1px solid rgba(0, 245, 212, 0.4); color: var(--neon-teal); margin-bottom: 16px;
             }
 
-            /* Container & Glass Cards */
             .container { max-width: 1200px; margin: -50px auto 80px; padding: 0 24px; position: relative; z-index: 10; }
             .page-view { display: none; }
             .page-view.active { display: block; }
@@ -164,6 +161,10 @@ def visual_frontend_home_view(request):
                     title: 'Personalized Patient Care & Enterprise OPD Portal',
                     subtitle: 'Led by Medical Director Dr. Divit Shah, delivering AI symptom analysis, auto-generated OPD tokens, Jitsi video rooms, and sub-millisecond cloud performance.'
                 },
+                'track-token': {
+                    title: '🔎 Live OPD Token Status & Wait Time Tracker',
+                    subtitle: 'Enter your OPD Token number below to query live consultation status, estimated wait time, room assignments, and tele-health video links.'
+                },
                 'ai-triage': {
                     title: '🤖 AI Clinical Symptom Checker Assistant',
                     subtitle: 'Describe symptoms or medical concerns to receive instant AI department recommendations and specialist doctor matching.'
@@ -191,22 +192,17 @@ def visual_frontend_home_view(request):
             };
 
             function switchTab(pageId) {
-                console.log('Switching tab to:', pageId);
-                
-                // Hide all page views
                 const pages = document.querySelectorAll('.page-view');
                 pages.forEach(function(p) {
                     p.style.display = 'none';
                     p.classList.remove('active');
                 });
                 
-                // Deactivate all nav buttons
                 const buttons = document.querySelectorAll('.nav-btn');
                 buttons.forEach(function(b) {
                     b.classList.remove('active');
                 });
 
-                // Show target page view
                 const target = document.getElementById('page-' + pageId);
                 const btnTarget = document.getElementById('nav-' + pageId);
                 
@@ -219,7 +215,6 @@ def visual_frontend_home_view(request):
                     btnTarget.classList.add('active');
                 }
 
-                // Update Hero Title & Subtitle for instant visual feedback
                 const meta = pageMetaData[pageId] || pageMetaData.home;
                 const heroTitle = document.getElementById('hero-title');
                 const heroSubtitle = document.getElementById('hero-subtitle');
@@ -245,6 +240,47 @@ def visual_frontend_home_view(request):
                     res.innerHTML = '🤖 <strong>AI Recommendation:</strong> Recommended Department: <strong>General Consultation & Preventive Care</strong> under <strong>Dr. Divit Shah</strong> (OPD Room 101).';
                 }
             }
+
+            async function trackOpdToken() {
+                const tokenInput = document.getElementById('trackTokenInput');
+                const resultBox = document.getElementById('trackResultBox');
+                if (!tokenInput || !resultBox) return;
+
+                const tokenVal = tokenInput.value.trim();
+                if (!tokenVal) {
+                    alert('Please enter a valid OPD Token Number (e.g. PURE-OPD-101)');
+                    return;
+                }
+
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = '<p>⏳ Fetching live token status from cloud database...</p>';
+
+                try {
+                    const response = await fetch('/api/admin/appointments/track/' + encodeURIComponent(tokenVal) + '/');
+                    const data = await response.json();
+
+                    if (response.ok && data.success) {
+                        resultBox.innerHTML = `
+                            <div style="background: #ffffff; border: 2px solid #0078d4; border-radius: 16px; padding: 24px; text-align: center; color: #0f172a;">
+                                <span style="background: #dcfce7; color: #15803d; padding: 4px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;">✅ LIVE TOKEN STATUS: \${data.status}</span>
+                                <div style="font-size: 2.8rem; font-weight: 900; color: #0078d4; margin: 12px 0;">\${data.token_number}</div>
+                                <p style="font-size: 1.1rem;"><strong>Patient:</strong> \${data.patient_name} &nbsp;|&nbsp; <strong>Doctor:</strong> \${data.doctor_name}</p>
+                                <p><strong>Department:</strong> \${data.department} &nbsp;|&nbsp; <strong>Room:</strong> <span style="color: #008272; font-weight: 800;">\${data.room_number}</span></p>
+                                <p><strong>Estimated Wait Time:</strong> <span style="color: #d13438; font-weight: 800;">\${data.estimated_wait_time_minutes} minutes</span></p>
+                                \${data.video_room_url !== 'N/A (In-Clinic Visit)' ? `<p style="margin-top: 10px;">📹 <strong>Tele-Link:</strong> <a href="\${data.video_room_url}" target="_blank" style="color: #0078d4; font-weight: 800;">\${data.video_room_url}</a></p>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        resultBox.innerHTML = `
+                            <div style="background: #fee2e2; border: 1.5px solid #ef4444; color: #b91c1c; border-radius: 14px; padding: 18px; text-align: center;">
+                                ⚠️ <strong>Token Not Found:</strong> \${data.error || 'Please verify your token number.'}
+                            </div>
+                        `;
+                    }
+                } catch (err) {
+                    resultBox.innerHTML = '<div style="background: #fee2e2; color: #b91c1c; padding: 16px; border-radius: 12px; text-align: center;">Network error querying API.</div>';
+                }
+            }
         </script>
     </head>
     <body>
@@ -260,6 +296,7 @@ def visual_frontend_home_view(request):
             <div onclick="switchTab('home')" class="logo-brand">🏥 Pure Health <span>Clinic</span></div>
             <ul class="nav-links">
                 <li><button type="button" onclick="switchTab('home')" id="nav-home" class="nav-btn active">Home</button></li>
+                <li><button type="button" onclick="switchTab('track-token')" id="nav-track-token" class="nav-btn">🔎 Track OPD Token</button></li>
                 <li><button type="button" onclick="switchTab('ai-triage')" id="nav-ai-triage" class="nav-btn">🤖 AI Symptom Checker</button></li>
                 <li><button type="button" onclick="switchTab('tv-board')" id="nav-tv-board" class="nav-btn">📺 Reception TV Display</button></li>
                 <li><button type="button" onclick="switchTab('about')" id="nav-about" class="nav-btn">About Us</button></li>
@@ -362,7 +399,22 @@ def visual_frontend_home_view(request):
                 </div>
             </div>
 
-            <!-- PAGE 2: AI SYMPTOM CHECKER -->
+            <!-- PAGE 2: LIVE OPD TOKEN TRACKER -->
+            <div id="page-track-token" class="page-view" style="display: none;">
+                <div class="glass-card">
+                    <h2 style="color: #03071e; font-size: 2rem;">🔎 Live OPD Token Status & Wait Time Tracker</h2>
+                    <p style="color: #64748b; margin-top: 4px;">Track your consultation status, estimated wait time, and room assignment live.</p>
+                    
+                    <div style="margin-top: 24px; display: flex; gap: 14px; max-width: 600px;">
+                        <input type="text" id="trackTokenInput" placeholder="Enter Token Number (e.g. PURE-OPD-101)" class="form-control" style="font-weight: 700;">
+                        <button type="button" onclick="trackOpdToken()" class="btn-dynamic" style="margin-top: 0; width: auto; white-space: nowrap;">Track Token</button>
+                    </div>
+
+                    <div id="trackResultBox" style="display: none; margin-top: 24px;"></div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: AI SYMPTOM CHECKER -->
             <div id="page-ai-triage" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">🤖 AI Clinical Symptom Checker Assistant</h2>
@@ -381,7 +433,7 @@ def visual_frontend_home_view(request):
                 </div>
             </div>
 
-            <!-- PAGE 3: RECEPTION TV DISPLAY BOARD -->
+            <!-- PAGE 4: RECEPTION TV DISPLAY BOARD -->
             <div id="page-tv-board" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">📺 Live Reception OPD Token TV Display Board</h2>
@@ -396,7 +448,7 @@ def visual_frontend_home_view(request):
                 </div>
             </div>
 
-            <!-- PAGE 4: ABOUT US -->
+            <!-- PAGE 5: ABOUT US -->
             <div id="page-about" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">About Pure Health Clinic & Hospital Systems</h2>
@@ -423,7 +475,7 @@ def visual_frontend_home_view(request):
                 </div>
             </div>
 
-            <!-- PAGE 5: SERVICES -->
+            <!-- PAGE 6: SERVICES -->
             <div id="page-services" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">Clinical Services & Medical Specialties</h2>
@@ -450,7 +502,7 @@ def visual_frontend_home_view(request):
                 </div>
             </div>
 
-            <!-- PAGE 6: DOCTORS -->
+            <!-- PAGE 7: DOCTORS -->
             <div id="page-doctors" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">Attending Specialist Doctor Faculty</h2>
@@ -486,7 +538,7 @@ def visual_frontend_home_view(request):
                 </div>
             </div>
 
-            <!-- PAGE 7: CONTACT -->
+            <!-- PAGE 8: CONTACT -->
             <div id="page-contact" class="page-view" style="display: none;">
                 <div class="glass-card">
                     <h2 style="color: #03071e; font-size: 2rem;">Contact Patient Helpdesk</h2>

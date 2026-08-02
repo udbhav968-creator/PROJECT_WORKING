@@ -425,3 +425,39 @@ class SeedDemoDataView(APIView):
             {"success": True, "message": msg},
             status=status.HTTP_201_CREATED,
         )
+
+
+class TokenTrackerView(APIView):
+    """
+    Public Live OPD Token Status Tracker API
+    Allows patients to query OPD Token status, room assignment, and estimated wait time.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, token_number):
+        try:
+            appointment = AppointmentModel.objects.get(token_number__iexact=token_number, is_deleted=False)
+            roster = DoctorRosterModel.objects.filter(doctor_name__icontains=appointment.doctor_name).first()
+            wait_time = roster.estimated_wait_time_minutes if roster else 15
+            room = roster.room_number if roster else "OPD Room 101"
+
+            return Response({
+                "success": True,
+                "token_number": appointment.token_number,
+                "patient_name": appointment.patient_name,
+                "doctor_name": appointment.doctor_name,
+                "department": appointment.get_department_display(),
+                "priority": appointment.priority.upper(),
+                "consultation_type": appointment.consultation_type,
+                "status": appointment.status.upper(),
+                "room_number": room,
+                "estimated_wait_time_minutes": wait_time,
+                "video_room_url": appointment.video_room_url or "N/A (In-Clinic Visit)",
+                "appointment_date": appointment.appointment_date.strftime("%Y-%m-%d %H:%M"),
+            }, status=status.HTTP_200_OK)
+        except AppointmentModel.DoesNotExist:
+            return Response(
+                {"success": False, "error": f"Token '{token_number}' not found. Please verify your token number."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+

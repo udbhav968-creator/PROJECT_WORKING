@@ -7,6 +7,7 @@ from apps.administration.views import (
     AppointmentDetailView,
     AppointmentPDFSlipView,
     SeedDemoDataView,
+    TokenTrackerView,
 )
 
 urlpatterns = [
@@ -20,6 +21,7 @@ urlpatterns = [
 
     # Appointment Management & OPD Token APIs
     path('appointments/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
+    path('appointments/track/<str:token_number>/', TokenTrackerView.as_view(), name='appointment-track'),
     path('appointments/<uuid:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
     path('appointments/<uuid:pk>/slip/', AppointmentPDFSlipView.as_view(), name='appointment-pdf-slip'),
 ]
