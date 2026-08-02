@@ -1,7 +1,8 @@
 # 🏥 Pure Health Clinic Backend & Full-Stack Medical System
 ### Enterprise Healthcare Portal, AI Symptom Checker, OPD Token Management & Administration Integration
 
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(28%2F28%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Author](https://img.shields.io/badge/Author-Udbhav%20(udbhav968--creator)-0078d4?style=for-the-badge&logo=github)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(30%2F30%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![Node Express](https://img.shields.io/badge/Node.js-Express%20TypeScript-339933?style=for-the-badge&logo=nodedotjs)
