@@ -2,8 +2,9 @@ from django.http import HttpResponse
 
 def visual_frontend_home_view(request):
     """
-    Renders World-Class, Ultra-Smooth Healthcare Web Portal at root URL '/'.
-    Clean single-handler tab switching, instant scrollIntoView to card content, and zero click conflicts.
+    Renders a State-of-the-Art, Real-World Multi-Page Healthcare Web Portal at root URL '/'.
+    Features dynamic keyframe animations, floating glassmorphism depth, interactive AI triage,
+    live OPD token tracking, reception TV display board, and 100% working multi-page routing.
     """
     html_content = """
     <!DOCTYPE html>
@@ -11,7 +12,7 @@ def visual_frontend_home_view(request):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pure Health Clinic - Enterprise Healthcare Portal</title>
+        <title>Pure Health Clinic - Enterprise Next-Gen Healthcare Portal</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -34,6 +35,23 @@ def visual_frontend_home_view(request):
             body { font-family: var(--font-body); background-color: #03071e; color: #f8fafc; line-height: 1.6; overflow-x: hidden; }
             h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.02em; }
             
+            /* Dynamic Keyframe Animations */
+            @keyframes fadeInSlide {
+                0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+                100% { opacity: 1; transform: translateY(0) scale(1); }
+            }
+            @keyframes floatGlow {
+                0% { transform: translateY(0px) rotate(0deg); }
+                50% { transform: translateY(-20px) rotate(5deg); }
+                100% { transform: translateY(0px) rotate(0deg); }
+            }
+            @keyframes pulse-glow {
+                0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+                70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+            }
+
+            /* Top Announcement Bar */
             .top-bar {
                 background: linear-gradient(90deg, #03071e 0%, #0a192f 50%, #0078d4 100%);
                 color: #ffffff; padding: 12px 32px; display: flex; justify-content: space-between;
@@ -45,30 +63,30 @@ def visual_frontend_home_view(request):
                 padding: 5px 16px; border-radius: 30px; font-size: 0.78rem; text-transform: uppercase;
                 letter-spacing: 0.06em; animation: pulse-glow 2s infinite; display: inline-flex; align-items: center; gap: 6px;
             }
-            @keyframes pulse-glow {
-                0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
-                70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-            }
 
+            /* Sticky Navigation Header */
             .main-nav {
-                background: rgba(10, 25, 47, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+                background: rgba(10, 25, 47, 0.98); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
                 padding: 16px 32px; display: flex; justify-content: space-between; align-items: center;
                 border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000;
-                flex-wrap: wrap; gap: 16px;
+                flex-wrap: wrap; gap: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             }
             .logo-brand {
                 font-size: 1.4rem; font-weight: 900; color: #ffffff; text-decoration: none;
                 display: flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap;
             }
             .logo-brand span { color: var(--neon-teal); }
-            .nav-links { display: flex; gap: 10px; list-style: none; align-items: center; flex-wrap: wrap; }
+            .nav-links { display: flex; gap: 8px; list-style: none; align-items: center; flex-wrap: wrap; }
             .nav-btn {
-                color: #cbd5e1; background: transparent; border: 1px solid transparent; font-weight: 600; font-size: 0.9rem;
-                transition: all 0.2s ease; cursor: pointer; padding: 8px 14px; border-radius: 10px;
-                font-family: var(--font-body); white-space: nowrap;
+                color: #cbd5e1; background: transparent; border: 1.5px solid transparent; font-weight: 700; font-size: 0.9rem;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; padding: 9px 16px; border-radius: 12px;
+                font-family: var(--font-body); white-space: nowrap; position: relative;
             }
-            .nav-btn:hover, .nav-btn.active { color: #ffffff; background: rgba(0, 245, 212, 0.18); border-color: rgba(0, 245, 212, 0.4); }
+            .nav-btn:hover { color: #ffffff; background: rgba(0, 245, 212, 0.12); border-color: rgba(0, 245, 212, 0.3); }
+            .nav-btn.active {
+                color: #ffffff; background: linear-gradient(135deg, rgba(0, 120, 212, 0.4) 0%, rgba(0, 245, 212, 0.25) 100%);
+                border-color: var(--neon-teal); box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+            }
 
             .lang-btn {
                 background: linear-gradient(135deg, var(--cobalt-blue) 0%, var(--vibrant-cyan) 100%);
@@ -78,23 +96,31 @@ def visual_frontend_home_view(request):
             }
             .lang-btn:hover { transform: scale(1.05); }
 
+            /* Dynamic Hero Section */
             .hero-section {
                 background: radial-gradient(circle at 50% 30%, #0a192f 0%, #03071e 80%);
                 color: white; padding: 60px 24px 90px; text-align: center; position: relative; overflow: hidden;
+            }
+            .hero-section::before {
+                content: ''; position: absolute; top: -20%; left: 35%; width: 500px; height: 500px;
+                background: radial-gradient(circle, rgba(0, 245, 212, 0.12) 0%, transparent 70%);
+                animation: floatGlow 8s ease-in-out infinite alternate; pointer-events: none;
             }
             .hero-chip {
                 background: rgba(255, 255, 255, 0.08); padding: 8px 22px; border-radius: 30px;
                 font-size: 0.88rem; font-weight: 800; letter-spacing: 0.08em; display: inline-block;
                 border: 1px solid rgba(0, 245, 212, 0.4); color: var(--neon-teal); margin-bottom: 16px;
+                box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
             }
 
+            /* Container & Glassmorphism Cards */
             .container { max-width: 1200px; margin: -50px auto 80px; padding: 0 24px; position: relative; z-index: 10; }
             .page-view { display: none; }
-            .page-view.active { display: block; }
+            .page-view.active { display: block; animation: fadeInSlide 0.5s ease-out forwards; }
 
             .glass-card {
                 background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-                border-radius: 24px; padding: 36px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+                border-radius: 24px; padding: 40px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
                 border: 1px solid var(--glass-border); margin-bottom: 36px; color: #0f172a;
             }
 
@@ -110,17 +136,17 @@ def visual_frontend_home_view(request):
                 background: linear-gradient(135deg, var(--cobalt-blue) 0%, var(--vibrant-cyan) 50%, var(--neon-teal) 100%);
                 color: white; font-weight: 800; font-size: 1.05rem; padding: 15px 32px;
                 border: none; border-radius: 14px; cursor: pointer; width: 100%; margin-top: 20px;
-                box-shadow: 0 10px 30px rgba(0, 180, 216, 0.35); transition: all 0.3s ease; text-transform: uppercase;
-                letter-spacing: 0.03em; font-family: var(--font-body);
+                box-shadow: 0 10px 30px rgba(0, 180, 216, 0.35); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                text-transform: uppercase; letter-spacing: 0.03em; font-family: var(--font-body);
             }
-            .btn-dynamic:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0, 245, 212, 0.45); }
+            .btn-dynamic:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 15px 40px rgba(0, 245, 212, 0.45); }
 
             .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 24px; }
             .feature-card {
-                background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 24px;
-                transition: all 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+                background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 26px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 8px 24px rgba(0,0,0,0.04);
             }
-            .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0, 120, 212, 0.12); border-color: var(--vibrant-cyan); }
+            .feature-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 120, 212, 0.15); border-color: var(--vibrant-cyan); }
 
             .duty-badge { padding: 5px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; float: right; }
             .on_duty { background: #dcfce7; color: #15803d; }
@@ -128,17 +154,17 @@ def visual_frontend_home_view(request):
 
             .ai-box {
                 background: linear-gradient(135deg, #eff6fc 0%, #e0f2fe 100%); border: 2px solid #bae6fd;
-                padding: 24px; border-radius: 20px; margin-bottom: 24px;
+                padding: 26px; border-radius: 20px; margin-bottom: 24px;
             }
 
             .tv-screen {
-                background: linear-gradient(135deg, #03071e 0%, #0a192f 100%); color: white; padding: 40px 24px;
+                background: linear-gradient(135deg, #03071e 0%, #0a192f 100%); color: white; padding: 44px 24px;
                 border-radius: 28px; text-align: center; border: 2px solid var(--neon-teal);
-                box-shadow: 0 0 50px rgba(0, 245, 212, 0.25); margin-top: 20px;
+                box-shadow: 0 0 50px rgba(0, 245, 212, 0.25); margin-top: 20px; animation: floatGlow 6s ease-in-out infinite alternate;
             }
             .token-display-number {
-                font-size: 4.5rem; font-weight: 900; color: var(--neon-teal); margin: 12px 0;
-                letter-spacing: 0.08em; text-shadow: 0 0 30px rgba(0, 245, 212, 0.6);
+                font-size: 4.8rem; font-weight: 900; color: var(--neon-teal); margin: 14px 0;
+                letter-spacing: 0.08em; text-shadow: 0 0 35px rgba(0, 245, 212, 0.7);
             }
         </style>
         <script>
@@ -191,7 +217,7 @@ def visual_frontend_home_view(request):
             };
 
             function switchTab(pageId) {
-                console.log('Explicitly switching tab to:', pageId);
+                console.log('Switching tab to:', pageId);
                 
                 // Hide all page views
                 const pages = document.querySelectorAll('.page-view');
@@ -206,7 +232,7 @@ def visual_frontend_home_view(request):
                     b.classList.remove('active');
                 });
 
-                // Show target page view
+                // Show target page view with slide animation
                 const target = document.getElementById('page-' + pageId);
                 const btnTarget = document.getElementById('nav-' + pageId);
                 
@@ -264,7 +290,7 @@ def visual_frontend_home_view(request):
 
                     if (response.ok && data.success) {
                         resultBox.innerHTML = `
-                            <div style="background: #ffffff; border: 2px solid #0078d4; border-radius: 16px; padding: 24px; text-align: center; color: #0f172a;">
+                            <div style="background: #ffffff; border: 2px solid #0078d4; border-radius: 16px; padding: 24px; text-align: center; color: #0f172a; animation: fadeInSlide 0.4s ease-out;">
                                 <span style="background: #dcfce7; color: #15803d; padding: 4px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;">✅ LIVE TOKEN STATUS: \${data.status}</span>
                                 <div style="font-size: 2.8rem; font-weight: 900; color: #0078d4; margin: 12px 0;">\${data.token_number}</div>
                                 <p style="font-size: 1.1rem;"><strong>Patient:</strong> \${data.patient_name} &nbsp;|&nbsp; <strong>Doctor:</strong> \${data.doctor_name}</p>
@@ -607,7 +633,7 @@ def visual_frontend_home_view(request):
                                 if (receipt) {
                                     receipt.style.display = 'block';
                                     receipt.innerHTML = `
-                                        <div style="background: #ffffff; border: 2px dashed #0078d4; padding: 28px; border-radius: 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,120,212,0.15);">
+                                        <div style="background: #ffffff; border: 2px dashed #0078d4; padding: 28px; border-radius: 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,120,212,0.15); animation: fadeInSlide 0.4s ease-out;">
                                             <span style="background: #dcfce7; color: #15803d; padding: 6px 18px; border-radius: 30px; font-weight: 800; font-size: 0.85rem;">✅ OPD APPOINTMENT BOOKED SUCCESSFULLY</span>
                                             <div style="font-size: 2.5rem; font-weight: 900; color: #0078d4; margin: 14px 0; letter-spacing: 0.05em;">\${data.token_number}</div>
                                             <p style="font-size: 1.05rem;"><strong>Patient:</strong> \${data.patient_name} &nbsp;|&nbsp; <strong>Phone:</strong> \${data.patient_phone}</p>
