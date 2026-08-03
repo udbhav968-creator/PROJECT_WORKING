@@ -5,7 +5,16 @@ from rest_framework.response import Response
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from clinic_core.views import visual_frontend_home_view
+from clinic_core.views import (
+    home_page_view,
+    track_page_view,
+    ai_checker_page_view,
+    tv_display_page_view,
+    about_page_view,
+    services_page_view,
+    doctors_page_view,
+    contact_page_view,
+)
 
 
 @api_view(['GET'])
@@ -33,8 +42,15 @@ def root_api_directory_view(request):
 
 
 urlpatterns = [
-    # Root Visual Website Landing (HTML Frontend UI)
-    path('', visual_frontend_home_view, name='visual-frontend-home'),
+    # Multi-Page Standalone HTML Web Portal Routes
+    path('', home_page_view, name='home-page'),
+    path('track/', track_page_view, name='track-page'),
+    path('ai-checker/', ai_checker_page_view, name='ai-checker-page'),
+    path('tv-display/', tv_display_page_view, name='tv-display-page'),
+    path('about/', about_page_view, name='about-page'),
+    path('services/', services_page_view, name='services-page'),
+    path('doctors/', doctors_page_view, name='doctors-page'),
+    path('contact/', contact_page_view, name='contact-page'),
 
     # JSON API Directory
     path('api/', root_api_directory_view, name='root-api-directory'),
