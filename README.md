@@ -2,13 +2,22 @@
 ### Enterprise Healthcare Portal, AI Symptom Checker, OPD Token Management & Administration Integration
 
 ![Author](https://img.shields.io/badge/Author-Udbhav%20(udbhav968--creator)-0078d4?style=for-the-badge&logo=github)
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(30%2F30%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(33%2F33%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![Node Express](https://img.shields.io/badge/Node.js-Express%20TypeScript-339933?style=for-the-badge&logo=nodedotjs)
-![React TS](https://img.shields.io/badge/React-18%20TypeScript-61DAFB?style=for-the-badge&logo=react)
-![Coverage](https://img.shields.io/badge/Test%20Coverage-100%25-brightgreen?style=for-the-badge)
-![Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel)
+![React TS](https://img.shields.io/badge/React-TypeScript-61dafb?style=for-the-badge&logo=react)
+![MySQL Version](https://img.shields.io/badge/MySQL-8.0.35-4479a1?style=for-the-badge&logo=mysql)
+![Vercel Live](https://img.shields.io/badge/Vercel-Cloud%20Deployed-000000?style=for-the-badge&logo=vercel)
+
+---
+
+### 🌟 Next-Gen Innovations Built into Portal:
+- 💳 **Razorpay & UPI Payment Gateway API**: `POST /api/admin/create-razorpay-order/`
+- 📱 **Twilio SMS & WhatsApp Webhook Gateway**: `POST /api/admin/send-whatsapp-notification/`
+- 🤖 **Gemini 1.5 Pro AI Prescription & Lab Report Summarizer**: `POST /api/admin/summarize-prescription/`
+- 📊 **Chart.js Live Graphical Analytics**: Weekly Patient Volume Bar Chart & Department Revenue Doughnut Chart.
+- 🔎 **Public Live OPD Token Status Tracker**: `GET /api/admin/appointments/track/<token_number>/`
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ed?style=for-the-badge&logo=docker)
 
 ---
