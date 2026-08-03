@@ -159,7 +159,6 @@ def get_shared_header(active_tab="home"):
                 letter-spacing: 0.08em; text-shadow: 0 0 35px rgba(0, 245, 212, 0.7);
             }}
 
-            /* Responsive Device Breakpoints */
             @media (max-width: 768px) {{
                 .top-bar {{ flex-direction: column; text-align: center; padding: 10px 16px; }}
                 .main-nav {{ padding: 12px 16px; flex-direction: column; gap: 12px; }}
@@ -227,7 +226,10 @@ def get_shared_footer():
                         const userText = input.value.trim();
                         if (!userText) return;
 
-                        box.innerHTML += `<div style="background: #0078d4; color: white; padding: 10px 14px; border-radius: 14px; align-self: flex-end; max-width: 85%;">\${userText}</div>`;
+                        const userMsgDiv = document.createElement('div');
+                        userMsgDiv.style.cssText = "background: #0078d4; color: white; padding: 10px 14px; border-radius: 14px; align-self: flex-end; max-width: 85%; margin-bottom: 6px;";
+                        userMsgDiv.textContent = userText;
+                        box.appendChild(userMsgDiv);
                         input.value = '';
                         box.scrollTop = box.scrollHeight;
 
@@ -239,11 +241,17 @@ def get_shared_footer():
                             });
                             const data = await res.json();
                             if (res.ok && data.success) {
-                                box.innerHTML += `<div style="background: #e0f2fe; color: #0369a1; padding: 10px 14px; border-radius: 14px; align-self: flex-start; max-width: 85%;">🤖 <strong>Gemini AI:</strong> \${data.reply}</div>`;
+                                const aiMsgDiv = document.createElement('div');
+                                aiMsgDiv.style.cssText = "background: #e0f2fe; color: #0369a1; padding: 10px 14px; border-radius: 14px; align-self: flex-start; max-width: 85%; margin-bottom: 6px;";
+                                aiMsgDiv.innerHTML = '🤖 <strong>Gemini AI:</strong> ' + data.reply;
+                                box.appendChild(aiMsgDiv);
                                 box.scrollTop = box.scrollHeight;
                             }
                         } catch (err) {
-                            box.innerHTML += `<div style="background: #fee2e2; color: #b91c1c; padding: 10px 14px; border-radius: 14px; align-self: flex-start;">Error connecting to Gemini AI.</div>`;
+                            const errDiv = document.createElement('div');
+                            errDiv.style.cssText = "background: #fee2e2; color: #b91c1c; padding: 10px 14px; border-radius: 14px; align-self: flex-start;";
+                            errDiv.textContent = "Error connecting to Gemini AI.";
+                            box.appendChild(errDiv);
                         }
                     });
                 }
@@ -360,7 +368,6 @@ def home_page_view(request):
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Initialize Chart.js Bar Chart
                 const ctxBar = document.getElementById('opdTrendChart');
                 if (ctxBar) {
                     new Chart(ctxBar, {
@@ -378,7 +385,6 @@ def home_page_view(request):
                     });
                 }
 
-                // Initialize Chart.js Pie Chart
                 const ctxPie = document.getElementById('revenuePieChart');
                 if (ctxPie) {
                     new Chart(ctxPie, {
@@ -421,7 +427,6 @@ def home_page_view(request):
                     const data = await response.json();
 
                     if (response.ok) {
-                        // Send Twilio WhatsApp Notification
                         fetch('/api/admin/send-whatsapp-notification/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -434,15 +439,15 @@ def home_page_view(request):
                         receipt.innerHTML = `
                             <div style="background: #ffffff; border: 2px dashed #0078d4; padding: 28px; border-radius: 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,120,212,0.15);">
                                 <span style="background: #dcfce7; color: #15803d; padding: 6px 18px; border-radius: 30px; font-weight: 800; font-size: 0.85rem;">✅ OPD APPOINTMENT BOOKED & WHATSAPP NOTIFIED</span>
-                                <div style="font-size: 2.5rem; font-weight: 900; color: #0078d4; margin: 14px 0; letter-spacing: 0.05em;">\${data.token_number}</div>
-                                <p style="font-size: 1.05rem;"><strong>Patient:</strong> \${data.patient_name} &nbsp;|&nbsp; <strong>Phone:</strong> \${data.patient_phone}</p>
-                                <p><strong>Doctor:</strong> \${data.doctor_name} &nbsp;|&nbsp; <strong>Department:</strong> \${data.department}</p>
-                                <p><strong>Fee:</strong> ₹\${data.consultation_fee_inr} &nbsp;|&nbsp; <strong>Status:</strong> \${data.status.toUpperCase()}</p>
-                                <p style="color: #059669; font-size: 0.9rem; margin-top: 6px;">📱 <strong>Twilio WhatsApp Alert:</strong> Confirmation dispatched to \${data.patient_phone}</p>
-                                \${data.video_room_url ? `<div style="background: #e0f2fe; padding: 12px; border-radius: 12px; margin-top: 14px;">📹 <strong>Tele-Health Video Room:</strong> <a href="\${data.video_room_url}" target="_blank" style="color: #0284c7; font-weight: 800;">\${data.video_room_url}</a></div>` : ''}
-                                \${data.emergency_escalation_code ? `<div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 14px; margin-top: 14px; font-weight: 800;">🚨 EMERGENCY ALERT CODE: \${data.emergency_escalation_code}</div>` : ''}
+                                <div style="font-size: 2.5rem; font-weight: 900; color: #0078d4; margin: 14px 0; letter-spacing: 0.05em;">` + data.token_number + `</div>
+                                <p style="font-size: 1.05rem;"><strong>Patient:</strong> ` + data.patient_name + ` &nbsp;|&nbsp; <strong>Phone:</strong> ` + data.patient_phone + `</p>
+                                <p><strong>Doctor:</strong> ` + data.doctor_name + ` &nbsp;|&nbsp; <strong>Department:</strong> ` + data.department + `</p>
+                                <p><strong>Fee:</strong> ₹` + data.consultation_fee_inr + ` &nbsp;|&nbsp; <strong>Status:</strong> ` + data.status.toUpperCase() + `</p>
+                                <p style="color: #059669; font-size: 0.9rem; margin-top: 6px;">📱 <strong>Twilio WhatsApp Alert:</strong> Confirmation dispatched to ` + data.patient_phone + `</p>
+                                ` + (data.video_room_url ? `<div style="background: #e0f2fe; padding: 12px; border-radius: 12px; margin-top: 14px;">📹 <strong>Tele-Health Video Room:</strong> <a href="` + data.video_room_url + `" target="_blank" style="color: #0284c7; font-weight: 800;">` + data.video_room_url + `</a></div>` : '') + `
+                                ` + (data.emergency_escalation_code ? `<div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 14px; margin-top: 14px; font-weight: 800;">🚨 EMERGENCY ALERT CODE: ` + data.emergency_escalation_code + `</div>` : '') + `
                                 <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                                    <button type="button" onclick="window.open('/api/admin/appointments/' + '\${data.id}' + '/slip/', '_blank')" style="background: linear-gradient(135deg, #0078d4 0%, #00b4d8 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer;">🖨️ Print Reception OPD Slip</button>
+                                    <button type="button" onclick="window.open('/api/admin/appointments/' + '` + data.id + `' + '/slip/', '_blank')" style="background: linear-gradient(135deg, #0078d4 0%, #00b4d8 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer;">🖨️ Print Reception OPD Slip</button>
                                     <a href="/track/" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 12px 24px; border-radius: 12px; font-weight: 800; text-decoration: none; color: #0f172a;">Track Token Live</a>
                                 </div>
                             </div>
@@ -509,18 +514,18 @@ def track_page_view(request):
                     if (response.ok && data.success) {
                         resultBox.innerHTML = `
                             <div style="background: #ffffff; border: 2px solid #0078d4; border-radius: 16px; padding: 24px; text-align: center; color: #0f172a;">
-                                <span style="background: #dcfce7; color: #15803d; padding: 4px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;">✅ LIVE TOKEN STATUS: \${data.status}</span>
-                                <div style="font-size: 2.8rem; font-weight: 900; color: #0078d4; margin: 12px 0;">\${data.token_number}</div>
-                                <p style="font-size: 1.1rem;"><strong>Patient:</strong> \${data.patient_name} &nbsp;|&nbsp; <strong>Doctor:</strong> \${data.doctor_name}</p>
-                                <p><strong>Department:</strong> \${data.department} &nbsp;|&nbsp; <strong>Room:</strong> <span style="color: #008272; font-weight: 800;">\${data.room_number}</span></p>
-                                <p><strong>Estimated Wait Time:</strong> <span style="color: #d13438; font-weight: 800;">\${data.estimated_wait_time_minutes} minutes</span></p>
-                                \${data.video_room_url !== 'N/A (In-Clinic Visit)' ? `<p style="margin-top: 10px;">📹 <strong>Tele-Link:</strong> <a href="\${data.video_room_url}" target="_blank" style="color: #0078d4; font-weight: 800;">\${data.video_room_url}</a></p>` : ''}
+                                <span style="background: #dcfce7; color: #15803d; padding: 4px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;">✅ LIVE TOKEN STATUS: ` + data.status + `</span>
+                                <div style="font-size: 2.8rem; font-weight: 900; color: #0078d4; margin: 12px 0;">` + data.token_number + `</div>
+                                <p style="font-size: 1.1rem;"><strong>Patient:</strong> ` + data.patient_name + ` &nbsp;|&nbsp; <strong>Doctor:</strong> ` + data.doctor_name + `</p>
+                                <p><strong>Department:</strong> ` + data.department + ` &nbsp;|&nbsp; <strong>Room:</strong> <span style="color: #008272; font-weight: 800;">` + data.room_number + `</span></p>
+                                <p><strong>Estimated Wait Time:</strong> <span style="color: #d13438; font-weight: 800;">` + data.estimated_wait_time_minutes + ` minutes</span></p>
+                                ` + (data.video_room_url !== 'N/A (In-Clinic Visit)' ? `<p style="margin-top: 10px;">📹 <strong>Tele-Link:</strong> <a href="` + data.video_room_url + `" target="_blank" style="color: #0078d4; font-weight: 800;">` + data.video_room_url + `</a></p>` : '') + `
                             </div>
                         `;
                     } else {
                         resultBox.innerHTML = `
                             <div style="background: #fee2e2; border: 1.5px solid #ef4444; color: #b91c1c; border-radius: 14px; padding: 18px; text-align: center;">
-                                ⚠️ <strong>Token Not Found:</strong> \${data.error || 'Please verify your token number.'}
+                                ⚠️ <strong>Token Not Found:</strong> ` + (data.error || 'Please verify your token number.') + `
                             </div>
                         `;
                     }
@@ -611,10 +616,10 @@ def ai_checker_page_view(request):
                         const s = data.ai_summary;
                         box.innerHTML = `
                             <div style="background: #ffffff; border: 2px solid #10b981; padding: 24px; border-radius: 16px; color: #0f172a;">
-                                <h3 style="color: #065f46; margin-bottom: 10px;">🧪 \${s.summary_title}</h3>
-                                <p style="margin-bottom: 8px;"><strong>Urgency Assessment:</strong> <span style="background: \${s.urgency_level === 'HIGH_PRIORITY' ? '#fee2e2' : '#dcfce7'}; color: \${s.urgency_level === 'HIGH_PRIORITY' ? '#b91c1c' : '#15803d'}; padding: 4px 12px; border-radius: 12px; font-weight: 800;">\${s.urgency_level}</span></p>
-                                <p><strong>Key Observations:</strong> \${s.clinical_observations.join(' ')}</p>
-                                <p style="margin-top: 6px;"><strong>Recommended Doctor:</strong> \${s.recommended_actions.join(' ')}</p>
+                                <h3 style="color: #065f46; margin-bottom: 10px;">🧪 ` + s.summary_title + `</h3>
+                                <p style="margin-bottom: 8px;"><strong>Urgency Assessment:</strong> <span style="background: ` + (s.urgency_level === 'HIGH_PRIORITY' ? '#fee2e2' : '#dcfce7') + `; color: ` + (s.urgency_level === 'HIGH_PRIORITY' ? '#b91c1c' : '#15803d') + `; padding: 4px 12px; border-radius: 12px; font-weight: 800;">` + s.urgency_level + `</span></p>
+                                <p><strong>Key Observations:</strong> ` + s.clinical_observations.join(' ') + `</p>
+                                <p style="margin-top: 6px;"><strong>Recommended Doctor:</strong> ` + s.recommended_actions.join(' ') + `</p>
                             </div>
                         `;
                     }
