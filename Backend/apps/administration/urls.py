@@ -8,6 +8,9 @@ from apps.administration.views import (
     AppointmentPDFSlipView,
     SeedDemoDataView,
     TokenTrackerView,
+    RazorpayOrderCreateView,
+    WhatsAppNotificationSendView,
+    PrescriptionSummarizerAiView,
 )
 
 urlpatterns = [
@@ -24,4 +27,9 @@ urlpatterns = [
     path('appointments/track/<str:token_number>/', TokenTrackerView.as_view(), name='appointment-track'),
     path('appointments/<uuid:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
     path('appointments/<uuid:pk>/slip/', AppointmentPDFSlipView.as_view(), name='appointment-pdf-slip'),
+
+    # Next-Gen Innovations (Razorpay, Twilio WhatsApp, Gemini AI Summarizer)
+    path('create-razorpay-order/', RazorpayOrderCreateView.as_view(), name='create-razorpay-order'),
+    path('send-whatsapp-notification/', WhatsAppNotificationSendView.as_view(), name='send-whatsapp-notification'),
+    path('summarize-prescription/', PrescriptionSummarizerAiView.as_view(), name='summarize-prescription'),
 ]

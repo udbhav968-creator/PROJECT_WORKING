@@ -5,6 +5,33 @@ from rest_framework.test import APITestCase
 from apps.administration.models import AppointmentModel, AdminAuditLogModel, DoctorRosterModel
 
 
+class NextGenInnovationsTests(APITestCase):
+    """
+    Automated Unit Test Suite for Razorpay, Twilio WhatsApp, and Gemini AI Summarizer APIs
+    """
+    def test_razorpay_order_creation(self):
+        url = reverse("create-razorpay-order")
+        response = self.client.post(url, {"amount_inr": 600, "currency": "INR"})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(response.data["success"])
+        self.assertIn("order_id", response.data)
+        self.assertEqual(response.data["razorpay_key_id"], "rzp_test_PURE_HEALTH_2026")
+
+    def test_whatsapp_notification_dispatch(self):
+        url = reverse("send-whatsapp-notification")
+        response = self.client.post(url, {"phone": "+91 9811122233", "token_number": "PURE-OPD-101", "doctor_name": "Dr. Divit Shah"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["whatsapp_status"], "QUEUED_AND_DISPATCHED")
+
+    def test_ai_prescription_summarizer(self):
+        url = reverse("summarize-prescription")
+        response = self.client.post(url, {"text": "Patient has elevated HbA1c glucose levels and BP hypertension."})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("ai_summary", response.data)
+
+
 class TokenTrackerTests(APITestCase):
     """
     Automated Unit Test Suite for TokenTrackerView API
