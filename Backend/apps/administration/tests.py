@@ -38,6 +38,20 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertEqual(response.data["ai_engine"], "Google Gemini 1.5 Pro AI")
 
+    def test_system_metrics(self):
+        url = reverse("system-metrics")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("db_query_latency_ms", response.data)
+
+    def test_hospital_stats(self):
+        url = reverse("hospital-stats")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("total_opd_appointments", response.data)
+
 
 class TokenTrackerTests(APITestCase):
     """

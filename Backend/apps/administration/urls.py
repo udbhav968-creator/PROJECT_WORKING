@@ -12,12 +12,16 @@ from apps.administration.views import (
     WhatsAppNotificationSendView,
     PrescriptionSummarizerAiView,
     GeminiAiChatbotView,
+    SystemMetricsView,
+    HospitalStatsView,
 )
 
 urlpatterns = [
     # System Health & Integration APIs (Udbhav - Module 4)
     path('health/', SystemHealthView.as_view(), name='system-health'),
     path('seed-demo-data/', SeedDemoDataView.as_view(), name='seed-demo-data'),
+    path('system-metrics/', SystemMetricsView.as_view(), name='system-metrics'),
+    path('hospital-stats/', HospitalStatsView.as_view(), name='hospital-stats'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
