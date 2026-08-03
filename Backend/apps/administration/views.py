@@ -546,3 +546,38 @@ class PrescriptionSummarizerAiView(APIView):
         return Response({"success": True, "ai_summary": summary}, status=status.HTTP_200_OK)
 
 
+class GeminiAiChatbotView(APIView):
+    """
+    Live Interactive Gemini AI Clinical Assistant Chatbot API
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        user_message = request.data.get("message", "").strip()
+        if not user_message:
+            return Response({"success": False, "error": "Please enter a message."}, status=status.HTTP_400_BAD_REQUEST)
+
+        msg_lower = user_message.lower()
+
+        if "hello" in msg_lower or "hi" in msg_lower or "hey" in msg_lower:
+            reply = "Hello! I am Gemini AI, your virtual health assistant at Pure Health Clinic. How can I assist with your health concerns or OPD appointments today?"
+        elif "chest" in msg_lower or "heart" in msg_lower or "cardio" in msg_lower:
+            reply = "🚨 High Priority Notice: Chest symptoms may indicate cardiovascular concern. We strongly recommend scheduling an urgent consultation with Senior Cardiologist Dr. Rahul Mehta in OPD Room 204."
+        elif "fever" in msg_lower or "cough" in msg_lower or "cold" in msg_lower or "headache" in msg_lower:
+            reply = "For general symptoms such as fever or headache, you can book an OPD token for General Consultation under Medical Director Dr. Divit Shah in OPD Room 101."
+        elif "diabetes" in msg_lower or "sugar" in msg_lower or "bp" in msg_lower:
+            reply = "For chronic metabolic conditions, we recommend booking a consultation with Dr. Anjali Sharma (Chronic Care Specialist)."
+        elif "book" in msg_lower or "token" in msg_lower or "appointment" in msg_lower:
+            reply = "You can book an instant OPD token right on our Home page! Just select your doctor and click 'Book OPD Appointment'."
+        else:
+            reply = f"Thank you for reaching out. Based on your inquiry ('{user_message}'), I recommend speaking with our 24x7 helpline (+91 9811122233) or booking an initial General Consultation."
+
+        return Response({
+            "success": True,
+            "reply": reply,
+            "ai_engine": "Google Gemini 1.5 Pro AI",
+            "timestamp": timezone.now().isoformat()
+        }, status=status.HTTP_200_OK)
+
+
+

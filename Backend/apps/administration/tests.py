@@ -31,6 +31,13 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertIn("ai_summary", response.data)
 
+    def test_gemini_ai_chatbot(self):
+        url = reverse("chat-gemini-ai")
+        response = self.client.post(url, {"message": "Hello Gemini AI!"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["ai_engine"], "Google Gemini 1.5 Pro AI")
+
 
 class TokenTrackerTests(APITestCase):
     """

@@ -11,6 +11,7 @@ from apps.administration.views import (
     RazorpayOrderCreateView,
     WhatsAppNotificationSendView,
     PrescriptionSummarizerAiView,
+    GeminiAiChatbotView,
 )
 
 urlpatterns = [
@@ -28,8 +29,9 @@ urlpatterns = [
     path('appointments/<uuid:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
     path('appointments/<uuid:pk>/slip/', AppointmentPDFSlipView.as_view(), name='appointment-pdf-slip'),
 
-    # Next-Gen Innovations (Razorpay, Twilio WhatsApp, Gemini AI Summarizer)
+    # Next-Gen Innovations (Razorpay, Twilio WhatsApp, Gemini AI Summarizer, Gemini Chatbot)
     path('create-razorpay-order/', RazorpayOrderCreateView.as_view(), name='create-razorpay-order'),
     path('send-whatsapp-notification/', WhatsAppNotificationSendView.as_view(), name='send-whatsapp-notification'),
     path('summarize-prescription/', PrescriptionSummarizerAiView.as_view(), name='summarize-prescription'),
+    path('chat-gemini-ai/', GeminiAiChatbotView.as_view(), name='chat-gemini-ai'),
 ]

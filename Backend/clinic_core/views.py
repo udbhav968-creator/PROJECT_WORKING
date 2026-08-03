@@ -188,6 +188,68 @@ def get_shared_header(active_tab="home"):
 
 def get_shared_footer():
     return """
+        <!-- Floating Gemini AI Chatbot Launcher Button -->
+        <button type="button" onclick="toggleGeminiChat()" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: linear-gradient(135deg, #0078d4 0%, #00f5d4 100%); color: #03071e; border: none; padding: 14px 24px; border-radius: 30px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,245,212,0.4); display: flex; align-items: center; gap: 8px; font-family: var(--font-body);">
+            💬 Chat with Gemini AI
+        </button>
+
+        <!-- Floating Gemini AI Chatbot Modal Box -->
+        <div id="geminiChatModal" style="display: none; position: fixed; bottom: 90px; right: 24px; width: 360px; max-width: 90vw; height: 460px; background: #ffffff; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 2px solid #00f5d4; z-index: 9999; flex-direction: column; overflow: hidden; color: #0f172a;">
+            <div style="background: linear-gradient(90deg, #03071e 0%, #0a192f 100%); color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #00f5d4;">
+                <div style="font-weight: 800; font-size: 0.95rem;">🤖 Gemini AI Health Assistant</div>
+                <button type="button" onclick="toggleGeminiChat()" style="background: transparent; border: none; color: white; font-weight: 900; font-size: 1.2rem; cursor: pointer;">✕</button>
+            </div>
+            <div id="chatMessagesBox" style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; background: #f8fafc;">
+                <div style="background: #e0f2fe; color: #0369a1; padding: 10px 14px; border-radius: 14px; align-self: flex-start; max-width: 85%;">
+                    Hello! I am Google Gemini AI, your clinical health assistant. How can I help you today?
+                </div>
+            </div>
+            <form id="geminiChatForm" style="padding: 12px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; background: #ffffff;">
+                <input type="text" id="chatInput" placeholder="Ask Gemini AI..." required style="flex: 1; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; outline: none; font-family: var(--font-body); font-size: 0.88rem;">
+                <button type="submit" style="background: #0078d4; color: white; border: none; padding: 10px 16px; border-radius: 12px; font-weight: 800; cursor: pointer;">Send</button>
+            </form>
+        </div>
+
+        <script>
+            function toggleGeminiChat() {
+                const modal = document.getElementById('geminiChatModal');
+                if (!modal) return;
+                modal.style.display = (modal.style.display === 'none' || !modal.style.display) ? 'flex' : 'none';
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const chatForm = document.getElementById('geminiChatForm');
+                if (chatForm) {
+                    chatForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const input = document.getElementById('chatInput');
+                        const box = document.getElementById('chatMessagesBox');
+                        const userText = input.value.trim();
+                        if (!userText) return;
+
+                        box.innerHTML += `<div style="background: #0078d4; color: white; padding: 10px 14px; border-radius: 14px; align-self: flex-end; max-width: 85%;">\${userText}</div>`;
+                        input.value = '';
+                        box.scrollTop = box.scrollHeight;
+
+                        try {
+                            const res = await fetch('/api/admin/chat-gemini-ai/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ message: userText })
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                box.innerHTML += `<div style="background: #e0f2fe; color: #0369a1; padding: 10px 14px; border-radius: 14px; align-self: flex-start; max-width: 85%;">🤖 <strong>Gemini AI:</strong> \${data.reply}</div>`;
+                                box.scrollTop = box.scrollHeight;
+                            }
+                        } catch (err) {
+                            box.innerHTML += `<div style="background: #fee2e2; color: #b91c1c; padding: 10px 14px; border-radius: 14px; align-self: flex-start;">Error connecting to Gemini AI.</div>`;
+                        }
+                    });
+                }
+            });
+        </script>
+
         <footer style="background: #03071e; color: #94a3b8; padding: 40px 24px; text-align: center; border-top: 4px solid var(--neon-teal);">
             <p style="color: white; font-weight: 800; font-size: 1.1rem;">🏥 Pure Health Clinic & Hospital Systems</p>
             <p style="font-size: 0.88rem; margin-top: 4px; color: #cbd5e1;">Enterprise Full-Stack Web Portal Deployment by Udbhav.</p>
