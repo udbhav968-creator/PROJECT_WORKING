@@ -4,7 +4,7 @@ def get_shared_header(active_tab="home"):
     nav_items = [
         ("home", "/", "Home"),
         ("track", "/track/", "🔎 Track OPD Token"),
-        ("ai-checker", "/ai-checker/", "🤖 AI Symptom Checker & Summarizer"),
+        ("ai-checker", "/ai-checker/", "🤖 AI Triage & Lab Summarizer"),
         ("tv-display", "/tv-display/", "📺 Reception TV Display"),
         ("about", "/about/", "About Us"),
         ("services", "/services/", "Medical Services"),
@@ -23,7 +23,7 @@ def get_shared_header(active_tab="home"):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pure Health Clinic - Enterprise Next-Gen Healthcare Portal</title>
+        <title>Pure Health Clinic - Ultra-Next-Gen Enterprise Medical Portal</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -38,28 +38,31 @@ def get_shared_header(active_tab="home"):
                 --neon-teal: #00f5d4;
                 --emerald-green: #10b981;
                 --crimson-red: #ef4444;
-                --glass-bg: rgba(255, 255, 255, 0.95);
-                --glass-border: rgba(255, 255, 255, 0.8);
+                --glass-bg: rgba(255, 255, 255, 0.96);
+                --glass-border: rgba(255, 255, 255, 0.85);
                 --font-heading: 'Outfit', sans-serif;
                 --font-body: 'Plus Jakarta Sans', sans-serif;
             }}
             * {{ box-sizing: border-box; margin: 0; padding: 0; }}
             html {{ scroll-behavior: smooth; }}
-            body {{ font-family: var(--font-body); background-color: #03071e; color: #f8fafc; line-height: 1.6; overflow-x: hidden; }}
+            body {{
+                font-family: var(--font-body); background: radial-gradient(circle at 50% 10%, #0a192f 0%, #03071e 80%);
+                color: #f8fafc; line-height: 1.6; overflow-x: hidden; min-height: 100vh;
+            }}
             h1, h2, h3, h4 {{ font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.02em; }}
             
             @keyframes fadeInSlide {{
-                0% {{ opacity: 0; transform: translateY(25px) scale(0.98); }}
+                0% {{ opacity: 0; transform: translateY(30px) scale(0.98); }}
                 100% {{ opacity: 1; transform: translateY(0) scale(1); }}
             }}
             @keyframes floatGlow {{
-                0% {{ transform: translateY(0px); }}
-                50% {{ transform: translateY(-15px); }}
-                100% {{ transform: translateY(0px); }}
+                0% {{ transform: translateY(0px) rotate(0deg); }}
+                50% {{ transform: translateY(-15px) rotate(3deg); }}
+                100% {{ transform: translateY(0px) rotate(0deg); }}
             }}
             @keyframes pulseGlow {{
                 0% {{ box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }}
-                70% {{ box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }}
+                70% {{ box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }}
                 100% {{ box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }}
             }}
 
@@ -67,7 +70,7 @@ def get_shared_header(active_tab="home"):
                 background: linear-gradient(90deg, #03071e 0%, #0a192f 50%, #0078d4 100%);
                 color: #ffffff; padding: 12px 32px; display: flex; justify-content: space-between;
                 align-items: center; font-size: 0.88rem; border-bottom: 2px solid var(--neon-teal);
-                box-shadow: 0 4px 20px rgba(0,245,212,0.15); position: relative; z-index: 100; flex-wrap: wrap; gap: 10px;
+                box-shadow: 0 4px 25px rgba(0,245,212,0.2); position: relative; z-index: 100; flex-wrap: wrap; gap: 10px;
             }}
             .triage-badge {{
                 background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; font-weight: 800;
@@ -76,42 +79,43 @@ def get_shared_header(active_tab="home"):
             }}
 
             .main-nav {{
-                background: rgba(10, 25, 47, 0.98); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+                background: rgba(10, 25, 47, 0.98); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
                 padding: 16px 32px; display: flex; justify-content: space-between; align-items: center;
-                border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000;
-                flex-wrap: wrap; gap: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                border-bottom: 1px solid rgba(255,255,255,0.12); position: sticky; top: 0; z-index: 1000;
+                flex-wrap: wrap; gap: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.4);
             }}
             .logo-brand {{
-                font-size: 1.4rem; font-weight: 900; color: #ffffff; text-decoration: none;
+                font-size: 1.5rem; font-weight: 900; color: #ffffff; text-decoration: none;
                 display: flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap;
             }}
             .logo-brand span {{ color: var(--neon-teal); }}
             .nav-links {{ display: flex; gap: 8px; list-style: none; align-items: center; flex-wrap: wrap; }}
             .nav-btn {{
                 color: #cbd5e1; background: transparent; border: 1.5px solid transparent; font-weight: 700; font-size: 0.9rem;
-                transition: all 0.3s ease; cursor: pointer; padding: 9px 16px; border-radius: 12px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; padding: 9px 16px; border-radius: 12px;
                 font-family: var(--font-body); white-space: nowrap; text-decoration: none; display: inline-block;
             }}
-            .nav-btn:hover {{ color: #ffffff; background: rgba(0, 245, 212, 0.12); border-color: rgba(0, 245, 212, 0.3); }}
+            .nav-btn:hover {{ color: #ffffff; background: rgba(0, 245, 212, 0.15); border-color: rgba(0, 245, 212, 0.4); }}
             .nav-btn.active {{
-                color: #ffffff; background: linear-gradient(135deg, rgba(0, 120, 212, 0.4) 0%, rgba(0, 245, 212, 0.25) 100%);
-                border-color: var(--neon-teal); box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+                color: #ffffff; background: linear-gradient(135deg, rgba(0, 120, 212, 0.45) 0%, rgba(0, 245, 212, 0.3) 100%);
+                border-color: var(--neon-teal); box-shadow: 0 0 24px rgba(0, 245, 212, 0.35);
             }}
 
             .hero-section {{
-                background: radial-gradient(circle at 50% 30%, #0a192f 0%, #03071e 80%);
-                color: white; padding: 50px 24px 80px; text-align: center; position: relative; overflow: hidden;
+                background: radial-gradient(circle at 50% 30%, #0a192f 0%, #03071e 85%);
+                color: white; padding: 60px 24px 90px; text-align: center; position: relative; overflow: hidden;
             }}
             .hero-chip {{
                 background: rgba(255, 255, 255, 0.08); padding: 8px 22px; border-radius: 30px;
                 font-size: 0.88rem; font-weight: 800; letter-spacing: 0.08em; display: inline-block;
                 border: 1px solid rgba(0, 245, 212, 0.4); color: var(--neon-teal); margin-bottom: 16px;
+                box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
             }}
 
             .container {{ max-width: 1200px; margin: -40px auto 80px; padding: 0 24px; position: relative; z-index: 10; }}
             .glass-card {{
                 background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-                border-radius: 24px; padding: 40px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+                border-radius: 24px; padding: 40px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
                 border: 1px solid var(--glass-border); margin-bottom: 36px; color: #0f172a;
                 animation: fadeInSlide 0.5s ease-out forwards;
             }}
@@ -128,18 +132,18 @@ def get_shared_header(active_tab="home"):
                 background: linear-gradient(135deg, var(--cobalt-blue) 0%, var(--vibrant-cyan) 50%, var(--neon-teal) 100%);
                 color: white; font-weight: 800; font-size: 1.05rem; padding: 15px 32px;
                 border: none; border-radius: 14px; cursor: pointer; width: 100%; margin-top: 20px;
-                box-shadow: 0 10px 30px rgba(0, 180, 216, 0.35); transition: all 0.3s ease;
+                box-shadow: 0 10px 30px rgba(0, 180, 216, 0.35); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 text-transform: uppercase; letter-spacing: 0.03em; font-family: var(--font-body); text-decoration: none;
                 display: inline-block; text-align: center;
             }}
-            .btn-dynamic:hover {{ transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0, 245, 212, 0.45); }}
+            .btn-dynamic:hover {{ transform: translateY(-3px) scale(1.01); box-shadow: 0 15px 40px rgba(0, 245, 212, 0.45); }}
 
             .grid-3 {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 24px; }}
             .feature-card {{
                 background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 26px;
-                transition: all 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 8px 24px rgba(0,0,0,0.04);
             }}
-            .feature-card:hover {{ transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0, 120, 212, 0.12); border-color: var(--vibrant-cyan); }}
+            .feature-card:hover {{ transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 120, 212, 0.15); border-color: var(--vibrant-cyan); }}
 
             .duty-badge {{ padding: 5px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; float: right; }}
             .on_duty {{ background: #dcfce7; color: #15803d; }}
@@ -153,6 +157,16 @@ def get_shared_header(active_tab="home"):
             .token-display-number {{
                 font-size: 4.8rem; font-weight: 900; color: var(--neon-teal); margin: 14px 0;
                 letter-spacing: 0.08em; text-shadow: 0 0 35px rgba(0, 245, 212, 0.7);
+            }}
+
+            /* Responsive Device Breakpoints */
+            @media (max-width: 768px) {{
+                .top-bar {{ flex-direction: column; text-align: center; padding: 10px 16px; }}
+                .main-nav {{ padding: 12px 16px; flex-direction: column; gap: 12px; }}
+                .nav-links {{ justify-content: center; overflow-x: auto; max-width: 100%; padding-bottom: 6px; }}
+                .hero-section h1 {{ font-size: 2.2rem !important; }}
+                .glass-card {{ padding: 24px !important; }}
+                .token-display-number {{ font-size: 3rem !important; }}
             }}
         </style>
     </head>
@@ -174,9 +188,9 @@ def get_shared_header(active_tab="home"):
 
 def get_shared_footer():
     return """
-        <footer style="background: #03071e; color: #94a3b8; padding: 40px; text-align: center; border-top: 4px solid var(--neon-teal);">
+        <footer style="background: #03071e; color: #94a3b8; padding: 40px 24px; text-align: center; border-top: 4px solid var(--neon-teal);">
             <p style="color: white; font-weight: 800; font-size: 1.1rem;">🏥 Pure Health Clinic & Hospital Systems</p>
-            <p style="font-size: 0.88rem; margin-top: 4px; color: #cbd5e1;">Multi-Page Full-Stack Enterprise Web Application Deployment by Udbhav.</p>
+            <p style="font-size: 0.88rem; margin-top: 4px; color: #cbd5e1;">Enterprise Full-Stack Web Portal Deployment by Udbhav.</p>
             <p style="font-size: 0.82rem; margin-top: 10px; color: #64748b;">© 2026 Pure Health Clinic. All Rights Reserved.</p>
         </footer>
     </body>
@@ -254,7 +268,7 @@ def home_page_view(request):
 
                     <div style="margin-top: 20px; background: #f8fafc; padding: 18px; border-radius: 16px; border: 1.5px solid #e2e8f0;">
                         <label style="font-weight: 800; color: #03071e; font-size: 0.9rem;">💳 Production Razorpay / UPI Payment Gateway Integration:</label>
-                        <div style="display: flex; gap: 20px; margin-top: 8px; font-weight: 600; font-size: 0.9rem;">
+                        <div style="display: flex; gap: 20px; margin-top: 8px; font-weight: 600; font-size: 0.9rem; flex-wrap: wrap;">
                             <label style="cursor: pointer;"><input type="radio" name="payment_method" value="pay_at_clinic" checked> 🏥 Pay at Reception (Cash/Card)</label>
                             <label style="cursor: pointer;"><input type="radio" name="payment_method" value="razorpay"> 💳 Razorpay / Instant UPI (Pay Online)</label>
                         </div>
@@ -269,7 +283,7 @@ def home_page_view(request):
             <!-- Chart.js Graphical Analytics Dashboard Widget -->
             <div class="glass-card">
                 <h2 style="color: #03071e; font-size: 1.8rem; text-align: center; margin-bottom: 20px;">📊 Live OPD Patient Volume & Revenue Analytics (Chart.js)</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
                     <div style="background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0;">
                         <h4 style="color: #0078d4; text-align: center; margin-bottom: 12px;">Weekly OPD Patient Bookings Trend</h4>
                         <canvas id="opdTrendChart"></canvas>
@@ -365,7 +379,7 @@ def home_page_view(request):
                                 <p style="color: #059669; font-size: 0.9rem; margin-top: 6px;">📱 <strong>Twilio WhatsApp Alert:</strong> Confirmation dispatched to \${data.patient_phone}</p>
                                 \${data.video_room_url ? `<div style="background: #e0f2fe; padding: 12px; border-radius: 12px; margin-top: 14px;">📹 <strong>Tele-Health Video Room:</strong> <a href="\${data.video_room_url}" target="_blank" style="color: #0284c7; font-weight: 800;">\${data.video_room_url}</a></div>` : ''}
                                 \${data.emergency_escalation_code ? `<div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 14px; margin-top: 14px; font-weight: 800;">🚨 EMERGENCY ALERT CODE: \${data.emergency_escalation_code}</div>` : ''}
-                                <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center;">
+                                <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                                     <button type="button" onclick="window.open('/api/admin/appointments/' + '\${data.id}' + '/slip/', '_blank')" style="background: linear-gradient(135deg, #0078d4 0%, #00b4d8 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer;">🖨️ Print Reception OPD Slip</button>
                                     <a href="/track/" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; padding: 12px 24px; border-radius: 12px; font-weight: 800; text-decoration: none; color: #0f172a;">Track Token Live</a>
                                 </div>
@@ -485,7 +499,6 @@ def ai_checker_page_view(request):
                 <div id="aiResult" style="display: none; background: #dcfce7; border: 2px solid #10b981; padding: 20px; border-radius: 16px; color: #065f46; font-size: 1rem; margin-top: 20px;"></div>
             </div>
 
-            <!-- Gemini 1.5 Pro Lab Report Summarizer Widget -->
             <div class="glass-card">
                 <h2 style="color: #03071e; font-size: 2rem;">2. Gemini 1.5 Pro AI Prescription & Lab Summarizer</h2>
                 <p style="color: #64748b; margin-top: 6px; font-size: 1rem;">Paste lab report text (HbA1c, Lipid Profile, BP readings) to extract clinical vitals and risk scores.</p>
