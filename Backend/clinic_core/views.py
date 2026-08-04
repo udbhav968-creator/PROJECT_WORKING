@@ -183,7 +183,8 @@ def get_shared_header(active_tab="home"):
     <body>
         <div class="top-bar">
             <div><span class="triage-badge">🚨 24x7 EMERGENCY TRIAGE</span> &nbsp; Helpline: +91 9811122233 | 1800-11-2233</div>
-            <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                <span style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; padding: 3px 10px; border-radius: 12px; font-weight: 800; font-size: 0.78rem;">🟢 API LATENCY: 0.84ms</span>
                 <span>🏢 Pure Health Enterprise Portal &nbsp;|&nbsp; 🛡️ NABH Certified</span>
             </div>
         </div>
@@ -759,19 +760,22 @@ def services_page_view(request):
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🩺</div>
                         <h3>General Consultation & Primary Care</h3>
                         <p style="color: #64748b; font-size: 0.9rem; margin: 6px 0;">Routine health checkups, preventive counseling, and medical assessment under Medical Director Dr. Divit Shah.</p>
-                        <div style="font-weight: 800; color: #4f46e5; font-size: 1rem;">Consultation Fee: ₹600</div>
+                        <div style="font-weight: 800; color: #4f46e5; font-size: 1rem; margin-bottom: 10px;">Consultation Fee: ₹600</div>
+                        <a href="/#opdForm" class="btn-dynamic" style="padding: 10px 20px; font-size: 0.88rem; margin-top: 0;">Book General Consultation</a>
                     </div>
                     <div class="feature-card">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">🩸</div>
                         <h3>Cardiology & Cardiovascular Care</h3>
                         <p style="color: #64748b; font-size: 0.9rem; margin: 6px 0;">Advanced heart health evaluations, ECG, Holter monitoring, and preventive cardiology by Senior Cardiologist Dr. Rahul Mehta.</p>
-                        <div style="font-weight: 800; color: #4f46e5; font-size: 1rem;">Consultation Fee: ₹1000</div>
+                        <div style="font-weight: 800; color: #4f46e5; font-size: 1rem; margin-bottom: 10px;">Consultation Fee: ₹1000</div>
+                        <a href="/#opdForm" class="btn-dynamic" style="padding: 10px 20px; font-size: 0.88rem; margin-top: 0;">Book Cardiology Consultation</a>
                     </div>
                     <div class="feature-card">
                         <div style="font-size: 2.5rem; margin-bottom: 10px;">💊</div>
                         <h3>Chronic Care Management</h3>
                         <p style="color: #64748b; font-size: 0.9rem; margin: 6px 0;">Long-term metabolic control for diabetes, hypertension, and continuous wellness tracking by Dr. Anjali Sharma.</p>
-                        <div style="font-weight: 800; color: #4f46e5; font-size: 1rem;">Consultation Fee: ₹750</div>
+                        <div style="font-weight: 800; color: #4f46e5; font-size: 1rem; margin-bottom: 10px;">Consultation Fee: ₹750</div>
+                        <a href="/#opdForm" class="btn-dynamic" style="padding: 10px 20px; font-size: 0.88rem; margin-top: 0;">Book Chronic Care</a>
                     </div>
                 </div>
             </div>
@@ -805,6 +809,7 @@ def doctors_page_view(request):
                         <div style="border-top: 1px solid #e2e8f0; margin-top: 10px; padding-top: 8px; font-size: 0.85rem; font-weight: 600;">
                             📍 OPD Room 101 &nbsp;|&nbsp; ⏰ 09:00 AM - 05:00 PM &nbsp;|&nbsp; 💳 Fee: ₹600
                         </div>
+                        <a href="/#opdForm" class="btn-dynamic" style="padding: 10px 18px; font-size: 0.88rem; margin-top: 12px;">Book Appointment</a>
                     </div>
                     <div class="feature-card">
                         <span class="duty-badge on_duty">On Duty</span>
@@ -814,6 +819,7 @@ def doctors_page_view(request):
                         <div style="border-top: 1px solid #e2e8f0; margin-top: 10px; padding-top: 8px; font-size: 0.85rem; font-weight: 600;">
                             📍 OPD Room 204 &nbsp;|&nbsp; ⏰ 10:00 AM - 04:00 PM &nbsp;|&nbsp; 💳 Fee: ₹1000
                         </div>
+                        <a href="/#opdForm" class="btn-dynamic" style="padding: 10px 18px; font-size: 0.88rem; margin-top: 12px;">Book Appointment</a>
                     </div>
                     <div class="feature-card">
                         <span class="duty-badge in_surgery">In Surgery</span>
@@ -823,6 +829,7 @@ def doctors_page_view(request):
                         <div style="border-top: 1px solid #e2e8f0; margin-top: 10px; padding-top: 8px; font-size: 0.85rem; font-weight: 600;">
                             📍 Operation Theater 2 &nbsp;|&nbsp; ⏰ 02:00 PM - 08:00 PM &nbsp;|&nbsp; 💳 Fee: ₹750
                         </div>
+                        <a href="/#opdForm" class="btn-dynamic" style="padding: 10px 18px; font-size: 0.88rem; margin-top: 12px;">Book Appointment</a>
                     </div>
                 </div>
             </div>
