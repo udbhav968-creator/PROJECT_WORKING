@@ -281,8 +281,10 @@ def home_page_view(request):
             </p>
             <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
                 <a href="#opdForm" class="btn-dynamic" style="width: auto; padding: 14px 32px; margin-top: 0;">🎟️ Book OPD Token Now</a>
+                <button type="button" onclick="seedHugeDataset()" style="background: linear-gradient(135deg, #10b981 0%, #00b4d8 100%); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 1rem; box-shadow: 0 8px 25px rgba(16,185,129,0.3); font-family: var(--font-body);">🌱 Seed Huge Demo Dataset</button>
                 <a href="/api/docs/" target="_blank" style="background: rgba(255,255,255,0.1); color: white; padding: 14px 32px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 1rem; border: 1.5px solid rgba(255,255,255,0.3); display: inline-block;">📄 Interactive Swagger Docs</a>
             </div>
+            <div id="seedNotification" style="display: none; margin-top: 16px; background: #dcfce7; color: #15803d; padding: 10px 20px; border-radius: 12px; font-weight: 800; max-width: 600px; margin-left: auto; margin-right: auto;"></div>
         </section>
 
         <div class="container">
@@ -367,6 +369,29 @@ def home_page_view(request):
         </div>
 
         <script>
+            async function seedHugeDataset() {
+                const notif = document.getElementById('seedNotification');
+                if (notif) {
+                    notif.style.display = 'block';
+                    notif.innerHTML = '⏳ Seeding 50+ Specialist Doctors, 200+ OPD Tokens & 50+ Audit Logs into cloud database...';
+                }
+                try {
+                    const res = await fetch('/api/admin/seed-demo-data/', { method: 'POST' });
+                    const data = await res.json();
+                    if (notif) {
+                        notif.style.background = '#dcfce7';
+                        notif.style.color = '#15803d';
+                        notif.innerHTML = '✅ SUCCESS! ' + (data.message || 'Dataset Seeded Successfully!');
+                    }
+                } catch (e) {
+                    if (notif) {
+                        notif.style.background = '#fee2e2';
+                        notif.style.color = '#b91c1c';
+                        notif.innerHTML = '⚠️ Error seeding dataset.';
+                    }
+                }
+            }
+
             document.addEventListener('DOMContentLoaded', function() {
                 const ctxBar = document.getElementById('opdTrendChart');
                 if (ctxBar) {

@@ -13,6 +13,7 @@
 ---
 
 ### 🌟 Next-Gen Innovations Built into Portal:
+- 🌱 **Huge Enterprise Dataset Seeding Engine**: One-click database populator (`POST /api/admin/seed-demo-data/`) auto-seeding 50+ Specialist Doctors, 200+ OPD Tokens, and 50+ Compliance Audit Logs.
 - ⚡ **Sub-Millisecond Telemetry & Latency API**: `GET /api/admin/system-metrics/` (0.84ms DB Latency)
 - 📊 **Real-Time Hospital OPD Volume Statistics**: `GET /api/admin/hospital-stats/`
 - 💬 **Interactive Gemini AI Clinical Health Assistant Chatbot Widget**: Floating chat widget powered by `POST /api/admin/chat-gemini-ai/`

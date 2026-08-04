@@ -340,85 +340,86 @@ class SeedDemoDataView(APIView):
             )
             created.append("Medical Director user")
 
-        if DoctorRosterModel.objects.count() == 0:
-            DoctorRosterModel.objects.create(
-                doctor_name="Dr. Divit Shah",
-                department="General_Consultation",
-                consultation_fee_inr=Decimal("600.00"),
-                shift_hours="09:00 AM - 05:00 PM",
-                duty_status="on_duty",
-                room_number="OPD Room 101",
-                max_daily_patients=35,
-                current_queue_count=5,
-            )
-            DoctorRosterModel.objects.create(
-                doctor_name="Dr. Rahul Mehta",
-                department="Cardiology",
-                consultation_fee_inr=Decimal("1000.00"),
-                shift_hours="10:00 AM - 04:00 PM",
-                duty_status="on_duty",
-                room_number="OPD Room 204",
-                max_daily_patients=25,
-                current_queue_count=8,
-            )
-            DoctorRosterModel.objects.create(
-                doctor_name="Dr. Anjali Sharma",
-                department="Chronic_Care",
-                consultation_fee_inr=Decimal("750.00"),
-                shift_hours="02:00 PM - 08:00 PM",
-                duty_status="in_surgery",
-                room_number="Operation Theater 2",
-                max_daily_patients=20,
-                current_queue_count=2,
-            )
-            created.append("3 Doctor Duty Roster records")
+        # Seed Doctors Roster
+        if DoctorRosterModel.objects.count() < 10:
+            depts = [
+                ("General_Consultation", "OPD Room 101", "Dr. Divit Shah", Decimal("600.00")),
+                ("Cardiology", "OPD Room 204", "Dr. Rahul Mehta", Decimal("1000.00")),
+                ("Chronic_Care", "Operation Theater 2", "Dr. Anjali Sharma", Decimal("750.00")),
+                ("Neurology", "OPD Room 305", "Dr. Vikram Sethi", Decimal("1200.00")),
+                ("Orthopedics", "OPD Room 108", "Dr. Sunita Rao", Decimal("850.00")),
+                ("Pediatrics", "OPD Room 112", "Dr. Arjun Kapoor", Decimal("650.00")),
+                ("Dermatology", "OPD Room 201", "Dr. Neha Verma", Decimal("900.00")),
+                ("Gastroenterology", "OPD Room 215", "Dr. Manish Malhotra", Decimal("1100.00")),
+                ("Pulmonology", "OPD Room 302", "Dr. Ritu Saxena", Decimal("950.00")),
+                ("Oncology", "Special Suite 4", "Dr. Sameer Khan", Decimal("1500.00")),
+                ("ENT", "OPD Room 105", "Dr. Kavita Joshi", Decimal("700.00")),
+                ("Urology", "OPD Room 308", "Dr. Alok Nath", Decimal("1050.00")),
+            ]
+            for dept, room, doc, fee in depts:
+                DoctorRosterModel.objects.get_or_create(
+                    doctor_name=doc,
+                    defaults={
+                        "department": dept,
+                        "consultation_fee_inr": fee,
+                        "shift_hours": "09:00 AM - 05:00 PM",
+                        "duty_status": "on_duty",
+                        "room_number": room,
+                        "max_daily_patients": 40,
+                        "current_queue_count": 6,
+                        "estimated_wait_time_minutes": 15,
+                    }
+                )
+            created.append("12 Board-Certified Specialist Doctor Roster records")
 
-        if AppointmentModel.objects.count() == 0:
-            AppointmentModel.objects.create(
-                patient_name="Rajesh Sharma",
-                patient_phone="+91 9811122233",
-                patient_email="rajesh.sharma@example.com",
-                doctor_name="Dr. Divit Shah",
-                department="General_Consultation",
-                priority="urgent",
-                consultation_type="OPD",
-                consultation_fee_inr=Decimal("600.00"),
-                token_number="PURE-GEN-101",
-                appointment_date=timezone.now(),
-                status="scheduled",
-                notes="Personalized Health Checkup & Comprehensive Assessment",
-            )
-            AppointmentModel.objects.create(
-                patient_name="Priya Verma",
-                patient_phone="+91 9877766655",
-                patient_email="priya.v@example.com",
-                doctor_name="Dr. Rahul Mehta",
-                department="Cardiology",
-                priority="emergency",
-                consultation_type="Emergency",
-                consultation_fee_inr=Decimal("1000.00"),
-                token_number="PURE-CARD-EMG-909",
-                emergency_escalation_code="EMG-ALERT-RED-909",
-                appointment_date=timezone.now(),
-                status="in_consultation",
-                notes="Acute cardiovascular triage evaluation",
-            )
-            AppointmentModel.objects.create(
-                patient_name="Amitabh Gupta",
-                patient_phone="+91 9123456780",
-                patient_email="agupta@example.com",
-                doctor_name="Dr. Anjali Sharma",
-                department="Chronic_Care",
-                priority="routine",
-                consultation_type="Teleconsultation",
-                consultation_fee_inr=Decimal("750.00"),
-                token_number="PURE-CHRONIC-304",
-                video_room_url="https://meet.jit.si/purehealth-opd-pure-chronic-304",
-                appointment_date=timezone.now(),
-                status="completed",
-                notes="Diabetes & Hypertension routine management follow-up",
-            )
-            created.append("3 Clinical Records")
+        # Seed Massive OPD Appointments Dataset
+        if AppointmentModel.objects.count() < 20:
+            names = ["Rajesh Sharma", "Priya Verma", "Amitabh Gupta", "Suresh Raina", "Meena Kumari", "Rohan Das", "Kavita Roy", "Vikas Singh", "Pooja Hegde", "Siddharth Malhotra"]
+            statuses = ["scheduled", "in_consultation", "completed", "scheduled"]
+            priorities = ["routine", "urgent", "emergency", "routine"]
+            consult_types = ["OPD", "Teleconsultation", "OPD", "OPD"]
+
+            for i in range(1, 51):
+                idx = i % len(names)
+                token = f"PURE-OPD-{1000 + i}"
+                status_val = statuses[i % len(statuses)]
+                priority_val = priorities[i % len(priorities)]
+                ctype = consult_types[i % len(consult_types)]
+                fee = Decimal("600.00") if i % 2 == 0 else Decimal("1000.00")
+
+                AppointmentModel.objects.get_or_create(
+                    token_number=token,
+                    defaults={
+                        "patient_name": f"{names[idx]} #{i}",
+                        "patient_phone": f"+91 98111{10000 + i}",
+                        "patient_email": f"patient{i}@example.com",
+                        "doctor_name": "Dr. Divit Shah" if i % 2 == 0 else "Dr. Rahul Mehta",
+                        "department": "General_Consultation" if i % 2 == 0 else "Cardiology",
+                        "priority": priority_val,
+                        "consultation_type": ctype,
+                        "consultation_fee_inr": fee,
+                        "video_room_url": f"https://meet.jit.si/purehealth-opd-{token.lower()}" if ctype == "Teleconsultation" else "",
+                        "emergency_escalation_code": f"EMG-ALERT-RED-{i}" if priority_val == "emergency" else "",
+                        "appointment_date": timezone.now(),
+                        "status": status_val,
+                        "notes": "Automated Clinical Enterprise Registration",
+                    }
+                )
+            created.append("50+ High-Volume OPD Patient Appointments with Tokens & Tele-Links")
+
+        # Seed Security Audit Logs
+        if AdminAuditLogModel.objects.count() < 10:
+            for i in range(1, 21):
+                AdminAuditLogModel.objects.create(
+                    admin_email="admin@purehealthclinic.com",
+                    action=f"AUDIT_EVENT_{i}",
+                    resource="CLINICAL_DATABASE",
+                    severity="INFO" if i % 3 != 0 else "WARNING",
+                    compliance_category="NABH_HIPAA_AUDIT",
+                    ip_address="127.0.0.1",
+                    details=f"Compliance check audit entry #{i} for patient records integrity.",
+                )
+            created.append("20+ Security & Compliance Audit Log Entries")
 
         msg = f"Seeded: {', '.join(created)}" if created else "Demo data already exists."
         return Response(
