@@ -52,6 +52,13 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertIn("total_opd_appointments", response.data)
 
+    def test_patient_feedback(self):
+        url = reverse("patient-feedback")
+        response = self.client.post(url, {"patient_name": "Test Patient", "rating": 5, "comments": "Great service!"})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["feedback"]["rating_stars"], "5/5 ⭐")
+
 
 class TokenTrackerTests(APITestCase):
     """

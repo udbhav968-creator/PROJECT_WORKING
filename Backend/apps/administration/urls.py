@@ -14,6 +14,7 @@ from apps.administration.views import (
     GeminiAiChatbotView,
     SystemMetricsView,
     HospitalStatsView,
+    PatientFeedbackView,
 )
 
 urlpatterns = [
@@ -22,6 +23,7 @@ urlpatterns = [
     path('seed-demo-data/', SeedDemoDataView.as_view(), name='seed-demo-data'),
     path('system-metrics/', SystemMetricsView.as_view(), name='system-metrics'),
     path('hospital-stats/', HospitalStatsView.as_view(), name='hospital-stats'),
+    path('patient-feedback/', PatientFeedbackView.as_view(), name='patient-feedback'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
