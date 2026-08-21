@@ -67,9 +67,15 @@ def get_shared_header(active_tab="home"):
                 70% {{ box-shadow: 0 0 0 14px rgba(236, 72, 153, 0); }}
                 100% {{ box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }}
             }}
+            @keyframes gradientShift {{
+                0% {{ background-position: 0% 50%; }}
+                50% {{ background-position: 100% 50%; }}
+                100% {{ background-position: 0% 50%; }}
+            }}
 
             .top-bar {{
                 background: linear-gradient(90deg, #1e1b4b 0%, #312e81 30%, #4338ca 60%, #0284c7 100%);
+                background-size: 200% 200%; animation: gradientShift 8s ease infinite;
                 color: #ffffff; padding: 12px 32px; display: flex; justify-content: space-between;
                 align-items: center; font-size: 0.88rem; border-bottom: 3px solid var(--neon-cyan);
                 box-shadow: 0 4px 25px rgba(6, 182, 212, 0.3); position: relative; z-index: 100; flex-wrap: wrap; gap: 10px;
@@ -100,7 +106,7 @@ def get_shared_header(active_tab="home"):
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; padding: 9px 16px; border-radius: 12px;
                 font-family: var(--font-body); white-space: nowrap; text-decoration: none; display: inline-block;
             }}
-            .nav-btn:hover {{ color: #ffffff; background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.5); }}
+            .nav-btn:hover {{ color: #ffffff; background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.5); transform: translateY(-2px); }}
             .nav-btn.active {{
                 color: #ffffff; background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
                 border-color: #38bdf8; box-shadow: 0 0 24px rgba(6, 182, 212, 0.45);
@@ -114,7 +120,7 @@ def get_shared_header(active_tab="home"):
                 background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(6, 182, 212, 0.25) 100%);
                 padding: 8px 22px; border-radius: 30px; font-size: 0.88rem; font-weight: 800; letter-spacing: 0.08em;
                 display: inline-block; border: 1.5px solid var(--neon-cyan); color: #38bdf8; margin-bottom: 16px;
-                box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+                box-shadow: 0 0 25px rgba(56, 189, 248, 0.3); animation: floatGlow 4s ease-in-out infinite alternate;
             }}
 
             .container {{ max-width: 1200px; margin: -45px auto 80px; padding: 0 24px; position: relative; z-index: 10; }}
@@ -123,6 +129,7 @@ def get_shared_header(active_tab="home"):
                 border-radius: 24px; padding: 40px; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
                 border: 1.5px solid var(--glass-border); margin-bottom: 36px; color: #0f172a;
                 animation: fadeInSlide 0.5s ease-out forwards; position: relative; overflow: hidden;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }}
             .glass-card::before {{
                 content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
@@ -152,7 +159,7 @@ def get_shared_header(active_tab="home"):
                 background: #ffffff; border: 2px solid #e2e8f0; border-radius: 20px; padding: 26px;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.06); position: relative; overflow: hidden;
             }}
-            .feature-card:hover {{ transform: translateY(-8px); box-shadow: 0 25px 50px rgba(99, 102, 241, 0.2); border-color: var(--neon-cyan); }}
+            .feature-card:hover {{ transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px rgba(99, 102, 241, 0.2); border-color: var(--neon-cyan); }}
 
             .duty-badge {{ padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; float: right; }}
             .on_duty {{ background: #dcfce7; color: #15803d; border: 1px solid #86efac; }}
@@ -182,10 +189,11 @@ def get_shared_header(active_tab="home"):
     </head>
     <body>
         <div class="top-bar">
-            <div><span class="triage-badge">🚨 24x7 EMERGENCY TRIAGE</span> &nbsp; Helpline: +91 9811122233 | 1800-11-2233</div>
-            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+            <div><span class="triage-badge">🚨 24x7 EMERGENCY TRIAGE</span> &nbsp; Helpline: +91 9811122233 | 🚑 Ambulance ETA: 4.5 Mins</div>
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <span style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; padding: 3px 10px; border-radius: 12px; font-weight: 800; font-size: 0.78rem;">🟢 API LATENCY: 0.84ms</span>
-                <span>🏢 Pure Health Enterprise Portal &nbsp;|&nbsp; 🛡️ NABH Certified</span>
+                <span style="background: rgba(99,102,241,0.2); border: 1px solid #6366f1; padding: 3px 10px; border-radius: 12px; font-weight: 800; font-size: 0.78rem;">🧠 50+ NEXT-GEN AI FEATURES</span>
+                <span>🏢 Pure Health Enterprise Portal</span>
             </div>
         </div>
 
