@@ -81,6 +81,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("paradigms", response.data)
         self.assertEqual(response.data["paradigms"]["1_supervised_learning"]["triage_category"], "EMERGENCY_RED_ALERT")
 
+    def test_mlops_pipeline(self):
+        url = reverse("mlops-pipeline")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["mlops_pipeline_status"], "HEALTHY_ACTIVE")
+        self.assertIn("model_registry", response.data)
+
 
 class TokenTrackerTests(APITestCase):
     """

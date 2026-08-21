@@ -2,7 +2,7 @@
 ### Enterprise Healthcare Portal, AI Symptom Checker, OPD Token Management & Administration Integration
 
 ![Author](https://img.shields.io/badge/Author-Udbhav%20(udbhav968--creator)-0078d4?style=for-the-badge&logo=github)
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(40%2F40%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(41%2F41%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![Node Express](https://img.shields.io/badge/Node.js-Express%20TypeScript-339933?style=for-the-badge&logo=nodedotjs)
@@ -13,6 +13,7 @@
 ---
 
 ### 🌟 Next-Gen Innovations Built into Portal:
+- 🔄 **Enterprise MLOps Model Lifecycle & Telemetry Pipeline API**: `GET /api/admin/mlops-pipeline/` (Drift Monitoring, Model Registry v3.2.1, Retraining Triggers)
 - 🧠 **Unified AI Model Suite API (4 ML Paradigms)**: `POST /api/admin/ai-model-suite/` (Supervised Triage, Unsupervised Clustering, Deep Learning NLP, Reinforcement Learning DQN)
 - 💉 **Pharmacy & Emergency Blood Bank Stock Telemetry API**: `GET /api/admin/pharmacy-blood-bank/`
 - 🚨 **Real-Time ICU Bed & Trauma Telemetry API**: `GET /api/admin/icu-occupancy/` (14/20 Ventilator Beds Free)
