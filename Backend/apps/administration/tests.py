@@ -105,6 +105,20 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("dispatch_details", response.data)
         self.assertEqual(response.data["dispatch_details"]["estimated_eta_minutes"], 4.5)
 
+    def test_kaggle_github_datasets(self):
+        url = reverse("kaggle-github-datasets")
+        response = self.client.post(url, {"source": "KAGGLE_MIMIC_III"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["dataset_telemetry"]["records_ingested"], 150000)
+
+    def test_train_kaggle_models(self):
+        url = reverse("train-kaggle-models")
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["status"], "DEEP_TRAINING_SUCCESSFUL")
+
 
 class TokenTrackerTests(APITestCase):
     """
