@@ -73,6 +73,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertEqual(response.data["pharmacy_icu_drugs_status"], "FULL_STOCK")
 
+    def test_unified_ai_model_suite(self):
+        url = reverse("ai-model-suite")
+        response = self.client.post(url, {"symptoms": "chest pain", "lab_text": "HbA1c 8.4%"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("paradigms", response.data)
+        self.assertEqual(response.data["paradigms"]["1_supervised_learning"]["triage_category"], "EMERGENCY_RED_ALERT")
+
 
 class TokenTrackerTests(APITestCase):
     """
