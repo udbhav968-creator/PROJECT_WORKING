@@ -119,6 +119,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertEqual(response.data["status"], "DEEP_TRAINING_SUCCESSFUL")
 
+    def test_next_gen_50_features(self):
+        url = reverse("next-gen-50-features")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["total_next_gen_features"], 50)
+        self.assertEqual(response.data["domain_categories"], 10)
+
 
 class TokenTrackerTests(APITestCase):
     """

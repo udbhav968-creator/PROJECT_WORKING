@@ -23,6 +23,7 @@ from apps.administration.views import (
     AmbulanceDispatchView,
     KaggleGitHubDatasetView,
     TrainKaggleModelsView,
+    NextGen50FeaturesView,
 )
 
 urlpatterns = [
@@ -40,6 +41,7 @@ urlpatterns = [
     path('ambulance-dispatch/', AmbulanceDispatchView.as_view(), name='ambulance-dispatch'),
     path('kaggle-github-datasets/', KaggleGitHubDatasetView.as_view(), name='kaggle-github-datasets'),
     path('train-kaggle-models/', TrainKaggleModelsView.as_view(), name='train-kaggle-models'),
+    path('next-gen-50-features/', NextGen50FeaturesView.as_view(), name='next-gen-50-features'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
