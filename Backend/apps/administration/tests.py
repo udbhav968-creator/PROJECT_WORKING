@@ -59,6 +59,13 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertEqual(response.data["feedback"]["rating_stars"], "5/5 ⭐")
 
+    def test_icu_occupancy_telemetry(self):
+        url = reverse("icu-occupancy")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["icu_ventilator_beds_available"], 14)
+
 
 class TokenTrackerTests(APITestCase):
     """

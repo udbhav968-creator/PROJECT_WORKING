@@ -15,6 +15,7 @@ from apps.administration.views import (
     SystemMetricsView,
     HospitalStatsView,
     PatientFeedbackView,
+    IcuOccupancyTelemetryView,
 )
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     path('system-metrics/', SystemMetricsView.as_view(), name='system-metrics'),
     path('hospital-stats/', HospitalStatsView.as_view(), name='hospital-stats'),
     path('patient-feedback/', PatientFeedbackView.as_view(), name='patient-feedback'),
+    path('icu-occupancy/', IcuOccupancyTelemetryView.as_view(), name='icu-occupancy'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

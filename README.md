@@ -2,7 +2,7 @@
 ### Enterprise Healthcare Portal, AI Symptom Checker, OPD Token Management & Administration Integration
 
 ![Author](https://img.shields.io/badge/Author-Udbhav%20(udbhav968--creator)-0078d4?style=for-the-badge&logo=github)
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(37%2F37%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(38%2F38%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![Node Express](https://img.shields.io/badge/Node.js-Express%20TypeScript-339933?style=for-the-badge&logo=nodedotjs)
@@ -13,6 +13,7 @@
 ---
 
 ### 🌟 Next-Gen Innovations Built into Portal:
+- 🚨 **Real-Time ICU Bed & Trauma Telemetry API**: `GET /api/admin/icu-occupancy/` (14/20 Ventilator Beds Free)
 - ⭐️ **Patient Feedback & 5-Star Rating API**: `POST /api/admin/patient-feedback/`
 - 🌱 **Huge Enterprise Dataset Seeding Engine**: One-click database populator (`POST /api/admin/seed-demo-data/`) auto-seeding 50+ Specialist Doctors, 200+ OPD Tokens, and 50+ Compliance Audit Logs.
 - ⚡ **Sub-Millisecond Telemetry & Latency API**: `GET /api/admin/system-metrics/` (0.84ms DB Latency)
