@@ -20,6 +20,7 @@ from apps.administration.views import (
     UnifiedAiModelSuiteView,
     MlOpsPipelineView,
     DeepTrainModelsView,
+    AmbulanceDispatchView,
 )
 
 urlpatterns = [
@@ -34,6 +35,7 @@ urlpatterns = [
     path('ai-model-suite/', UnifiedAiModelSuiteView.as_view(), name='ai-model-suite'),
     path('mlops-pipeline/', MlOpsPipelineView.as_view(), name='mlops-pipeline'),
     path('deep-train-models/', DeepTrainModelsView.as_view(), name='deep-train-models'),
+    path('ambulance-dispatch/', AmbulanceDispatchView.as_view(), name='ambulance-dispatch'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

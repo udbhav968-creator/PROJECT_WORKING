@@ -97,6 +97,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.data["status"], "COMPLETED_OPTIMAL")
         self.assertEqual(len(response.data["models_trained"]), 4)
 
+    def test_ambulance_dispatch(self):
+        url = reverse("ambulance-dispatch")
+        response = self.client.post(url, {"address": "Sector 12", "phone": "+91 9811122233"})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(response.data["success"])
+        self.assertIn("dispatch_details", response.data)
+        self.assertEqual(response.data["dispatch_details"]["estimated_eta_minutes"], 4.5)
+
 
 class TokenTrackerTests(APITestCase):
     """
