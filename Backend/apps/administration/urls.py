@@ -16,6 +16,7 @@ from apps.administration.views import (
     HospitalStatsView,
     PatientFeedbackView,
     IcuOccupancyTelemetryView,
+    PharmacyBloodBankTelemetryView,
 )
 
 urlpatterns = [
@@ -26,6 +27,7 @@ urlpatterns = [
     path('hospital-stats/', HospitalStatsView.as_view(), name='hospital-stats'),
     path('patient-feedback/', PatientFeedbackView.as_view(), name='patient-feedback'),
     path('icu-occupancy/', IcuOccupancyTelemetryView.as_view(), name='icu-occupancy'),
+    path('pharmacy-blood-bank/', PharmacyBloodBankTelemetryView.as_view(), name='pharmacy-blood-bank'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
