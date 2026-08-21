@@ -19,6 +19,7 @@ from apps.administration.views import (
     PharmacyBloodBankTelemetryView,
     UnifiedAiModelSuiteView,
     MlOpsPipelineView,
+    DeepTrainModelsView,
 )
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
     path('pharmacy-blood-bank/', PharmacyBloodBankTelemetryView.as_view(), name='pharmacy-blood-bank'),
     path('ai-model-suite/', UnifiedAiModelSuiteView.as_view(), name='ai-model-suite'),
     path('mlops-pipeline/', MlOpsPipelineView.as_view(), name='mlops-pipeline'),
+    path('deep-train-models/', DeepTrainModelsView.as_view(), name='deep-train-models'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

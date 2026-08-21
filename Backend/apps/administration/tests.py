@@ -89,6 +89,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.data["mlops_pipeline_status"], "HEALTHY_ACTIVE")
         self.assertIn("model_registry", response.data)
 
+    def test_deep_train_models(self):
+        url = reverse("deep-train-models")
+        response = self.client.post(url, {"epochs": 50})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["status"], "COMPLETED_OPTIMAL")
+        self.assertEqual(len(response.data["models_trained"]), 4)
+
 
 class TokenTrackerTests(APITestCase):
     """
