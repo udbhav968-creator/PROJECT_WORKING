@@ -190,6 +190,12 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("super_engine_telemetry", response.data)
         self.assertEqual(len(response.data["super_engine_telemetry"]["trained_models"]), 6)
 
+    def test_ai_suite_page(self):
+        url = reverse("ai-suite-page")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn(b"UNIFIED ENTERPRISE AI SUPER-ENGINE FRAMEWORK", response.content)
+
 
 class TokenTrackerTests(APITestCase):
     """

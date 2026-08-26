@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from clinic_core.views import (
     home_page_view,
+    ai_suite_page_view,
     track_page_view,
     ai_checker_page_view,
     tv_display_page_view,
@@ -44,6 +45,7 @@ def root_api_directory_view(request):
 urlpatterns = [
     # Multi-Page Standalone HTML Web Portal Routes
     path('', home_page_view, name='home-page'),
+    path('ai-suite/', ai_suite_page_view, name='ai-suite-page'),
     path('track/', track_page_view, name='track-page'),
     path('ai-checker/', ai_checker_page_view, name='ai-checker-page'),
     path('tv-display/', tv_display_page_view, name='tv-display-page'),
