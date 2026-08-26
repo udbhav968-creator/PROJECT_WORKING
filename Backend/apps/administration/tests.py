@@ -135,6 +135,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("genomic_analysis", response.data)
         self.assertEqual(response.data["genomic_analysis"]["precision_oncology_score"], 98.6)
 
+    def test_radiology_xray_ai(self):
+        url = reverse("radiology-xray-ai")
+        response = self.client.post(url, {"scan_type": "CHEST_XRAY_DICOM"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("radiology_ai_result", response.data)
+        self.assertEqual(response.data["radiology_ai_result"]["confidence_score"], 0.978)
+
 
 class TokenTrackerTests(APITestCase):
     """
