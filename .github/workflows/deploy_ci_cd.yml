@@ -24,7 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r Backend/requirements.txt
 
-      - name: Run Automated Unit & API Test Suite (52 Tests)
+      - name: Run Automated Unit & API Test Suite
         run: |
           cd Backend
           python manage.py test apps.core apps.authentication apps.administration apps.content
