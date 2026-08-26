@@ -204,6 +204,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.data["security_tier"], "MILITARY_GRADE_ZERO_TRUST")
         self.assertIn("vulnerability_scan_results", response.data)
 
+    def test_iot_medical_devices(self):
+        url = reverse("iot-medical-devices")
+        response = self.client.post(url, {"heart_rate": 80, "spo2_percentage": 98})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("iot_telemetry", response.data)
+        self.assertEqual(response.data["iot_telemetry"]["vital_signs"]["heart_rate_bpm"], 80)
+
 
 class TokenTrackerTests(APITestCase):
     """
