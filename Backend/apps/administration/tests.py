@@ -151,6 +151,13 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.data["status"], "FINE_TUNING_COMPLETED_SUCCESS")
         self.assertEqual(len(response.data["tuned_model_metrics"]), 4)
 
+    def test_send_email_notification(self):
+        url = reverse("send-email-notification")
+        response = self.client.post(url, {"email": "snojkumar968@gmail.com", "patient_name": "Udbhav"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["email_telemetry"]["recipient_email"], "snojkumar968@gmail.com")
+
 
 class TokenTrackerTests(APITestCase):
     """
