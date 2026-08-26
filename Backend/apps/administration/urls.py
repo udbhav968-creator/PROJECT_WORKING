@@ -31,6 +31,7 @@ from apps.administration.views import (
     LiveQueueSseView,
     BulkInsertClinicalDataView,
     SystemDiagnosticsView,
+    DeepAiSuperEngineView,
 )
 
 urlpatterns = [
@@ -56,6 +57,7 @@ urlpatterns = [
     path('live-queue-sse/', LiveQueueSseView.as_view(), name='live-queue-sse'),
     path('bulk-insert-clinical-data/', BulkInsertClinicalDataView.as_view(), name='bulk-insert-clinical-data'),
     path('system-diagnostics/', SystemDiagnosticsView.as_view(), name='system-diagnostics'),
+    path('deep-ai-super-engine/', DeepAiSuperEngineView.as_view(), name='deep-ai-super-engine'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

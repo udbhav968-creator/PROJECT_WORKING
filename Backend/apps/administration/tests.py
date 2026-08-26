@@ -182,6 +182,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.data["system_health_status"], "ALL_PIPELINES_100_PERCENT_HEALTHY")
         self.assertIn("diagnostics", response.data)
 
+    def test_deep_ai_super_engine(self):
+        url = reverse("deep-ai-super-engine")
+        response = self.client.post(url, {"epochs": 100, "lora_rank": 16})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("super_engine_telemetry", response.data)
+        self.assertEqual(len(response.data["super_engine_telemetry"]["trained_models"]), 6)
+
 
 class TokenTrackerTests(APITestCase):
     """
