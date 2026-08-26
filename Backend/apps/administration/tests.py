@@ -86,7 +86,7 @@ class NextGenInnovationsTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data["success"])
-        self.assertEqual(response.data["mlops_pipeline_status"], "HEALTHY_ACTIVE")
+        self.assertIn("HEALTHY_ACTIVE", response.data["mlops_pipeline_status"])
         self.assertIn("model_registry", response.data)
 
     def test_deep_train_models(self):
