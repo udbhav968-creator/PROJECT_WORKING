@@ -158,6 +158,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertEqual(response.data["email_telemetry"]["recipient_email"], "snojkumar968@gmail.com")
 
+    def test_live_queue_sse(self):
+        url = reverse("live-queue-sse")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("current_live_event", response.data)
+        self.assertEqual(response.data["current_live_event"]["active_token_calling"], "PURE-OPD-1001")
+
 
 class TokenTrackerTests(APITestCase):
     """

@@ -28,6 +28,7 @@ from apps.administration.views import (
     RadiologyXrayAiView,
     FineTuneAiModelsView,
     EmailNotificationSendView,
+    LiveQueueSseView,
 )
 
 urlpatterns = [
@@ -50,6 +51,7 @@ urlpatterns = [
     path('radiology-xray-ai/', RadiologyXrayAiView.as_view(), name='radiology-xray-ai'),
     path('fine-tune-ai-models/', FineTuneAiModelsView.as_view(), name='fine-tune-ai-models'),
     path('send-email-notification/', EmailNotificationSendView.as_view(), name='send-email-notification'),
+    path('live-queue-sse/', LiveQueueSseView.as_view(), name='live-queue-sse'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
