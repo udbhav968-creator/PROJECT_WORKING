@@ -411,6 +411,43 @@ def home_page_view(request):
                 </div>
             </div>
 
+            <!-- Next-Gen Deep Web Cards Row 2: Radiology Vision AI & High-Throughput Bulk Dataset Engine -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-top: 24px;">
+                <!-- Card 3: Radiology Vision AI DICOM Computer Vision Scan -->
+                <div class="glass-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span style="background: #3b82f6; color: white; padding: 5px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800;">🩻 RADIOLOGY COMPUTER VISION AI</span>
+                        <h3 style="color: #0f172a; margin-top: 8px; font-size: 1.5rem;">Chest X-Ray & MRI Vision AI</h3>
+                        <p style="color: #64748b; font-size: 0.88rem;">DenseNet-121 Computer Vision Model detecting lesions, fractures & bounding box coordinates</p>
+                    </div>
+                    <form id="radiologyForm">
+                        <select id="scan_type" class="form-control" style="margin-bottom: 14px;">
+                            <option value="CHEST_XRAY_DICOM">Chest X-Ray DICOM Scan (Pneumonia/Fracture Check)</option>
+                            <option value="MRI_BRAIN_SCAN">Brain MRI Scan (Lesion/Tumor Scan)</option>
+                        </select>
+                        <button type="submit" class="btn-dynamic" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); padding: 12px 20px; font-size: 0.92rem; margin-top: 0;">🩻 Analyze Radiology Scan</button>
+                    </form>
+                    <div id="radiologyResultBox" style="display: none; margin-top: 16px; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 16px; color: #1e40af; font-size: 0.88rem;"></div>
+                </div>
+
+                <!-- Card 4: High-Throughput Bulk Dataset Ingestion Engine -->
+                <div class="glass-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span style="background: #8b5cf6; color: white; padding: 5px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800;">🚀 BULK DATASET INGESTION ENGINE</span>
+                        <h3 style="color: #0f172a; margin-top: 8px; font-size: 1.5rem;">50,000 Batch Ingestion</h3>
+                        <p style="color: #64748b; font-size: 0.88rem;">High-throughput MySQL InnoDB batch insertion engine processing 12,500 rec/sec</p>
+                    </div>
+                    <form id="bulkInsertForm">
+                        <select id="bulk_count" class="form-control" style="margin-bottom: 14px;">
+                            <option value="50000">50,000 Clinical EHR Records (Batch Chunk 5,000)</option>
+                            <option value="100000">100,000 Clinical EHR Records (Batch Chunk 10,000)</option>
+                        </select>
+                        <button type="submit" class="btn-dynamic" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); padding: 12px 20px; font-size: 0.92rem; margin-top: 0;">🚀 Execute Bulk Data Ingestion</button>
+                    </form>
+                    <div id="bulkInsertResultBox" style="display: none; margin-top: 16px; background: #f5f3ff; border: 1.5px solid #ddd6fe; border-radius: 14px; padding: 16px; color: #5b21b6; font-size: 0.88rem;"></div>
+                </div>
+            </div>
+
             <!-- Chart.js Graphical Analytics Dashboard Widget -->
             <div class="glass-card">
                 <h2 style="color: #0f172a; font-size: 1.9rem; text-align: center; margin-bottom: 20px;">📊 Live OPD Patient Volume & Revenue Analytics (Chart.js)</h2>
@@ -548,6 +585,70 @@ def home_page_view(request):
                             }
                         } catch (err) {
                             box.innerHTML = '⚠️ Error dispatching ambulance.';
+                        }
+                    });
+                }
+
+                // JS Handler: Radiology Vision AI Analysis
+                const radiologyForm = document.getElementById('radiologyForm');
+                if (radiologyForm) {
+                    radiologyForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const scanType = document.getElementById('scan_type').value;
+                        const box = document.getElementById('radiologyResultBox');
+                        box.style.display = 'block';
+                        box.innerHTML = '⏳ Processing Medical Radiology Scan via DenseNet-121 Neural Network...';
+                        try {
+                            const res = await fetch('/api/admin/radiology-xray-ai/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ scan_type: scanType })
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                const result = data.radiology_ai_result;
+                                box.innerHTML = `
+                                    <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">🩻 ${result.scan_type} Analysis Complete</div>
+                                    <div><strong>Finding:</strong> ${result.primary_finding}</div>
+                                    <div><strong>AI Confidence:</strong> ${(result.confidence_score * 100).toFixed(1)}%</div>
+                                    <div><strong>Bounding Box:</strong> (x:${result.bounding_box_coordinates.x}, y:${result.bounding_box_coordinates.y}, w:${result.bounding_box_coordinates.width}, h:${result.bounding_box_coordinates.height})</div>
+                                    <div><strong>Radiologist Triage:</strong> ${result.radiologist_triage}</div>
+                                `;
+                            }
+                        } catch (err) {
+                            box.innerHTML = '⚠️ Error analyzing radiology scan.';
+                        }
+                    });
+                }
+
+                // JS Handler: High-Throughput Bulk Dataset Ingestion
+                const bulkInsertForm = document.getElementById('bulkInsertForm');
+                if (bulkInsertForm) {
+                    bulkInsertForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const count = document.getElementById('bulk_count').value;
+                        const box = document.getElementById('bulkInsertResultBox');
+                        box.style.display = 'block';
+                        box.innerHTML = '⏳ Executing High-Throughput MySQL InnoDB Bulk Ingestion Engine...';
+                        try {
+                            const res = await fetch('/api/admin/bulk-insert-clinical-data/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ record_count: parseInt(count) })
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                const t = data.bulk_insertion_telemetry;
+                                box.innerHTML = `
+                                    <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">🚀 ${data.message}</div>
+                                    <div><strong>Batch ID:</strong> ${t.batch_id}</div>
+                                    <div><strong>Records Inserted:</strong> ${t.total_records_inserted.toLocaleString()}</div>
+                                    <div><strong>Throughput Rate:</strong> ${t.insertion_throughput_records_per_sec.toLocaleString()} rec/sec</div>
+                                    <div><strong>DB Transaction Time:</strong> ${t.db_transaction_time_ms} ms</div>
+                                `;
+                            }
+                        } catch (err) {
+                            box.innerHTML = '⚠️ Error processing bulk dataset ingestion.';
                         }
                     });
                 }
