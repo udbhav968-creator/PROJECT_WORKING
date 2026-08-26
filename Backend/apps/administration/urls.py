@@ -34,6 +34,7 @@ from apps.administration.views import (
     DeepAiSuperEngineView,
     SecurityAuditView,
     IotMedicalDeviceTelemetryView,
+    DatabaseAiIngestionView,
 )
 
 urlpatterns = [
@@ -62,6 +63,7 @@ urlpatterns = [
     path('deep-ai-super-engine/', DeepAiSuperEngineView.as_view(), name='deep-ai-super-engine'),
     path('security-audit/', SecurityAuditView.as_view(), name='security-audit'),
     path('iot-medical-devices/', IotMedicalDeviceTelemetryView.as_view(), name='iot-medical-devices'),
+    path('database-ai-ingestion/', DatabaseAiIngestionView.as_view(), name='database-ai-ingestion'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

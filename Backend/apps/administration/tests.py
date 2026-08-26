@@ -212,6 +212,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("iot_telemetry", response.data)
         self.assertEqual(response.data["iot_telemetry"]["vital_signs"]["heart_rate_bpm"], 80)
 
+    def test_database_ai_ingestion(self):
+        url = reverse("database-ai-ingestion")
+        response = self.client.post(url, {"records_indexed": 500000})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("database_ai_telemetry", response.data)
+        self.assertEqual(response.data["database_ai_telemetry"]["total_records_vectorized"], 500000)
+
 
 class TokenTrackerTests(APITestCase):
     """
