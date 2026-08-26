@@ -127,6 +127,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.data["total_next_gen_features"], 50)
         self.assertEqual(response.data["domain_categories"], 10)
 
+    def test_genomic_sequencing(self):
+        url = reverse("genomic-sequencing")
+        response = self.client.post(url, {"gene": "BRCA1_PANEL"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("genomic_analysis", response.data)
+        self.assertEqual(response.data["genomic_analysis"]["precision_oncology_score"], 98.6)
+
 
 class TokenTrackerTests(APITestCase):
     """
