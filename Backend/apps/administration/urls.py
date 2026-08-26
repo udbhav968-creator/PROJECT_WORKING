@@ -30,6 +30,7 @@ from apps.administration.views import (
     EmailNotificationSendView,
     LiveQueueSseView,
     BulkInsertClinicalDataView,
+    SystemDiagnosticsView,
 )
 
 urlpatterns = [
@@ -54,6 +55,7 @@ urlpatterns = [
     path('send-email-notification/', EmailNotificationSendView.as_view(), name='send-email-notification'),
     path('live-queue-sse/', LiveQueueSseView.as_view(), name='live-queue-sse'),
     path('bulk-insert-clinical-data/', BulkInsertClinicalDataView.as_view(), name='bulk-insert-clinical-data'),
+    path('system-diagnostics/', SystemDiagnosticsView.as_view(), name='system-diagnostics'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

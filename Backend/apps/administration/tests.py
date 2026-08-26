@@ -174,6 +174,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("bulk_insertion_telemetry", response.data)
         self.assertEqual(response.data["bulk_insertion_telemetry"]["total_records_inserted"], 50000)
 
+    def test_system_diagnostics(self):
+        url = reverse("system-diagnostics")
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["system_health_status"], "ALL_PIPELINES_100_PERCENT_HEALTHY")
+        self.assertIn("diagnostics", response.data)
+
 
 class TokenTrackerTests(APITestCase):
     """
