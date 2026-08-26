@@ -29,6 +29,7 @@ from apps.administration.views import (
     FineTuneAiModelsView,
     EmailNotificationSendView,
     LiveQueueSseView,
+    BulkInsertClinicalDataView,
 )
 
 urlpatterns = [
@@ -52,6 +53,7 @@ urlpatterns = [
     path('fine-tune-ai-models/', FineTuneAiModelsView.as_view(), name='fine-tune-ai-models'),
     path('send-email-notification/', EmailNotificationSendView.as_view(), name='send-email-notification'),
     path('live-queue-sse/', LiveQueueSseView.as_view(), name='live-queue-sse'),
+    path('bulk-insert-clinical-data/', BulkInsertClinicalDataView.as_view(), name='bulk-insert-clinical-data'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

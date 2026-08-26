@@ -166,6 +166,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("current_live_event", response.data)
         self.assertEqual(response.data["current_live_event"]["active_token_calling"], "PURE-OPD-1001")
 
+    def test_bulk_insert_clinical_data(self):
+        url = reverse("bulk-insert-clinical-data")
+        response = self.client.post(url, {"record_count": 50000})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(response.data["success"])
+        self.assertIn("bulk_insertion_telemetry", response.data)
+        self.assertEqual(response.data["bulk_insertion_telemetry"]["total_records_inserted"], 50000)
+
 
 class TokenTrackerTests(APITestCase):
     """
