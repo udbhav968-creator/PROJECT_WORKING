@@ -143,6 +143,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("radiology_ai_result", response.data)
         self.assertEqual(response.data["radiology_ai_result"]["confidence_score"], 0.978)
 
+    def test_fine_tune_ai_models(self):
+        url = reverse("fine-tune-ai-models")
+        response = self.client.post(url, {"learning_rate": 0.0001})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["status"], "FINE_TUNING_COMPLETED_SUCCESS")
+        self.assertEqual(len(response.data["tuned_model_metrics"]), 4)
+
 
 class TokenTrackerTests(APITestCase):
     """

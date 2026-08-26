@@ -26,6 +26,7 @@ from apps.administration.views import (
     NextGen50FeaturesView,
     GenomicSequencingView,
     RadiologyXrayAiView,
+    FineTuneAiModelsView,
 )
 
 urlpatterns = [
@@ -46,6 +47,7 @@ urlpatterns = [
     path('next-gen-50-features/', NextGen50FeaturesView.as_view(), name='next-gen-50-features'),
     path('genomic-sequencing/', GenomicSequencingView.as_view(), name='genomic-sequencing'),
     path('radiology-xray-ai/', RadiologyXrayAiView.as_view(), name='radiology-xray-ai'),
+    path('fine-tune-ai-models/', FineTuneAiModelsView.as_view(), name='fine-tune-ai-models'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
