@@ -374,6 +374,43 @@ def home_page_view(request):
                 <div id="receipt-container" style="display: none;"></div>
             </div>
 
+            <!-- Interactive Bio-AI Genomic Sequencing & 24x7 Ambulance Dispatch Suite -->
+            <div class="grid-3" style="margin-bottom: 36px;">
+                <!-- Card 1: Bio-AI Genomic Variant Analysis -->
+                <div class="glass-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span style="background: #1e1b4b; color: var(--neon-cyan); padding: 5px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800;">🧬 BIO-AI GENOMIC SEQUENCING</span>
+                        <h3 style="color: #0f172a; margin-top: 8px; font-size: 1.5rem;">Precision DNA Variant Analysis</h3>
+                        <p style="color: #64748b; font-size: 0.88rem;">Analyzes DNA Panel (BRCA1, EGFR, CYP2D6) for Pharmacogenomic Dosing & Targeted Immunotherapy</p>
+                    </div>
+                    <form id="genomicForm">
+                        <label style="font-weight: 700; font-size: 0.85rem; color: #0f172a;">Target Gene Panel *</label>
+                        <select id="gene_target" class="form-control" style="margin-bottom: 14px;">
+                            <option value="BRCA1_EGFR_MUTATION_PANEL">BRCA1 & EGFR Mutation Oncology Panel</option>
+                            <option value="CYP2D6_PHARMACOGENOMIC">CYP2D6 Pharmacogenomic Dosing Panel</option>
+                            <option value="CARDIOMETABOLIC_GENOMIC_RISK">Cardiometabolic Polygenic Risk Panel</option>
+                        </select>
+                        <button type="submit" class="btn-dynamic" style="padding: 12px 20px; font-size: 0.92rem; margin-top: 0;">🔬 Run Genomic DNA Analysis</button>
+                    </form>
+                    <div id="genomicResultBox" style="display: none; margin-top: 16px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 14px; padding: 16px; color: #166534; font-size: 0.88rem;"></div>
+                </div>
+
+                <!-- Card 2: 24x7 Ambulance Dispatch & GPS Live Tracking -->
+                <div class="glass-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span style="background: #e11d48; color: white; padding: 5px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800;">🚑 24x7 AMBULANCE DISPATCH</span>
+                        <h3 style="color: #0f172a; margin-top: 8px; font-size: 1.5rem;">Emergency ALS Dispatch</h3>
+                        <p style="color: #64748b; font-size: 0.88rem;">Instant dispatch of Cardiac Advanced Life Support (ALS) Ambulance with Live GPS ETA</p>
+                    </div>
+                    <form id="ambulanceForm">
+                        <input type="text" id="amb_address" placeholder="Pickup Address (e.g. Sector 12, Main Ring Road)" required class="form-control" style="margin-bottom: 10px;">
+                        <input type="tel" id="amb_phone" placeholder="Emergency Contact Phone" required class="form-control" style="margin-bottom: 14px;">
+                        <button type="submit" class="btn-dynamic" style="background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); padding: 12px 20px; font-size: 0.92rem; margin-top: 0; box-shadow: 0 8px 25px rgba(244,63,94,0.4);">🚨 Dispatch ALS Ambulance Now</button>
+                    </form>
+                    <div id="ambulanceResultBox" style="display: none; margin-top: 16px; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 14px; padding: 16px; color: #9f1239; font-size: 0.88rem;"></div>
+                </div>
+            </div>
+
             <!-- Chart.js Graphical Analytics Dashboard Widget -->
             <div class="glass-card">
                 <h2 style="color: #0f172a; font-size: 1.9rem; text-align: center; margin-bottom: 20px;">📊 Live OPD Patient Volume & Revenue Analytics (Chart.js)</h2>
@@ -389,6 +426,7 @@ def home_page_view(request):
                 </div>
             </div>
         </div>
+
 
         <script>
             async function seedHugeDataset() {
@@ -446,7 +484,75 @@ def home_page_view(request):
                         options: { responsive: true }
                     });
                 }
+
+                // JS Handler: Bio-AI Genomic Sequencing
+                const genomicForm = document.getElementById('genomicForm');
+                if (genomicForm) {
+                    genomicForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const gene = document.getElementById('gene_target').value;
+                        const box = document.getElementById('genomicResultBox');
+                        box.style.display = 'block';
+                        box.innerHTML = '⏳ Sequencing DNA variant panel...';
+                        try {
+                            const res = await fetch('/api/admin/genomic-sequencing/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ gene: gene })
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                const analysis = data.genomic_analysis;
+                                let variantsHtml = '';
+                                analysis.variants_identified.forEach(v => {
+                                    variantsHtml += `<li><strong>${v.gene} (${v.variant}):</strong> ${v.pathogenicity} — <em>${v.recommended_therapy || v.recommended_dosing}</em></li>`;
+                                });
+                                box.innerHTML = `
+                                    <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">🧬 Genomic DNA Analysis Complete</div>
+                                    <div><strong>Precision Score:</strong> ${analysis.precision_oncology_score}/100</div>
+                                    <ul style="margin-top: 6px; padding-left: 18px;">${variantsHtml}</ul>
+                                `;
+                            }
+                        } catch (err) {
+                            box.innerHTML = '⚠️ Error running genomic analysis.';
+                        }
+                    });
+                }
+
+                // JS Handler: 24x7 Emergency Ambulance Dispatch
+                const ambulanceForm = document.getElementById('ambulanceForm');
+                if (ambulanceForm) {
+                    ambulanceForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const address = document.getElementById('amb_address').value;
+                        const phone = document.getElementById('amb_phone').value;
+                        const box = document.getElementById('ambulanceResultBox');
+                        box.style.display = 'block';
+                        box.innerHTML = '⏳ Contacting Emergency Telemetry & Dispatching ALS Ambulance...';
+                        try {
+                            const res = await fetch('/api/admin/ambulance-dispatch/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ address: address, phone: phone })
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                const details = data.dispatch_details;
+                                box.innerHTML = `
+                                    <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">🚨 ${data.message}</div>
+                                    <div><strong>Dispatch ID:</strong> ${details.dispatch_id}</div>
+                                    <div><strong>Unit:</strong> ${details.ambulance_unit}</div>
+                                    <div><strong>Estimated GPS ETA:</strong> <span style="font-weight: 800; color: #e11d48;">${details.estimated_eta_minutes} Minutes</span></div>
+                                    <div><strong>Paramedic Team:</strong> ${details.paramedic_team}</div>
+                                `;
+                            }
+                        } catch (err) {
+                            box.innerHTML = '⚠️ Error dispatching ambulance.';
+                        }
+                    });
+                }
             });
+
 
             document.getElementById('opdForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
