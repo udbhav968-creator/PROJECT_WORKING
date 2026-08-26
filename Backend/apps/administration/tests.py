@@ -196,6 +196,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn(b"UNIFIED ENTERPRISE AI SUPER-ENGINE FRAMEWORK", response.content)
 
+    def test_security_audit(self):
+        url = reverse("security-audit")
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["security_tier"], "MILITARY_GRADE_ZERO_TRUST")
+        self.assertIn("vulnerability_scan_results", response.data)
+
 
 class TokenTrackerTests(APITestCase):
     """

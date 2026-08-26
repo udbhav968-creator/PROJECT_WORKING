@@ -32,6 +32,7 @@ from apps.administration.views import (
     BulkInsertClinicalDataView,
     SystemDiagnosticsView,
     DeepAiSuperEngineView,
+    SecurityAuditView,
 )
 
 urlpatterns = [
@@ -58,6 +59,7 @@ urlpatterns = [
     path('bulk-insert-clinical-data/', BulkInsertClinicalDataView.as_view(), name='bulk-insert-clinical-data'),
     path('system-diagnostics/', SystemDiagnosticsView.as_view(), name='system-diagnostics'),
     path('deep-ai-super-engine/', DeepAiSuperEngineView.as_view(), name='deep-ai-super-engine'),
+    path('security-audit/', SecurityAuditView.as_view(), name='security-audit'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
