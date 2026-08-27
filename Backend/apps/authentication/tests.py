@@ -73,3 +73,12 @@ class JWTAuthenticationAPITests(APITestCase):
         refresh_response = self.client.post(refresh_url, refresh_payload, format="json")
         self.assertEqual(refresh_response.status_code, status.HTTP_200_OK)
         self.assertIn("access", refresh_response.data)
+
+    def test_mfa_verification_success(self):
+        url = reverse("auth-mfa-verify")
+        payload = {"email": "snojkumar968@gmail.com", "totp_code": "123456"}
+        response = self.client.post(url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["mfa_status"], "MFA_VERIFIED_SUCCESS")
+
