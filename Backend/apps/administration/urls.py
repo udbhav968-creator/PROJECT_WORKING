@@ -35,6 +35,9 @@ from apps.administration.views import (
     SecurityAuditView,
     IotMedicalDeviceTelemetryView,
     DatabaseAiIngestionView,
+    VoiceDictationView,
+    CdssAgentView,
+    FhirPatientView,
 )
 
 urlpatterns = [
@@ -64,6 +67,9 @@ urlpatterns = [
     path('security-audit/', SecurityAuditView.as_view(), name='security-audit'),
     path('iot-medical-devices/', IotMedicalDeviceTelemetryView.as_view(), name='iot-medical-devices'),
     path('database-ai-ingestion/', DatabaseAiIngestionView.as_view(), name='database-ai-ingestion'),
+    path('voice-dictation/', VoiceDictationView.as_view(), name='voice-dictation'),
+    path('cdss-agent/', CdssAgentView.as_view(), name='cdss-agent'),
+    path('fhir/Patient/', FhirPatientView.as_view(), name='fhir-patient'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

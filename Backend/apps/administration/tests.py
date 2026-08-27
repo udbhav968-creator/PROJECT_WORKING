@@ -220,6 +220,26 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("database_ai_telemetry", response.data)
         self.assertEqual(response.data["database_ai_telemetry"]["total_records_vectorized"], 500000)
 
+    def test_voice_dictation(self):
+        url = reverse("voice-dictation")
+        response = self.client.post(url, {"audio_transcript": "Patient exhibits acute pharyngitis."})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("dictation_result", response.data)
+
+    def test_cdss_agent(self):
+        url = reverse("cdss-agent")
+        response = self.client.post(url, {"symptoms": ["chest_pain"]})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("cdss_evaluation", response.data)
+
+    def test_fhir_patient(self):
+        url = reverse("fhir-patient")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["resourceType"], "Patient")
+
 
 class TokenTrackerTests(APITestCase):
     """
