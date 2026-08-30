@@ -248,6 +248,20 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("cloudflare_security_binding", response.data)
         self.assertEqual(response.data["cloudflare_security_binding"]["proxy_status"], "PROXIED_ORANGE_CLOUD_ACTIVE")
 
+    def test_pharmacy_order_tracking(self):
+        url = reverse("pharmacy-order-tracking")
+        response = self.client.post(url, {"rx_token": "RX-884920"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("pharmacy_fulfillment", response.data)
+
+    def test_organ_transplant_matching(self):
+        url = reverse("organ-transplant-matching")
+        response = self.client.post(url, {"organ_type": "KIDNEY", "blood_type": "O_NEGATIVE"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("transplant_match_result", response.data)
+
 
 class TokenTrackerTests(APITestCase):
     """

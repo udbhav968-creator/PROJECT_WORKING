@@ -39,6 +39,8 @@ from apps.administration.views import (
     CdssAgentView,
     FhirPatientView,
     CloudflareSecurityServerView,
+    PharmacyOrderTrackingView,
+    OrganTransplantMatchingView,
 )
 
 urlpatterns = [
@@ -72,6 +74,8 @@ urlpatterns = [
     path('cdss-agent/', CdssAgentView.as_view(), name='cdss-agent'),
     path('fhir/Patient/', FhirPatientView.as_view(), name='fhir-patient'),
     path('cloudflare-security-server/', CloudflareSecurityServerView.as_view(), name='cloudflare-security-server'),
+    path('pharmacy-order-tracking/', PharmacyOrderTrackingView.as_view(), name='pharmacy-order-tracking'),
+    path('organ-transplant-matching/', OrganTransplantMatchingView.as_view(), name='organ-transplant-matching'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
