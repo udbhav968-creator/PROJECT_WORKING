@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "healthcare-clinic-fullstack",
+  "name": "project-working",
   "builds": [
     {
       "src": "Backend/clinic_core/wsgi.py",
