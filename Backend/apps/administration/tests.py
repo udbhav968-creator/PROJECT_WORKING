@@ -263,6 +263,55 @@ class NextGenInnovationsTests(APITestCase):
         self.assertIn("transplant_match_result", response.data)
 
 
+class EndToEndIntegrationTestSuite(APITestCase):
+    """
+    **Deep End-to-End System & Cross-Module Integration Test Suite**
+    Validates complete user journeys across Auth, AI Triage, IoT Telemetry, Emergency Ambulance, and Pharmacy Drones.
+    """
+
+    def test_e2e_patient_registration_login_flow(self):
+        reg_url = reverse("auth-register")
+        payload = {
+            "username": "integration_patient",
+            "email": "integration_patient@clinic.com",
+            "password": "SecurePassword123!",
+            "full_name": "Integration Patient",
+            "role_name": "Patient"
+        }
+        res_reg = self.client.post(reg_url, payload, format="json")
+        self.assertEqual(res_reg.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(res_reg.data["success"])
+
+    def test_e2e_iot_critical_telemetry_ambulance_trigger(self):
+        iot_url = reverse("iot-medical-devices")
+        payload = {"heart_rate": 145, "spo2_percentage": 85}
+        res = self.client.post(iot_url, payload, format="json")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["iot_telemetry"]["clinical_triage_status"], "CRITICAL_EMERGENCY_ALERT")
+
+    def test_e2e_ai_triage_and_super_engine_training(self):
+        engine_url = reverse("deep-ai-super-engine")
+        res = self.client.post(engine_url, {"epochs": 100}, format="json")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("super_engine_telemetry", res.data)
+
+    def test_e2e_pharmacy_drone_express_fulfillment(self):
+        rx_url = reverse("pharmacy-order-tracking")
+        res = self.client.post(rx_url, {"rx_token": "RX-INTEGRATION-999"}, format="json")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["pharmacy_fulfillment"]["delivery_mode"], "AUTONOMOUS_MEDICAL_DRONE")
+
+    def test_e2e_organ_transplant_hla_matching(self):
+        match_url = reverse("organ-transplant-matching")
+        res = self.client.post(match_url, {"organ_type": "HEART", "blood_type": "O_NEGATIVE"}, format="json")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn("hla_match_score", res.data["transplant_match_result"])
+
+
+
+
+
 class TokenTrackerTests(APITestCase):
     """
     Automated Unit Test Suite for TokenTrackerView API
