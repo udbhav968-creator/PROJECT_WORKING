@@ -449,6 +449,37 @@ def home_page_view(request):
                 </div>
             </div>
 
+            <!-- Next-Gen Deep Web Cards Row 3: Emergency ER Bed Live Monitor & Pharmacy Blood Bank Counter -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-top: 24px;">
+                <!-- Card 5: Real-World Emergency ER Bed & Trauma Bay Live Monitor -->
+                <div class="glass-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span style="background: #ef4444; color: white; padding: 5px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800;">🏥 REAL-TIME ICU & TRAUMA BAY</span>
+                        <h3 style="color: #0f172a; margin-top: 8px; font-size: 1.5rem;">ICU Bed & Trauma Telemetry</h3>
+                        <p style="color: #64748b; font-size: 0.88rem;">Live ICU Bed Occupancy (14 Free), Ventilator Telemetry & Trauma Bay Status</p>
+                    </div>
+                    <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 12px; padding: 12px; margin-bottom: 14px; color: #991b1b; font-size: 0.88rem;">
+                        <strong>📍 ICU Bed Status:</strong> 14/20 Beds Available &nbsp;|&nbsp; <strong>🫁 Ventilator Beds:</strong> 6 Free &nbsp;|&nbsp; <strong>⚡ Trauma Bay:</strong> Level-1 Ready
+                    </div>
+                    <button type="button" onclick="checkIcuOccupancy()" class="btn-dynamic" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); padding: 12px 20px; font-size: 0.92rem; margin-top: 0;">🏥 Check Live ICU Telemetry</button>
+                    <div id="icuResultBox" style="display: none; margin-top: 16px; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 14px; padding: 16px; color: #9f1239; font-size: 0.88rem;"></div>
+                </div>
+
+                <!-- Card 6: Pharmacy & Emergency Blood Bank Live Counter -->
+                <div class="glass-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <span style="background: #059669; color: white; padding: 5px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800;">💉 PHARMACY & BLOOD BANK</span>
+                        <h3 style="color: #0f172a; margin-top: 8px; font-size: 1.5rem;">Blood Stock Telemetry</h3>
+                        <p style="color: #64748b; font-size: 0.88rem;">Real-time Blood Bank Reserve Units (O-, A+, B+, AB+) & Cold Chain Temp (3.4°C)</p>
+                    </div>
+                    <div style="background: #ecfdf5; border: 1.5px solid #6ee7b7; border-radius: 12px; padding: 12px; margin-bottom: 14px; color: #065f46; font-size: 0.88rem;">
+                        <strong>🩸 O- Negative:</strong> 12 Units &nbsp;|&nbsp; <strong>🩸 A+ Positive:</strong> 45 Units &nbsp;|&nbsp; <strong>❄️ Temp:</strong> 3.4°C Cold Storage
+                    </div>
+                    <button type="button" onclick="checkBloodBank()" class="btn-dynamic" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); padding: 12px 20px; font-size: 0.92rem; margin-top: 0;">💉 Check Blood Bank Telemetry</button>
+                    <div id="bloodResultBox" style="display: none; margin-top: 16px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 14px; padding: 16px; color: #166534; font-size: 0.88rem;"></div>
+                </div>
+            </div>
+
             <!-- Chart.js Graphical Analytics Dashboard Widget -->
             <div class="glass-card">
                 <h2 style="color: #0f172a; font-size: 1.9rem; text-align: center; margin-bottom: 20px;">📊 Live OPD Patient Volume & Revenue Analytics (Chart.js)</h2>
@@ -654,6 +685,43 @@ def home_page_view(request):
                     });
                 }
             });
+
+            async function checkIcuOccupancy() {
+                const box = document.getElementById('icuResultBox');
+                box.style.display = 'block';
+                box.innerHTML = '⏳ Querying ICU Bed Telemetry Sensors...';
+                try {
+                    const res = await fetch('/api/admin/icu-occupancy/');
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        const icu = data.icu_telemetry;
+                        box.innerHTML = `
+                            <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">🏥 ${data.message}</div>
+                            <div><strong>Available ICU Beds:</strong> ${icu.available_icu_beds} / ${icu.total_icu_beds} Beds</div>
+                            <div><strong>Free Ventilators:</strong> ${icu.ventilators_free}</div>
+                            <div><strong>Trauma Bay Status:</strong> <span style="color: #15803d; font-weight: 700;">${icu.trauma_bay_status}</span></div>
+                        `;
+                    }
+                } catch (e) { box.innerHTML = '⚠️ Error fetching ICU telemetry.'; }
+            }
+
+            async function checkBloodBank() {
+                const box = document.getElementById('bloodResultBox');
+                box.style.display = 'block';
+                box.innerHTML = '⏳ Querying Blood Bank Inventory Sensors...';
+                try {
+                    const res = await fetch('/api/admin/pharmacy-blood-bank/');
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        const b = data.pharmacy_telemetry;
+                        box.innerHTML = `
+                            <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 6px;">💉 ${data.message}</div>
+                            <div><strong>O- Negative:</strong> ${b.blood_bank_units["O_negative"]} Units &nbsp;|&nbsp; <strong>A+ Positive:</strong> ${b.blood_bank_units["A_positive"]} Units</div>
+                            <div><strong>Cold Chain Temperature:</strong> ${b.cold_chain_vaccine_storage_temp_celsius}°C</div>
+                        `;
+                    }
+                } catch (e) { box.innerHTML = '⚠️ Error fetching blood bank telemetry.'; }
+            }
 
 
             document.getElementById('opdForm').addEventListener('submit', async function(e) {
