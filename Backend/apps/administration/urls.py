@@ -41,6 +41,7 @@ from apps.administration.views import (
     CloudflareSecurityServerView,
     PharmacyOrderTrackingView,
     OrganTransplantMatchingView,
+    TrafficManagementServerView,
 )
 
 urlpatterns = [
@@ -76,6 +77,7 @@ urlpatterns = [
     path('cloudflare-security-server/', CloudflareSecurityServerView.as_view(), name='cloudflare-security-server'),
     path('pharmacy-order-tracking/', PharmacyOrderTrackingView.as_view(), name='pharmacy-order-tracking'),
     path('organ-transplant-matching/', OrganTransplantMatchingView.as_view(), name='organ-transplant-matching'),
+    path('traffic-management-server/', TrafficManagementServerView.as_view(), name='traffic-management-server'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

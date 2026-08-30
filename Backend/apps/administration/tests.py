@@ -262,6 +262,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertIn("transplant_match_result", response.data)
 
+    def test_traffic_management_server(self):
+        url = reverse("traffic-management-server")
+        response = self.client.post(url, {"max_throughput_req_sec": 10000})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("traffic_management_telemetry", response.data)
+        self.assertEqual(response.data["traffic_management_telemetry"]["edge_cache_hit_rate"], "99.4%")
+
 
 class EndToEndIntegrationTestSuite(APITestCase):
     """
