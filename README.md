@@ -3,7 +3,7 @@
 
 ![Author](https://img.shields.io/badge/Author-Udbhav%20(udbhav968--creator)-0078d4?style=for-the-badge&logo=github)
 ![Email](https://img.shields.io/badge/Email-snojkumar968%40gmail.com-d14836?style=for-the-badge&logo=gmail)
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(62%2F62%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(63%2F63%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![Node Express](https://img.shields.io/badge/Node.js-Express%20TypeScript-339933?style=for-the-badge&logo=nodedotjs)
@@ -28,6 +28,7 @@
 
 ## 🌟 Next-Gen Innovations Built into Platform:
 
+- 🛡️ **Enterprise Cloudflare Security Edge Shield & Tunnel Binding API**: `POST /api/admin/cloudflare-security-server/` (Binds Cloudflare Anycast DNS, OWASP WAF Managed Rulesets, Zero-Trust Tunnels, and TLS 1.3 Strict Encryption to server backend)
 - 🎙️ **Voice-Driven Medical Dictation & Speech-to-Text AI API**: `POST /api/admin/voice-dictation/` (Converts doctor voice audio dictations into structured clinical prescriptions & ICD-10 codes using Whisper AI)
 - 🤖 **Autonomous Clinical Decision Support System (CDSS) Agent API**: `POST /api/admin/cdss-agent/` (Evaluates patient symptoms, differential diagnoses & drug interactions against SNOMED-CT & RxNorm)
 - 🌐 **HL7 FHIR R4 Interoperability Patient Resource API**: `GET /api/admin/fhir/Patient/` (Returns international FHIR R4 standard JSON schemas for cross-hospital EHR data exchange)

@@ -240,6 +240,14 @@ class NextGenInnovationsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["resourceType"], "Patient")
 
+    def test_cloudflare_security_server(self):
+        url = reverse("cloudflare-security-server")
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("cloudflare_security_binding", response.data)
+        self.assertEqual(response.data["cloudflare_security_binding"]["proxy_status"], "PROXIED_ORANGE_CLOUD_ACTIVE")
+
 
 class TokenTrackerTests(APITestCase):
     """

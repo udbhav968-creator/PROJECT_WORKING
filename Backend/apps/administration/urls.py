@@ -38,6 +38,7 @@ from apps.administration.views import (
     VoiceDictationView,
     CdssAgentView,
     FhirPatientView,
+    CloudflareSecurityServerView,
 )
 
 urlpatterns = [
@@ -70,6 +71,7 @@ urlpatterns = [
     path('voice-dictation/', VoiceDictationView.as_view(), name='voice-dictation'),
     path('cdss-agent/', CdssAgentView.as_view(), name='cdss-agent'),
     path('fhir/Patient/', FhirPatientView.as_view(), name='fhir-patient'),
+    path('cloudflare-security-server/', CloudflareSecurityServerView.as_view(), name='cloudflare-security-server'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
