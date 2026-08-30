@@ -3,7 +3,7 @@
   "name": "project-working",
   "builds": [
     {
-      "src": "Backend/clinic_core/wsgi.py",
+      "src": "api/index.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
@@ -14,15 +14,15 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "Backend/clinic_core/wsgi.py"
+      "dest": "api/index.py"
     },
     {
       "src": "/admin/(.*)",
-      "dest": "Backend/clinic_core/wsgi.py"
+      "dest": "api/index.py"
     },
     {
       "src": "/(.*)",
-      "dest": "Backend/clinic_core/wsgi.py"
+      "dest": "api/index.py"
     }
   ],
   "env": {
