@@ -650,6 +650,20 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertEqual(mlops_res.status_code, status.HTTP_200_OK)
         self.assertTrue(mlops_res.data["success"])
 
+    def test_real_smtp_mail_outbox_verification(self):
+        from django.core import mail
+        email_url = reverse("send-email-notification")
+        res = self.client.post(email_url, {
+            "patient_email": "snojkumar968@gmail.com",
+            "patient_name": "Udbhav",
+            "token_number": "PURE-OPD-77112"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["snojkumar968@gmail.com"])
+        self.assertIn("Pure Health Clinic", mail.outbox[0].subject)
+
+
 
 
 
