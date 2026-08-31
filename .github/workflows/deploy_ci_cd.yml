@@ -27,7 +27,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r Backend/requirements.txt
 
-      - name: Run Automated Unit & API Test Suite
+      - name: Verify Django System Integrity Check
+        run: |
+          cd Backend
+          python manage.py check
+
+      - name: Verify Database Migrations
+        run: |
+          cd Backend
+          python manage.py migrate
+
+      - name: Test Real-World Datasets & Dynamic Non-Default Values
+        run: |
+          cd Backend
+          python manage.py test apps.administration.tests.MegaPipelineRealWorldDatasetTestSuite
+
+      - name: Run Full 77-Test Microservice & Integration Suite
         run: |
           cd Backend
           python manage.py test apps.core apps.authentication apps.administration apps.content
