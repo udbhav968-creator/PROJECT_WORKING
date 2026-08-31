@@ -63,6 +63,46 @@ def get_shared_header(active_tab="home"):
                 50% {{ transform: translateY(-15px) rotate(3deg); }}
                 100% {{ transform: translateY(0px) rotate(0deg); }}
             }}
+            @keyframes heartbeatPulse {{
+                0% {{ transform: scale(1); filter: drop-shadow(0 0 10px rgba(236,72,153,0.8)); }}
+                14% {{ transform: scale(1.35); filter: drop-shadow(0 0 30px rgba(236,72,153,1)); }}
+                28% {{ transform: scale(1); filter: drop-shadow(0 0 10px rgba(236,72,153,0.8)); }}
+                42% {{ transform: scale(1.35); filter: drop-shadow(0 0 30px rgba(236,72,153,1)); }}
+                70% {{ transform: scale(1); filter: drop-shadow(0 0 10px rgba(236,72,153,0.8)); }}
+                100% {{ transform: scale(1); filter: drop-shadow(0 0 10px rgba(236,72,153,0.8)); }}
+            }}
+            .animated-heart {{
+                display: inline-block;
+                animation: heartbeatPulse 1.4s ease-in-out infinite;
+                color: #ec4899;
+                font-size: 3rem;
+                vertical-align: middle;
+                margin: 0 8px;
+            }}
+            .doctor-avatar-circle {{
+                width: 90px; height: 90px; border-radius: 50%;
+                background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+                display: flex; align-items: center; justify-content: center;
+                font-size: 2.4rem; color: white; margin: 0 auto 16px;
+                border: 3px solid #ffffff; box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+                transition: transform 0.3s ease;
+            }}
+            .doctor-card-item:hover .doctor-avatar-circle {{
+                transform: scale(1.1) rotate(5deg);
+            }}
+            .start-session-btn {{
+                background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #06b6d4 100%);
+                color: #ffffff !important; font-weight: 900; font-size: 1.25rem; padding: 20px 48px;
+                border: none; border-radius: 50px; cursor: pointer; text-decoration: none;
+                box-shadow: 0 12px 40px rgba(236, 72, 153, 0.55); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                display: inline-flex; align-items: center; gap: 14px; font-family: var(--font-body);
+                letter-spacing: 0.04em; text-transform: uppercase; margin-top: 24px;
+                animation: floatGlow 3s ease-in-out infinite alternate;
+            }}
+            .start-session-btn:hover {{
+                transform: translateY(-5px) scale(1.05);
+                box-shadow: 0 24px 60px rgba(6, 182, 212, 0.75);
+            }}
             @keyframes pulseGlow {{
                 0% {{ box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.8); }}
                 70% {{ box-shadow: 0 0 0 14px rgba(236, 72, 153, 0); }}
@@ -302,15 +342,57 @@ def home_page_view(request):
             <p style="font-size: 1.25rem; color: #cbd5e1; max-width: 820px; margin: 0 auto 28px;">
                 Led by Medical Director <strong>Dr. Divit Shah</strong>, delivering AI symptom analysis, auto-generated OPD tokens, Jitsi video rooms, and sub-millisecond cloud performance.
             </p>
-            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-                <a href="#opdForm" class="btn-dynamic" style="width: auto; padding: 15px 34px; margin-top: 0;">🎟️ Book OPD Token Now</a>
-                <button type="button" onclick="seedHugeDataset()" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; padding: 15px 30px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 1rem; box-shadow: 0 8px 25px rgba(16,185,129,0.35); font-family: var(--font-body);">🌱 Seed Huge Demo Dataset</button>
-                <a href="/api/docs/" target="_blank" style="background: rgba(255,255,255,0.12); color: white; padding: 15px 34px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 1rem; border: 1.5px solid rgba(255,255,255,0.35); display: inline-block;">📄 Interactive Swagger Docs</a>
+            <!-- Animated Heartbeat & EKG Monitor Pulse Header -->
+            <div style="margin: 18px 0; font-size: 1.8rem; font-weight: 900; color: #ec4899; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span>⚡ REAL-TIME CLINICAL ECG TELEMETRY</span>
+                <span class="animated-heart">❤️</span>
+                <span style="letter-spacing: 0.1em; color: #38bdf8;">📈 72 BPM STABLE</span>
+            </div>
+
+            <!-- Specialist Doctor Pictures & Avatar Showcase Gallery -->
+            <div style="max-width: 1000px; margin: 30px auto 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+                    <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);">👨‍⚕️</div>
+                    <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Divit Shah</div>
+                    <div style="font-size: 0.82rem; color: #38bdf8; font-weight: 700;">Chief Cardiologist & Director</div>
+                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 ON DUTY</span></div>
+                </div>
+                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+                    <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);">👩‍⚕️</div>
+                    <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Ananya Sharma</div>
+                    <div style="font-size: 0.82rem; color: #f472b6; font-weight: 700;">Senior AI Vision Radiologist</div>
+                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 AVAILABLE</span></div>
+                </div>
+                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+                    <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👨‍⚕️</div>
+                    <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Rajesh Verma</div>
+                    <div style="font-size: 0.82rem; color: #34d399; font-weight: 700;">Lead Emergency & Trauma</div>
+                    <div style="margin-top: 8px;"><span class="duty-badge in_surgery" style="float: none; display: inline-block;">🚨 TRAUMA BAY</span></div>
+                </div>
+                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+                    <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">👩‍⚕️</div>
+                    <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Priya Nair</div>
+                    <div style="font-size: 0.82rem; color: #fbbf24; font-weight: 700;">Bio-AI Genomic Oncologist</div>
+                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 ON DUTY</span></div>
+                </div>
+            </div>
+
+            <!-- Prominent Start Button below animations and doctor pictures -->
+            <div style="text-align: center; margin-bottom: 20px;">
+                <a href="#clinicalPortal" class="start-session-btn">
+                    🚀 START CLINICAL SESSION & AI TRIAGE
+                </a>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 20px;">
+                <a href="#opdForm" class="btn-dynamic" style="width: auto; padding: 14px 28px; margin-top: 0;">🎟️ Book OPD Token Now</a>
+                <button type="button" onclick="seedHugeDataset()" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 0.95rem; box-shadow: 0 8px 25px rgba(16,185,129,0.35); font-family: var(--font-body);">🌱 Seed Huge Demo Dataset</button>
+                <a href="/api/docs/" target="_blank" style="background: rgba(255,255,255,0.12); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 0.95rem; border: 1.5px solid rgba(255,255,255,0.35); display: inline-block;">📄 Interactive Swagger Docs</a>
             </div>
             <div id="seedNotification" style="display: none; margin-top: 16px; background: #dcfce7; color: #15803d; padding: 10px 20px; border-radius: 12px; font-weight: 800; max-width: 600px; margin-left: auto; margin-right: auto;"></div>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <span style="background: #1e1b4b; color: var(--neon-cyan); padding: 6px 20px; border-radius: 30px; font-size: 0.82rem; font-weight: 800; border: 1.5px solid rgba(6, 182, 212, 0.4);">🏥 CLINICAL OPD REGISTRATION PORTAL</span>
@@ -801,7 +883,7 @@ def track_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <h2 style="color: #030712; font-size: 2rem;">Search & Track OPD Token</h2>
                 <p style="color: #64748b; margin-top: 4px;">Track your consultation status, estimated wait time, and room assignment live.</p>
@@ -874,7 +956,7 @@ def ai_checker_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <h2 style="color: #030712; font-size: 2rem;">1. AI Symptom Checker</h2>
                 <p style="color: #64748b; margin-top: 6px; font-size: 1rem;">AI will analyze inputs and recommend the matching clinical department and specialist doctor.</p>
@@ -966,7 +1048,7 @@ def tv_display_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <h2 style="color: #030712; font-size: 2rem;">Active Consultation Callout</h2>
                 <div class="tv-screen">
@@ -994,7 +1076,7 @@ def about_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <h2 style="color: #030712; font-size: 2rem;">Medical Director's Welcome</h2>
                 <p style="margin-top: 10px; font-size: 1.05rem; color: #334155;">
@@ -1036,7 +1118,7 @@ def services_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <h2 style="color: #030712; font-size: 2rem;">Medical Services Catalog</h2>
                 <div class="grid-3">
@@ -1081,7 +1163,7 @@ def doctors_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <h2 style="color: #030712; font-size: 2rem;">Attending Specialist Roster</h2>
                 <div class="grid-3">
@@ -1135,7 +1217,7 @@ def contact_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <div class="glass-card">
                 <h2 style="color: #030712; font-size: 2rem;">Contact Administration</h2>
                 <p style="color: #64748b; margin-top: 4px;">Submit an inquiry or reach out to clinic administration.</p>
@@ -1182,7 +1264,7 @@ def ai_suite_page_view(request):
             </p>
         </section>
 
-        <div class="container">
+        <div class="container" id="clinicalPortal">
             <!-- Section 1: AI Super-Engine Trigger Panel -->
             <div class="glass-card">
                 <div style="text-align: center; margin-bottom: 20px;">
