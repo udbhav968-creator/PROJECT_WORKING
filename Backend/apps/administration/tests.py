@@ -871,6 +871,39 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertTrue(res.data["allergy_shield_telemetry"]["contraindication_flag"])
         self.assertEqual(res.data["allergy_shield_telemetry"]["safety_evaluation"], "CRITICAL_CROSS_REACTIVITY_ALERT")
 
+    def test_real_world_doctor_roster_queue_load_balancing(self):
+        url = reverse("content-doctor-list")
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn("results", res.data)
+
+    def test_real_world_voice_scribe_and_icd10_coding_pipeline(self):
+        url = reverse("voice-dictation")
+        res = self.client.post(url, {
+            "audio_transcript": "Patient exhibits acute pharyngitis and fever of 101 Fahrenheit."
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("dictation_result", res.data)
+
+    def test_real_world_fhir_patient_resource_compliance(self):
+        url = reverse("fhir-patient")
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["resourceType"], "Patient")
+
+    def test_real_world_cloudflare_waf_security_rules_enforcement(self):
+        url = reverse("cloudflare-security-server")
+        res = self.client.post(url, {
+            "domain_name": "purehealthclinic.com",
+            "waf_mode": "ENTERPRISE_SHIELD"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("cloudflare_security_binding", res.data)
+
+
+
 
 
 
