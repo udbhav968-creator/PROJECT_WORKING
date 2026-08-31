@@ -606,4 +606,18 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertIn("wearable_telemetry_stream", response.data)
 
+    def test_trigger_voice_call(self):
+        url = reverse("trigger-voice-call")
+        response = self.client.post(url, {
+            "phone": "+91 9811122233",
+            "patient_name": "Udbhav",
+            "token_number": "PURE-OPD-77112",
+            "room": "OPD Room 101"
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("voice_call_telemetry", response.data)
+        self.assertEqual(response.data["voice_call_telemetry"]["recipient_phone"], "+91 9811122233")
+
+
 

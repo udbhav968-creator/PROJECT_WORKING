@@ -47,6 +47,7 @@ from apps.administration.views import (
     UvcRobotSchedulingView,
     RetinalScanAiView,
     HealthKitGatewayView,
+    VoiceCallDispatchView,
 )
 
 urlpatterns = [
@@ -88,6 +89,7 @@ urlpatterns = [
     path('uvc-robot-scheduling/', UvcRobotSchedulingView.as_view(), name='uvc-robot-scheduling'),
     path('retinal-scan-ai/', RetinalScanAiView.as_view(), name='retinal-scan-ai'),
     path('healthkit-gateway/', HealthKitGatewayView.as_view(), name='healthkit-gateway'),
+    path('trigger-voice-call/', VoiceCallDispatchView.as_view(), name='trigger-voice-call'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
