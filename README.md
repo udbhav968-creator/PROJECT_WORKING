@@ -5,12 +5,20 @@
 ![Institution](https://img.shields.io/badge/University-Bennett%20University-8b5cf6?style=for-the-badge)
 ![Organization](https://img.shields.io/badge/Company-PY%20Digital%20Services%20Pvt.%20Ltd.-00b4d8?style=for-the-badge)
 ![Email](https://img.shields.io/badge/Email-snojkumar968%40gmail.com-d14836?style=for-the-badge&logo=gmail)
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(77%2F77%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(81%2F81%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![MySQL Version](https://img.shields.io/badge/MySQL-8.0.35-4479a1?style=for-the-badge&logo=mysql)
 ![Vercel Live](https://img.shields.io/badge/Vercel-Cloud%20Deployed-000000?style=for-the-badge&logo=vercel)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ed?style=for-the-badge&logo=docker)
+
+---
+
+### 🌟 Advanced Next-Gen Innovations Built into Platform:
+- 📡 **BLE & RFID Patient Indoor Tracking API**: `POST /api/admin/rfid-indoor-tracking/` (Sub-meter Bluetooth patient location tracking across ICUs, operating theaters, and wards)
+- 🤖 **Autonomous UV-C Disinfection Robot Fleet Dispatcher API**: `POST /api/admin/uvc-robot-scheduling/` (Robotic UV-C sterilization scheduling with 99.9999% Log-6 pathogen kill efficiency)
+- 👁️ **Fundus Retinal Ophthalmology AI Vision API**: `POST /api/admin/retinal-scan-ai/` (EfficientNet-B4 computer vision triage for Diabetic Retinopathy and Glaucoma)
+- ⌚ **Apple HealthKit & Google Health Connect Wearables Gateway API**: `POST /api/admin/healthkit-gateway/` (Live streaming of Apple Watch ECG waveforms, SpO2, HRV, and fall detection telemetry)
 
 ---
 

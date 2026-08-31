@@ -578,3 +578,32 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertTrue(response.data["success"])
         self.assertEqual(response.data["traffic_management_telemetry"]["max_throughput_capacity"], "25,000 req/sec")
 
+    def test_rfid_indoor_patient_tracking(self):
+        url = reverse("rfid-indoor-tracking")
+        response = self.client.post(url, {"patient_tag_id": "RFID-TAG-CARD-99"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("indoor_location_telemetry", response.data)
+
+    def test_uvc_robot_scheduling(self):
+        url = reverse("uvc-robot-scheduling")
+        response = self.client.post(url, {"operating_room": "OR-Suite-104"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("uvc_robot_telemetry", response.data)
+
+    def test_retinal_scan_ai(self):
+        url = reverse("retinal-scan-ai")
+        response = self.client.post(url, {"eye_side": "RIGHT_EYE_OD"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("retinal_ai_analysis", response.data)
+
+    def test_healthkit_gateway(self):
+        url = reverse("healthkit-gateway")
+        response = self.client.post(url, {"device_type": "Apple Watch Series 9"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertIn("wearable_telemetry_stream", response.data)
+
+

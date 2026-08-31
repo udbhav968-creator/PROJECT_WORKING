@@ -43,6 +43,10 @@ from apps.administration.views import (
     OrganTransplantMatchingView,
     TrafficManagementServerView,
     MegaDatasetAiMlopsPipelineView,
+    RfidIndoorTrackingView,
+    UvcRobotSchedulingView,
+    RetinalScanAiView,
+    HealthKitGatewayView,
 )
 
 urlpatterns = [
@@ -80,6 +84,10 @@ urlpatterns = [
     path('organ-transplant-matching/', OrganTransplantMatchingView.as_view(), name='organ-transplant-matching'),
     path('traffic-management-server/', TrafficManagementServerView.as_view(), name='traffic-management-server'),
     path('mega-dataset-mlops/', MegaDatasetAiMlopsPipelineView.as_view(), name='mega-dataset-mlops'),
+    path('rfid-indoor-tracking/', RfidIndoorTrackingView.as_view(), name='rfid-indoor-tracking'),
+    path('uvc-robot-scheduling/', UvcRobotSchedulingView.as_view(), name='uvc-robot-scheduling'),
+    path('retinal-scan-ai/', RetinalScanAiView.as_view(), name='retinal-scan-ai'),
+    path('healthkit-gateway/', HealthKitGatewayView.as_view(), name='healthkit-gateway'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
