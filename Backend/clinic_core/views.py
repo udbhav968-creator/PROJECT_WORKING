@@ -324,8 +324,103 @@ def get_shared_footer():
             <p style="font-size: 0.88rem; margin-top: 4px; color: #cbd5e1;">World-Class Vibrant Enterprise Web Portal Deployment by Udbhav.</p>
             <p style="font-size: 0.82rem; margin-top: 10px; color: #64748b;">© 2026 Pure Health Clinic. All Rights Reserved.</p>
         </footer>
-    </body>
-    </html>
+    <script>
+        // Real-Time Animated EKG Waveform Canvas Engine
+        (function initEcgCanvas() {
+            const canvas = document.getElementById('ecgWaveformCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width;
+            let height = canvas.height;
+            let x = 0;
+            let lastY = height / 2;
+            let step = 0;
+
+            function getEcgY(s) {
+                const mid = height / 2;
+                const phase = s % 60;
+                if (phase === 10) return mid - 8;   // P wave
+                if (phase === 12) return mid + 3;
+                if (phase === 20) return mid + 6;   // Q
+                if (phase === 23) return mid - 32;  // R peak
+                if (phase === 26) return mid + 18;  // S
+                if (phase === 34) return mid - 12;  // T wave
+                if (phase === 38) return mid + 2;
+                return mid + (Math.random() * 2 - 1); // Baseline isoelectric noise
+            }
+
+            ctx.fillStyle = 'rgba(3, 7, 18, 1)';
+            ctx.fillRect(0, 0, width, height);
+
+            function draw() {
+                const nextY = getEcgY(step);
+                ctx.strokeStyle = '#06b6d4';
+                ctx.lineWidth = 2.5;
+                ctx.shadowColor = '#06b6d4';
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.moveTo(x, lastY);
+                ctx.lineTo(x + 3, nextY);
+                ctx.stroke();
+
+                // Leading glow dot
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(x + 3, nextY, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                lastY = nextY;
+                x += 3;
+                step++;
+
+                if (x >= width) {
+                    x = 0;
+                    ctx.fillStyle = 'rgba(3, 7, 18, 0.85)';
+                    ctx.fillRect(0, 0, width, height);
+                } else {
+                    ctx.fillStyle = 'rgba(3, 7, 18, 0.15)';
+                    ctx.fillRect(x + 3, 0, 15, height);
+                }
+
+                requestAnimationFrame(draw);
+            }
+            requestAnimationFrame(draw);
+        })();
+
+        // Doctor Selection 1-Click Auto-Fill Helper
+        function selectDoctor(doctorName, department, fee) {
+            const docSelect = document.getElementById('doctor_name');
+            const deptSelect = document.getElementById('department');
+            if (docSelect) {
+                let found = false;
+                for (let i = 0; i < docSelect.options.length; i++) {
+                    if (docSelect.options[i].value.includes(doctorName) || docSelect.options[i].text.includes(doctorName)) {
+                        docSelect.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    const opt = document.createElement('option');
+                    opt.value = doctorName;
+                    opt.text = `${doctorName} (Specialist - ₹${fee})`;
+                    opt.selected = true;
+                    docSelect.appendChild(opt);
+                }
+            }
+            if (deptSelect) {
+                deptSelect.value = department;
+            }
+            const portal = document.getElementById('clinicalPortal');
+            if (portal) {
+                portal.scrollIntoView({ behavior: 'smooth' });
+                portal.style.boxShadow = '0 0 40px rgba(6, 182, 212, 0.7)';
+                setTimeout(() => { portal.style.boxShadow = ''; }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
     """
 
 
@@ -342,38 +437,67 @@ def home_page_view(request):
             <p style="font-size: 1.25rem; color: #cbd5e1; max-width: 820px; margin: 0 auto 28px;">
                 Led by Medical Director <strong>Dr. Divit Shah</strong>, delivering AI symptom analysis, auto-generated OPD tokens, Jitsi video rooms, and sub-millisecond cloud performance.
             </p>
-            <!-- Animated Heartbeat & EKG Monitor Pulse Header -->
-            <div style="margin: 18px 0; font-size: 1.8rem; font-weight: 900; color: #ec4899; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <!-- Animated Heartbeat & Live EKG Monitor Pulse Header -->
+            <div style="margin: 18px 0 10px; font-size: 1.8rem; font-weight: 900; color: #ec4899; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
                 <span>⚡ REAL-TIME CLINICAL ECG TELEMETRY</span>
                 <span class="animated-heart">❤️</span>
-                <span style="letter-spacing: 0.1em; color: #38bdf8;">📈 72 BPM STABLE</span>
+                <span id="liveBpmBadge" style="letter-spacing: 0.08em; color: #38bdf8; background: rgba(6,182,212,0.15); padding: 4px 16px; border-radius: 20px; border: 1px solid rgba(6,182,212,0.4); font-size: 1.2rem;">📈 72 BPM STABLE</span>
             </div>
 
-            <!-- Specialist Doctor Pictures & Avatar Showcase Gallery -->
-            <div style="max-width: 1000px; margin: 30px auto 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
-                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+            <!-- HTML5 Live Running EKG Waveform Canvas -->
+            <div style="max-width: 680px; margin: 0 auto 20px; position: relative;">
+                <canvas id="ecgWaveformCanvas" width="680" height="80" style="width: 100%; height: 80px; background: rgba(3,7,18,0.9); border-radius: 16px; border: 1.5px solid rgba(6,182,212,0.45); box-shadow: 0 10px 30px rgba(6,182,212,0.3); display: block;"></canvas>
+            </div>
+
+            <!-- Live Clinical Stats Counter Grid -->
+            <div style="max-width: 900px; margin: 10px auto 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size: 1.6rem; font-weight: 900; color: #38bdf8;">125,000+</div>
+                    <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Patients Consulted</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size: 1.6rem; font-weight: 900; color: #34d399;">99.98%</div>
+                    <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Clinical Triage Accuracy</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size: 1.6rem; font-weight: 900; color: #f43f5e;">4.5 Mins</div>
+                    <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Emergency ALS Dispatch</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size: 1.6rem; font-weight: 900; color: #fbbf24;">45+</div>
+                    <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Super-Specialists</div>
+                </div>
+            </div>
+
+            <!-- Specialist Doctor Pictures & Interactive 1-Click Booking Showcase Gallery -->
+            <div style="max-width: 1000px; margin: 20px auto 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+                <div class="doctor-card-item" onclick="selectDoctor('Dr. Divit Shah', 'Cardiology', 600)" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease; cursor: pointer;">
                     <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);">👨‍⚕️</div>
                     <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Divit Shah</div>
                     <div style="font-size: 0.82rem; color: #38bdf8; font-weight: 700;">Chief Cardiologist & Director</div>
-                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 ON DUTY</span></div>
+                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 ON DUTY • ₹600</span></div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px;">👆 Click to Book with Doctor</div>
                 </div>
-                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+                <div class="doctor-card-item" onclick="selectDoctor('Dr. Ananya Sharma', 'General_Consultation', 850)" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease; cursor: pointer;">
                     <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);">👩‍⚕️</div>
                     <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Ananya Sharma</div>
                     <div style="font-size: 0.82rem; color: #f472b6; font-weight: 700;">Senior AI Vision Radiologist</div>
-                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 AVAILABLE</span></div>
+                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 AVAILABLE • ₹850</span></div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px;">👆 Click to Book with Doctor</div>
                 </div>
-                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+                <div class="doctor-card-item" onclick="selectDoctor('Dr. Rajesh Verma', 'Cardiology', 1000)" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease; cursor: pointer;">
                     <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👨‍⚕️</div>
                     <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Rajesh Verma</div>
                     <div style="font-size: 0.82rem; color: #34d399; font-weight: 700;">Lead Emergency & Trauma</div>
-                    <div style="margin-top: 8px;"><span class="duty-badge in_surgery" style="float: none; display: inline-block;">🚨 TRAUMA BAY</span></div>
+                    <div style="margin-top: 8px;"><span class="duty-badge in_surgery" style="float: none; display: inline-block;">🚨 TRAUMA BAY • ₹1000</span></div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px;">👆 Click to Book with Doctor</div>
                 </div>
-                <div class="doctor-card-item" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">
+                <div class="doctor-card-item" onclick="selectDoctor('Dr. Priya Nair', 'Chronic_Care', 1200)" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); padding: 22px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.2); transition: all 0.3s ease; cursor: pointer;">
                     <div class="doctor-avatar-circle" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">👩‍⚕️</div>
                     <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff;">Dr. Priya Nair</div>
                     <div style="font-size: 0.82rem; color: #fbbf24; font-weight: 700;">Bio-AI Genomic Oncologist</div>
-                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 ON DUTY</span></div>
+                    <div style="margin-top: 8px;"><span class="duty-badge on_duty" style="float: none; display: inline-block;">🟢 ON DUTY • ₹1200</span></div>
+                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px;">👆 Click to Book with Doctor</div>
                 </div>
             </div>
 
