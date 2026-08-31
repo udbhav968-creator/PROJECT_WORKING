@@ -5,7 +5,7 @@
 ![Institution](https://img.shields.io/badge/University-Bennett%20University-8b5cf6?style=for-the-badge)
 ![Organization](https://img.shields.io/badge/Company-PY%20Digital%20Services%20Pvt.%20Ltd.-00b4d8?style=for-the-badge)
 ![Email](https://img.shields.io/badge/Email-snojkumar968%40gmail.com-d14836?style=for-the-badge&logo=gmail)
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(82%2F82%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(83%2F83%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![MySQL Version](https://img.shields.io/badge/MySQL-8.0.35-4479a1?style=for-the-badge&logo=mysql)

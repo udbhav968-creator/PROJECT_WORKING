@@ -619,5 +619,37 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertIn("voice_call_telemetry", response.data)
         self.assertEqual(response.data["voice_call_telemetry"]["recipient_phone"], "+91 9811122233")
 
+    def test_real_world_cell_call_and_email_dispatch_journey(self):
+        # Step 1: Dispatch TLS Email Receipt to snojkumar968@gmail.com
+        email_url = reverse("send-email-notification")
+        email_res = self.client.post(email_url, {
+            "patient_email": "snojkumar968@gmail.com",
+            "patient_name": "Udbhav",
+            "token_number": "PURE-OPD-77112"
+        })
+        self.assertEqual(email_res.status_code, status.HTTP_200_OK)
+        self.assertEqual(email_res.data["email_telemetry"]["recipient_email"], "snojkumar968@gmail.com")
+
+        # Step 2: Trigger IVR Voice Call to +91 9811122233
+        call_url = reverse("trigger-voice-call")
+        call_res = self.client.post(call_url, {
+            "phone": "+91 9811122233",
+            "patient_name": "Udbhav",
+            "token_number": "PURE-OPD-77112",
+            "room": "OPD Room 101"
+        })
+        self.assertEqual(call_res.status_code, status.HTTP_200_OK)
+        self.assertEqual(call_res.data["voice_call_telemetry"]["recipient_phone"], "+91 9811122233")
+
+        # Step 3: Real-World Dataset Preprocessing & Retraining (MIMIC-III & NIH ChestX-ray14)
+        mlops_url = reverse("mega-dataset-mlops")
+        mlops_res = self.client.post(mlops_url, {
+            "dataset_name": "KAGGLE_MIMIC_III_AND_NIH_CHESTXRAY14",
+            "epochs": 100
+        })
+        self.assertEqual(mlops_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(mlops_res.data["success"])
+
+
 
 
