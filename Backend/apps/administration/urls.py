@@ -42,6 +42,7 @@ from apps.administration.views import (
     PharmacyOrderTrackingView,
     OrganTransplantMatchingView,
     TrafficManagementServerView,
+    MegaDatasetAiMlopsPipelineView,
 )
 
 urlpatterns = [
@@ -78,6 +79,7 @@ urlpatterns = [
     path('pharmacy-order-tracking/', PharmacyOrderTrackingView.as_view(), name='pharmacy-order-tracking'),
     path('organ-transplant-matching/', OrganTransplantMatchingView.as_view(), name='organ-transplant-matching'),
     path('traffic-management-server/', TrafficManagementServerView.as_view(), name='traffic-management-server'),
+    path('mega-dataset-mlops/', MegaDatasetAiMlopsPipelineView.as_view(), name='mega-dataset-mlops'),
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
