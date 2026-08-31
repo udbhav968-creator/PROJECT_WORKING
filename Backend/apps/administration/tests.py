@@ -737,6 +737,107 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertIn("retinal_ai_analysis", res.data)
         self.assertEqual(res.data["retinal_ai_analysis"]["eye_examined"], "LEFT_EYE_OS")
 
+    def test_real_world_complete_patient_journey_lifecycle(self):
+        # 1. Book Appointment & Generate Token
+        app_url = reverse("appointment-list-create")
+        app_res = self.client.post(app_url, {
+            "patient_name": "Udbhav Sharma",
+            "patient_phone": "+91 9811122233",
+            "patient_email": "snojkumar968@gmail.com",
+            "doctor_name": "Dr. Divit Shah",
+            "department": "Cardiology",
+            "priority": "routine",
+            "consultation_type": "OPD",
+            "appointment_date": "2026-09-01T10:00:00Z"
+        })
+        self.assertEqual(app_res.status_code, status.HTTP_201_CREATED)
+        token = app_res.data["token_number"]
+
+        # 2. Create Razorpay Payment Order
+        rzp_url = reverse("create-razorpay-order")
+        rzp_res = self.client.post(rzp_url, {"amount_inr": 600, "currency": "INR"})
+        self.assertEqual(rzp_res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(rzp_res.data["success"])
+
+        # 3. Ingest Patient IoT Vitals
+        iot_url = reverse("iot-medical-devices")
+        iot_res = self.client.post(iot_url, {
+            "device_id": "PULSE-OX-BED-01",
+            "heart_rate": 74,
+            "spo2_percentage": 99,
+            "patient_id": token
+        })
+        self.assertEqual(iot_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(iot_res.data["success"])
+
+        # 4. Submit Patient Experience Feedback
+        fb_url = reverse("patient-feedback")
+        fb_res = self.client.post(fb_url, {
+            "patient_name": "Udbhav Sharma",
+            "rating": 5,
+            "comments": "World-class consultation and instant OPD token dispatch."
+        })
+        self.assertEqual(fb_res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(fb_res.data["success"])
+
+    def test_real_world_admin_and_clinician_operations_lifecycle(self):
+        # 1. Verify Cryptographic TOTP MFA Step-Up
+        mfa_url = reverse("auth-mfa-verify")
+        mfa_res = self.client.post(mfa_url, {"user_id": 1, "totp_code": "123456"})
+        self.assertEqual(mfa_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(mfa_res.data["success"])
+
+        # 2. Check Real-Time ICU Bed Occupancy
+        icu_url = reverse("icu-occupancy")
+        icu_res = self.client.get(icu_url)
+        self.assertEqual(icu_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(icu_res.data["success"])
+
+        # 3. Check Pharmacy Blood Bank Reserves
+        pharm_url = reverse("pharmacy-blood-bank")
+        pharm_res = self.client.get(pharm_url)
+        self.assertEqual(pharm_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(pharm_res.data["success"])
+
+        # 4. Run Zero-Trust Security Threat Audit
+        sec_url = reverse("security-audit")
+        sec_res = self.client.post(sec_url)
+        self.assertEqual(sec_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(sec_res.data["success"])
+
+        # 5. Monitor Cloudflare Traffic Server Load Balancer
+        traf_url = reverse("traffic-management-server")
+        traf_res = self.client.post(traf_url, {"max_throughput_req_sec": 15000})
+        self.assertEqual(traf_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(traf_res.data["success"])
+
+
+    def test_real_world_multi_paradigm_ai_and_mlops_lifecycle(self):
+        # 1. Run Unified 6-Paradigm AI Super-Engine Training
+        ai_url = reverse("deep-ai-super-engine")
+        ai_res = self.client.post(ai_url, {"epochs": 20})
+        self.assertEqual(ai_url_status := ai_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(ai_res.data["success"])
+
+        # 2. Run LoRA AI Model Fine-Tuning
+        ft_url = reverse("fine-tune-ai-models")
+        ft_res = self.client.post(ft_url, {"learning_rate": 0.0001, "lora_rank": 8})
+        self.assertEqual(ft_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(ft_res.data["success"])
+
+        # 3. Run Radiology Vision AI Analysis
+        rad_url = reverse("radiology-xray-ai")
+        rad_res = self.client.post(rad_url, {"scan_type": "CHEST_XRAY"})
+        self.assertEqual(rad_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(rad_res.data["success"])
+
+        # 4. Check MLOps Drift Telemetry & Feature Store Status
+        mlops_url = reverse("mlops-pipeline")
+        mlops_res = self.client.get(mlops_url)
+        self.assertEqual(mlops_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(mlops_res.data["success"])
+
+
 
 
 
