@@ -48,6 +48,9 @@ from apps.administration.views import (
     RetinalScanAiView,
     HealthKitGatewayView,
     VoiceCallDispatchView,
+    DoctorQueueWaitTimeView,
+    DigitalPrescriptionGeneratorView,
+    DrugAllergyCrossReactionView,
 )
 
 urlpatterns = [
@@ -90,6 +93,10 @@ urlpatterns = [
     path('retinal-scan-ai/', RetinalScanAiView.as_view(), name='retinal-scan-ai'),
     path('healthkit-gateway/', HealthKitGatewayView.as_view(), name='healthkit-gateway'),
     path('trigger-voice-call/', VoiceCallDispatchView.as_view(), name='trigger-voice-call'),
+    path('queue-wait-time/', DoctorQueueWaitTimeView.as_view(), name='queue-wait-time'),
+    path('generate-digital-rx/', DigitalPrescriptionGeneratorView.as_view(), name='generate-digital-rx'),
+    path('drug-allergy-shield/', DrugAllergyCrossReactionView.as_view(), name='drug-allergy-shield'),
+
 
     # Admin Analytics & Compliance Auditing APIs
     path('dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),

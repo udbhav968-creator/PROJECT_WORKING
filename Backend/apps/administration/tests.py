@@ -837,6 +837,41 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertEqual(mlops_res.status_code, status.HTTP_200_OK)
         self.assertTrue(mlops_res.data["success"])
 
+    def test_doctor_queue_wait_time_estimator(self):
+        url = reverse("queue-wait-time")
+        res = self.client.post(url, {
+            "doctor_name": "Dr. Divit Shah",
+            "queue_position": 5,
+            "priority": "routine"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("queue_wait_telemetry", res.data)
+        self.assertEqual(res.data["queue_wait_telemetry"]["estimated_wait_minutes"], 40)
+
+    def test_digital_prescription_generator(self):
+        url = reverse("generate-digital-rx")
+        res = self.client.post(url, {
+            "patient_name": "Udbhav Sharma",
+            "doctor_name": "Dr. Divit Shah",
+            "diagnosis": "Essential Hypertension (ICD-10 I10)"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("digital_prescription", res.data)
+
+    def test_drug_allergy_cross_reaction_shield(self):
+        url = reverse("drug-allergy-shield")
+        res = self.client.post(url, {
+            "known_allergies": ["Penicillin"],
+            "proposed_drug": "Amoxicillin 500mg"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertTrue(res.data["allergy_shield_telemetry"]["contraindication_flag"])
+        self.assertEqual(res.data["allergy_shield_telemetry"]["safety_evaluation"], "CRITICAL_CROSS_REACTIVITY_ALERT")
+
+
 
 
 
