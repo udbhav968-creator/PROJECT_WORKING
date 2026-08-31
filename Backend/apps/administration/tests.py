@@ -902,6 +902,56 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertTrue(res.data["success"])
         self.assertIn("cloudflare_security_binding", res.data)
 
+    def test_stripe_payment_session_creation(self):
+        url = reverse("create-stripe-session")
+        res = self.client.post(url, {
+            "amount": 45.00,
+            "currency": "USD",
+            "patient_email": "snojkumar968@gmail.com"
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(res.data["success"])
+        self.assertIn("stripe_session", res.data)
+        self.assertEqual(res.data["stripe_session"]["currency"], "USD")
+
+    def test_upi_instant_dynamic_qr_generation(self):
+        url = reverse("create-upi-qr")
+        res = self.client.post(url, {
+            "amount_inr": 600.00,
+            "token_number": "PURE-OPD-77112",
+            "patient_name": "Udbhav"
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(res.data["success"])
+        self.assertIn("upi_payment_payload", res.data)
+        self.assertIn("upi://pay", res.data["upi_payment_payload"]["upi_intent_url"])
+
+    def test_paypal_international_order_creation(self):
+        url = reverse("create-paypal-order")
+        res = self.client.post(url, {
+            "amount_usd": 50.00,
+            "patient_name": "Udbhav"
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(res.data["success"])
+        self.assertIn("paypal_order", res.data)
+        self.assertEqual(res.data["paypal_order"]["status"], "CREATED")
+
+    def test_tax_invoice_generation_and_smtp_email_delivery(self):
+        from django.core import mail
+        url = reverse("send-tax-invoice-email")
+        res = self.client.post(url, {
+            "patient_email": "snojkumar968@gmail.com",
+            "patient_name": "Udbhav",
+            "amount_inr": 600.00,
+            "token_number": "PURE-OPD-77112"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("invoice_details", res.data)
+        self.assertTrue(len(mail.outbox) >= 1)
+
+
 
 
 

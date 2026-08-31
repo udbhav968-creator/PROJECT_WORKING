@@ -51,6 +51,10 @@ from apps.administration.views import (
     DoctorQueueWaitTimeView,
     DigitalPrescriptionGeneratorView,
     DrugAllergyCrossReactionView,
+    StripePaymentSessionView,
+    UpiInstantDynamicQrView,
+    PayPalOrderCreateView,
+    TaxInvoiceEmailDispatchView,
 )
 
 urlpatterns = [
@@ -96,6 +100,11 @@ urlpatterns = [
     path('queue-wait-time/', DoctorQueueWaitTimeView.as_view(), name='queue-wait-time'),
     path('generate-digital-rx/', DigitalPrescriptionGeneratorView.as_view(), name='generate-digital-rx'),
     path('drug-allergy-shield/', DrugAllergyCrossReactionView.as_view(), name='drug-allergy-shield'),
+    path('create-stripe-session/', StripePaymentSessionView.as_view(), name='create-stripe-session'),
+    path('create-upi-qr/', UpiInstantDynamicQrView.as_view(), name='create-upi-qr'),
+    path('create-paypal-order/', PayPalOrderCreateView.as_view(), name='create-paypal-order'),
+    path('send-tax-invoice-email/', TaxInvoiceEmailDispatchView.as_view(), name='send-tax-invoice-email'),
+
 
 
     # Admin Analytics & Compliance Auditing APIs

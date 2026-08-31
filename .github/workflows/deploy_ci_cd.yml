@@ -42,7 +42,7 @@ jobs:
           cd Backend
           python manage.py test apps.administration.tests
 
-      - name: Run Full 100-Test Century Milestone Microservice & Integration Suite
+      - name: Run Full 104-Test Multi-Payment & Email Integration Suite
         run: |
           cd Backend
           python manage.py test apps.core.tests apps.authentication.tests apps.administration.tests apps.content.tests
