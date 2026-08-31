@@ -951,6 +951,18 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertIn("invoice_details", res.data)
         self.assertTrue(len(mail.outbox) >= 1)
 
+    def test_automated_mlops_retrain_and_model_registry_promotion(self):
+        url = reverse("automated-mlops-retrain")
+        res = self.client.post(url, {
+            "dataset": "mimic-iii-clinical-database-1.4",
+            "drift_threshold": 0.05
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("mlops_pipeline_telemetry", res.data)
+        self.assertEqual(res.data["mlops_pipeline_telemetry"]["mlflow_model_registry"]["stage_promoted_to"], "Production")
+
+
 
 
 

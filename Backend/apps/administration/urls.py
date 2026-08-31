@@ -55,6 +55,7 @@ from apps.administration.views import (
     UpiInstantDynamicQrView,
     PayPalOrderCreateView,
     TaxInvoiceEmailDispatchView,
+    AutomatedMlopsRetrainView,
 )
 
 urlpatterns = [
@@ -104,6 +105,8 @@ urlpatterns = [
     path('create-upi-qr/', UpiInstantDynamicQrView.as_view(), name='create-upi-qr'),
     path('create-paypal-order/', PayPalOrderCreateView.as_view(), name='create-paypal-order'),
     path('send-tax-invoice-email/', TaxInvoiceEmailDispatchView.as_view(), name='send-tax-invoice-email'),
+    path('automated-mlops-retrain/', AutomatedMlopsRetrainView.as_view(), name='automated-mlops-retrain'),
+
 
 
 
