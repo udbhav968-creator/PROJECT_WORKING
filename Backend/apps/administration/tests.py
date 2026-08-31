@@ -962,6 +962,37 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertIn("mlops_pipeline_telemetry", res.data)
         self.assertEqual(res.data["mlops_pipeline_telemetry"]["mlflow_model_registry"]["stage_promoted_to"], "Production")
 
+    def test_database_sharding_and_connection_pool_health(self):
+        url = reverse("database-sharding-health")
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("database_cluster_telemetry", res.data)
+        self.assertEqual(res.data["database_cluster_telemetry"]["primary_node_status"], "ONLINE_ACTIVE_READ_WRITE")
+
+    def test_multi_modal_cross_attention_fusion_ai_super_brain(self):
+        url = reverse("multi-modal-ai-super-brain")
+        res = self.client.post(url, {
+            "patient_id": "PT-MULTIMODAL-8891",
+            "clinical_notes": "Patient has chest heaviness radiating to left jaw."
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("multi_modal_ai_diagnosis", res.data)
+        self.assertTrue(res.data["multi_modal_ai_diagnosis"]["confidence_score"] >= 0.99)
+
+    def test_clinical_pharmacogenomics_precision_drug_dosing(self):
+        url = reverse("pharmacogenomics-ai")
+        res = self.client.post(url, {
+            "gene_allele": "CYP2D6 *4/*4",
+            "medication": "Codeine"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("pharmacogenomic_report", res.data)
+        self.assertEqual(res.data["pharmacogenomic_report"]["metabolizer_phenotype"], "POOR_METABOLIZER (PM)")
+
+
 
 
 

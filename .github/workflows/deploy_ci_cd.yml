@@ -39,7 +39,7 @@ jobs:
           cd Backend
           python manage.py migrate
 
-      - name: 🧪 Run Full 105-Test Multi-App Enterprise MLOps & Integration Suite
+      - name: 🧪 Run Full 108-Test Multi-App Enterprise MLOps & Integration Suite
         run: |
           cd Backend
           python manage.py test apps.core.tests apps.authentication.tests apps.administration.tests apps.content.tests

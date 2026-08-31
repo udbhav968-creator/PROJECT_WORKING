@@ -56,6 +56,9 @@ from apps.administration.views import (
     PayPalOrderCreateView,
     TaxInvoiceEmailDispatchView,
     AutomatedMlopsRetrainView,
+    DatabaseShardingHealthView,
+    MultiModalAiSuperBrainView,
+    PharmacogenomicsAiView,
 )
 
 urlpatterns = [
@@ -106,6 +109,10 @@ urlpatterns = [
     path('create-paypal-order/', PayPalOrderCreateView.as_view(), name='create-paypal-order'),
     path('send-tax-invoice-email/', TaxInvoiceEmailDispatchView.as_view(), name='send-tax-invoice-email'),
     path('automated-mlops-retrain/', AutomatedMlopsRetrainView.as_view(), name='automated-mlops-retrain'),
+    path('database-sharding-health/', DatabaseShardingHealthView.as_view(), name='database-sharding-health'),
+    path('multi-modal-ai-super-brain/', MultiModalAiSuperBrainView.as_view(), name='multi-modal-ai-super-brain'),
+    path('pharmacogenomics-ai/', PharmacogenomicsAiView.as_view(), name='pharmacogenomics-ai'),
+
 
 
 
