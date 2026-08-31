@@ -42,7 +42,7 @@ jobs:
           cd Backend
           python manage.py test apps.administration.tests.MegaPipelineRealWorldDatasetTestSuite
 
-      - name: Run Full 77-Test Microservice & Integration Suite
+      - name: Run Full 84-Test Microservice & Integration Suite
         run: |
           cd Backend
           python manage.py test apps.core apps.authentication apps.administration apps.content
