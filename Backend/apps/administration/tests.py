@@ -663,6 +663,82 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertEqual(mail.outbox[0].to, ["snojkumar968@gmail.com"])
         self.assertIn("Pure Health Clinic", mail.outbox[0].subject)
 
+    def test_real_world_critical_hypoxia_and_tachycardia_iot_alert(self):
+        url = reverse("iot-medical-devices")
+        res = self.client.post(url, {
+            "device_id": "ICU-TELEMETRY-MONITOR-BED-04",
+            "heart_rate": 154,
+            "spo2_percentage": 81,
+            "systolic_bp": 185,
+            "diastolic_bp": 115,
+            "patient_id": "PT-REAL-99412"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("iot_telemetry", res.data)
+        self.assertEqual(res.data["iot_telemetry"]["vital_signs"]["heart_rate_bpm"], 154)
+
+    def test_real_world_brca1_and_egfr_genomic_variant_analysis(self):
+        url = reverse("genomic-sequencing")
+        res = self.client.post(url, {
+            "gene_target": "BRCA1_EGFR_MUTATION_PANEL",
+            "dna_sequence": "ATGCGATCGATCGATCGATCGATCGATC",
+            "patient_id": "PT-GENOMICS-5512"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("genomic_analysis", res.data)
+        self.assertEqual(res.data["genomic_analysis"]["gene_target_analyzed"], "BRCA1_EGFR_MUTATION_PANEL")
+
+    def test_real_world_emergency_als_ambulance_dynamic_gps_dispatch(self):
+        url = reverse("ambulance-dispatch")
+        res = self.client.post(url, {
+            "address": "Block C, Tower 4, Express Highway Sector 128",
+            "phone": "+91 9811122233",
+            "emergency_type": "ACUTE_MYOCARDIAL_INFARCTION"
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(res.data["success"])
+        self.assertIn("dispatch_details", res.data)
+        self.assertEqual(res.data["dispatch_details"]["pickup_address"], "Block C, Tower 4, Express Highway Sector 128")
+
+
+    def test_real_world_organ_transplant_hla_crossmatch(self):
+        url = reverse("organ-transplant-matching")
+        res = self.client.post(url, {
+            "organ_type": "Heart",
+            "blood_type": "O_POSITIVE",
+            "recipient_id": "RECIPIENT-ORGAN-CARD-01"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("transplant_match_result", res.data)
+        self.assertEqual(res.data["transplant_match_result"]["requested_organ"], "Heart")
+
+    def test_real_world_pharmacy_drone_cold_chain_fulfillment(self):
+        url = reverse("pharmacy-order-tracking")
+        res = self.client.post(url, {
+            "rx_token": "RX-PREMIUM-CARDIAC-9944",
+            "patient_phone": "+91 9811122233"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("pharmacy_fulfillment", res.data)
+        self.assertEqual(res.data["pharmacy_fulfillment"]["rx_token"], "RX-PREMIUM-CARDIAC-9944")
+
+    def test_real_world_retinal_fundus_scan_glaucoma_and_edema_quantification(self):
+        url = reverse("retinal-scan-ai")
+        res = self.client.post(url, {
+            "eye_side": "LEFT_EYE_OS",
+            "patient_id": "PT-OPHTHAL-4412"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("retinal_ai_analysis", res.data)
+        self.assertEqual(res.data["retinal_ai_analysis"]["eye_examined"], "LEFT_EYE_OS")
+
+
+
 
 
 

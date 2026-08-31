@@ -42,7 +42,7 @@ jobs:
           cd Backend
           python manage.py test apps.administration.tests
 
-      - name: Run Full 84-Test Microservice & Integration Suite
+      - name: Run Full 90-Test Microservice & Integration Suite
         run: |
           cd Backend
           python manage.py test apps.core.tests apps.authentication.tests apps.administration.tests apps.content.tests
