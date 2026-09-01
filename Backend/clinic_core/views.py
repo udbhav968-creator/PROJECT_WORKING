@@ -387,6 +387,161 @@ def get_shared_footer():
             requestAnimationFrame(draw);
         })();
 
+        // MNC Corporate Multi-Tab Navigation Helper
+        function switchMncTab(tabId, btnElement) {
+            document.querySelectorAll('.mnc-tab-panel').forEach(panel => panel.style.display = 'none');
+            const targetPanel = document.getElementById(tabId);
+            if (targetPanel) targetPanel.style.display = 'block';
+            if (btnElement) {
+                btnElement.parentElement.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
+            }
+        }
+
+        // Multi-Modal AI Inference Call
+        async function runMultiModalAiInference() {
+            const notes = document.getElementById('mnc_clinical_notes').value;
+            const resDiv = document.getElementById('mnc_ai_result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = '<span style="color:#38bdf8;">🧠 Computing Multi-Modal Cross-Attention Fusion Tensor...</span>';
+            try {
+                const res = await fetch('/api/admin/multi-modal-ai-super-brain/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ clinical_notes: notes })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const diag = data.multi_modal_ai_diagnosis;
+                    resDiv.innerHTML = `
+                        <div style="color: #34d399; font-weight: 800; margin-bottom: 8px;">✅ Primary Differential: ${diag.primary_differential_diagnosis}</div>
+                        <div style="color: #f8fafc; font-size: 0.88rem;">• <strong>Confidence:</strong> ${(diag.confidence_score * 100).toFixed(2)}% | <strong>Triage:</strong> <span style="color: #f43f5e; font-weight: 700;">${diag.risk_stratification}</span></div>
+                        <div style="color: #cbd5e1; font-size: 0.85rem; margin-top: 6px;">• <strong>Action:</strong> ${diag.recommended_action}</div>
+                        <div style="color: #94a3b8; font-size: 0.78rem; margin-top: 6px;">• <strong>Architecture:</strong> ${diag.model_architecture}</div>
+                    `;
+                }
+            } catch (err) {
+                resDiv.innerHTML = `<span style="color:#f43f5e;">Error executing AI inference: ${err}</span>`;
+            }
+        }
+
+        // Doctor Queue Wait-Time Estimator Call
+        async function calculateQueueWaitTime() {
+            const doc = document.getElementById('queue_doc').value;
+            const pos = document.getElementById('queue_pos').value;
+            const prio = document.getElementById('queue_prio').value;
+            const resDiv = document.getElementById('mnc_queue_result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = '<span style="color:#fbbf24;">⏱️ Calculating dynamic queue velocity...</span>';
+            try {
+                const res = await fetch('/api/admin/queue-wait-time/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ doctor_name: doc, queue_position: pos, priority: prio })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const q = data.queue_wait_telemetry;
+                    resDiv.innerHTML = `
+                        <div style="color: #fbbf24; font-weight: 800; font-size: 1.1rem;">⏱️ Estimated Wait Time: ${q.estimated_wait_minutes} Minutes</div>
+                        <div style="color: #cbd5e1; font-size: 0.88rem; margin-top: 4px;">• <strong>Physician:</strong> ${q.doctor_name} | <strong>Room:</strong> ${q.assigned_room}</div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; margin-top: 4px;">• <strong>Priority Factor Applied:</strong> ${q.triage_priority.toUpperCase()} (${q.average_consultation_duration_mins} mins/patient baseline)</div>
+                    `;
+                }
+            } catch (err) {
+                resDiv.innerHTML = `<span style="color:#f43f5e;">Error calculating wait time: ${err}</span>`;
+            }
+        }
+
+        // Global Payments Test Handlers
+        async function testStripeCheckout() {
+            const resDiv = document.getElementById('mnc_payment_result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = '<span style="color:#38bdf8;">💳 Initializing Stripe USD $45 Checkout Session...</span>';
+            const res = await fetch('/api/admin/create-stripe-session/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: 45.00, currency: 'USD' })
+            });
+            const data = await res.json();
+            if (data.success) {
+                resDiv.innerHTML = `<div style="color:#34d399; font-weight:800;">✅ Stripe Session Initialized!</div><div style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">Session ID: <code>${data.stripe_session.session_id}</code> | Amount: $45.00 USD</div>`;
+            }
+        }
+
+        async function testUpiQr() {
+            const resDiv = document.getElementById('mnc_payment_result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = '<span style="color:#38bdf8;">📱 Generating NPCI Dynamic UPI QR Barcode...</span>';
+            const res = await fetch('/api/admin/create-upi-qr/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount_inr: 600.00 })
+            });
+            const data = await res.json();
+            if (data.success) {
+                resDiv.innerHTML = `
+                    <div style="color:#34d399; font-weight:800;">✅ NPCI Dynamic UPI Intent Generated!</div>
+                    <div style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">Deep-Link: <code>${data.upi_payment_payload.upi_intent_url}</code></div>
+                    <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">Supported Apps: ${data.upi_payment_payload.supported_apps.join(', ')}</div>
+                `;
+            }
+        }
+
+        async function testPayPalOrder() {
+            const resDiv = document.getElementById('mnc_payment_result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = '<span style="color:#38bdf8;">🌐 Creating PayPal International Order Token...</span>';
+            const res = await fetch('/api/admin/create-paypal-order/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount_usd: 35.00 })
+            });
+            const data = await res.json();
+            if (data.success) {
+                resDiv.innerHTML = `<div style="color:#34d399; font-weight:800;">✅ PayPal REST v2 Order Created!</div><div style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">Order ID: <code>${data.paypal_order.order_id}</code> | Status: ${data.paypal_order.status}</div>`;
+            }
+        }
+
+        // Database Sharding Telemetry Loader
+        async function loadDbShardingHealth() {
+            const resDiv = document.getElementById('mnc_db_result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = '<span style="color:#38bdf8;">🗄️ Querying High-Availability Sharded Cluster Telemetry...</span>';
+            const res = await fetch('/api/admin/database-sharding-health/');
+            const data = await res.json();
+            if (data.success) {
+                const db = data.database_cluster_telemetry;
+                resDiv.innerHTML = `
+                    <div style="color:#38bdf8; font-weight:800;">🗄️ Cluster Status: ${db.primary_node_status} (${db.read_replicas_count} Read Replicas)</div>
+                    <div style="color:#cbd5e1; font-size:0.88rem; margin-top:4px;">• <strong>Active Connection Pools:</strong> ${db.connection_pool_active}/${db.connection_pool_max_limit} | <strong>Buffer Pool Hit Ratio:</strong> ${db.buffer_pool_hit_ratio_percent}%</div>
+                    <div style="color:#cbd5e1; font-size:0.88rem; margin-top:4px;">• <strong>Query Latencies:</strong> P50: ${db.query_latency_percentiles_ms.p50}ms, P95: ${db.query_latency_percentiles_ms.p95}ms, P99: ${db.query_latency_percentiles_ms.p99}ms</div>
+                    <div style="color:#94a3b8; font-size:0.8rem; margin-top:4px;">• <strong>WAL Sync Lag:</strong> ${db.read_replica_replication_lag_ms}ms | <strong>Engine:</strong> ${db.storage_engine}</div>
+                `;
+            }
+        }
+
+        // Continuous MLOps Trigger
+        async function triggerContinuousMlops() {
+            const resDiv = document.getElementById('mnc_mlops_result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = '<span style="color:#f43f5e;">🚀 Ingesting EHR drift tensors and triggering MLflow stage promotion...</span>';
+            const res = await fetch('/api/admin/automated-mlops-retrain/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dataset: 'mimic-iii-clinical-database-1.4', drift_threshold: 0.05 })
+            });
+            const data = await res.json();
+            if (data.success) {
+                const m = data.mlops_pipeline_telemetry;
+                resDiv.innerHTML = `
+                    <div style="color:#34d399; font-weight:800;">✅ Model Promoted to: ${m.mlflow_model_registry.stage_promoted_to} (Version ${m.mlflow_model_registry.registered_version})</div>
+                    <div style="color:#cbd5e1; font-size:0.88rem; margin-top:4px;">• <strong>MLflow Run ID:</strong> <code>${m.mlflow_run_id}</code> | <strong>Feature Store:</strong> ${m.feature_store_synced}</div>
+                    <div style="color:#cbd5e1; font-size:0.88rem; margin-top:4px;">• <strong>Eval Metrics:</strong> AUC-ROC: ${m.eval_metrics.auc_roc_score} | F1-Score: ${m.eval_metrics.f1_score} | Latency P99: ${m.eval_metrics.latency_p99_ms}ms</div>
+                `;
+            }
+        }
+
         // Doctor Selection 1-Click Auto-Fill Helper
         function selectDoctor(doctorName, department, fee) {
             const docSelect = document.getElementById('doctor_name');
@@ -430,7 +585,7 @@ def home_page_view(request):
     footer = get_shared_footer()
     content = """
         <section class="hero-section">
-            <div class="hero-chip">MICROSOFT ENTERPRISE HEALTHCARE CLOUD</div>
+            <div class="hero-chip" style="letter-spacing: 0.12em; background: linear-gradient(135deg, rgba(6,182,212,0.25) 0%, rgba(99,102,241,0.25) 100%); border: 1.5px solid rgba(6,182,212,0.5); padding: 8px 24px; border-radius: 30px; font-weight: 800; font-size: 0.85rem; color: #38bdf8; display: inline-block; margin-bottom: 20px; box-shadow: 0 0 25px rgba(6,182,212,0.35);">🌐 GLOBAL MULTI-NATIONAL CORPORATE HEALTHCARE & BIO-AI SUITE</div>
             <h1 style="font-size: 3.4rem; margin-bottom: 14px; line-height: 1.15; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                 Personalized Patient Care & Enterprise OPD Portal
             </h1>
@@ -579,6 +734,107 @@ def home_page_view(request):
                 </form>
 
                 <div id="receipt-container" style="display: none;"></div>
+            </div>
+
+            <!-- FORTUNE 500 CORPORATE MNC MULTI-TAB INNOVATION SUITE -->
+            <div class="glass-card" style="margin-top: 40px; background: rgba(15, 23, 42, 0.95); border: 2px solid rgba(6, 182, 212, 0.4); box-shadow: 0 20px 60px rgba(0,0,0,0.6); padding: 32px 28px;">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <span style="background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%); color: white; padding: 6px 20px; border-radius: 30px; font-size: 0.82rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;">⚡ MNC SCALE MULTI-DISCIPLINARY PLATFORM</span>
+                    <h2 style="color: #ffffff; margin-top: 10px; font-size: 2.3rem; font-weight: 900;">Enterprise Corporate Command Hub</h2>
+                    <p style="color: #94a3b8; font-size: 1rem; max-width: 750px; margin: 6px auto 0;">Interact directly with live Multi-Modal Transformers, Dynamic Queue Estimators, Multi-Payment Gateways, and Sharded Database Clusters.</p>
+                </div>
+
+                <!-- MNC Navigation Tabs -->
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 25px;">
+                    <button type="button" class="nav-btn active" onclick="switchMncTab('tabAiBrain', this)">🧠 Multi-Modal AI Brain</button>
+                    <button type="button" class="nav-btn" onclick="switchMncTab('tabQueueEstimator', this)">⏱️ Live Queue Estimator</button>
+                    <button type="button" class="nav-btn" onclick="switchMncTab('tabMultiPayments', this)">💳 Global Payments Suite</button>
+                    <button type="button" class="nav-btn" onclick="switchMncTab('tabDbSharding', this)">🗄️ Database Sharding Cluster</button>
+                    <button type="button" class="nav-btn" onclick="switchMncTab('tabMlopsEngine', this)">🚀 MLOps Model Registry</button>
+                </div>
+
+                <!-- TAB 1: Multi-Modal AI Brain -->
+                <div id="tabAiBrain" class="mnc-tab-panel" style="display: block;">
+                    <div style="background: rgba(3,7,18,0.7); padding: 24px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.12);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+                            <h3 style="color: #38bdf8; font-size: 1.3rem;">🧠 1.2 Billion Parameter Cross-Attention Multi-Modal Transformer</h3>
+                            <span style="background: #064e3b; color: #34d399; padding: 4px 12px; border-radius: 12px; font-size: 0.78rem; font-weight: 800;">🟢 INFERENCE READY</span>
+                        </div>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 16px;">Fuses Clinical NLP (ClinicalBERT) + Vision (DenseNet-121) + Genomics (DNABERT-2) + ECG Bi-LSTM into a unified diagnostic differential.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                            <input type="text" id="mnc_clinical_notes" value="Patient has crushing substernal chest pressure radiating to left jaw." class="form-control" style="background: #0f172a; color: white; border-color: rgba(255,255,255,0.2);">
+                            <input type="text" id="mnc_genomics" value="APOE4_AND_CYP2C19_VARIANTS" class="form-control" style="background: #0f172a; color: white; border-color: rgba(255,255,255,0.2);">
+                        </div>
+                        <button type="button" onclick="runMultiModalAiInference()" class="btn-dynamic" style="width: auto; padding: 12px 28px; margin-top: 0;">⚡ Execute Multi-Modal Diagnostic Inference</button>
+                        <div id="mnc_ai_result" style="display: none; margin-top: 16px; background: #0f172a; padding: 18px; border-radius: 14px; border: 1px solid rgba(6,182,212,0.4);"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: Live Queue Estimator -->
+                <div id="tabQueueEstimator" class="mnc-tab-panel" style="display: none;">
+                    <div style="background: rgba(3,7,18,0.7); padding: 24px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.12);">
+                        <h3 style="color: #fbbf24; font-size: 1.3rem; margin-bottom: 10px;">⏱️ Dynamic Real-Time Doctor Queue Wait-Time Estimator</h3>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 16px;">Calculates sub-minute precision wait times factoring in priority weighting ($w_{emergency}=0$, $w_{urgent}=0.5$, $w_{routine}=1.0$) and physician velocity.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                            <div>
+                                <label style="color: #94a3b8; font-size: 0.8rem; font-weight: 700;">Doctor:</label>
+                                <select id="queue_doc" class="form-control" style="background: #0f172a; color: white; border-color: rgba(255,255,255,0.2);">
+                                    <option value="Dr. Divit Shah">Dr. Divit Shah (Cardiology)</option>
+                                    <option value="Dr. Ananya Sharma">Dr. Ananya Sharma (Radiology)</option>
+                                    <option value="Dr. Rajesh Verma">Dr. Rajesh Verma (Trauma Bay)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="color: #94a3b8; font-size: 0.8rem; font-weight: 700;">Your Position in Queue:</label>
+                                <input type="number" id="queue_pos" value="4" min="1" max="50" class="form-control" style="background: #0f172a; color: white; border-color: rgba(255,255,255,0.2);">
+                            </div>
+                            <div>
+                                <label style="color: #94a3b8; font-size: 0.8rem; font-weight: 700;">Triage Priority:</label>
+                                <select id="queue_prio" class="form-control" style="background: #0f172a; color: white; border-color: rgba(255,255,255,0.2);">
+                                    <option value="routine">Routine (Standard Velocity)</option>
+                                    <option value="urgent">Urgent (50% Expedited)</option>
+                                    <option value="emergency">Emergency (Instant Priority)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" onclick="calculateQueueWaitTime()" class="btn-dynamic" style="width: auto; padding: 12px 28px; margin-top: 0; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">⏱️ Calculate Live Estimated Wait Time</button>
+                        <div id="mnc_queue_result" style="display: none; margin-top: 16px; background: #0f172a; padding: 18px; border-radius: 14px; border: 1px solid rgba(245,158,11,0.4);"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Global Payments Suite -->
+                <div id="tabMultiPayments" class="mnc-tab-panel" style="display: none;">
+                    <div style="background: rgba(3,7,18,0.7); padding: 24px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.12);">
+                        <h3 style="color: #34d399; font-size: 1.3rem; margin-bottom: 10px;">💳 Global Multi-Gateway Corporate Payment Hub</h3>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 16px;">Test live integrations across Razorpay, Stripe Multi-Currency, NPCI Dynamic UPI QR, and PayPal International orders.</p>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+                            <button type="button" onclick="testStripeCheckout()" style="background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); color: white; padding: 12px 24px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer;">💳 Test Stripe Checkout (USD $45)</button>
+                            <button type="button" onclick="testUpiQr()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 12px 24px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer;">📱 Generate Dynamic UPI QR (INR ₹600)</button>
+                            <button type="button" onclick="testPayPalOrder()" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; padding: 12px 24px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer;">🌐 Create PayPal Order (USD $35)</button>
+                        </div>
+                        <div id="mnc_payment_result" style="display: none; margin-top: 16px; background: #0f172a; padding: 18px; border-radius: 14px; border: 1px solid rgba(52,211,153,0.4);"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: Database Sharding Cluster -->
+                <div id="tabDbSharding" class="mnc-tab-panel" style="display: none;">
+                    <div style="background: rgba(3,7,18,0.7); padding: 24px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.12);">
+                        <h3 style="color: #38bdf8; font-size: 1.3rem; margin-bottom: 10px;">🗄️ High-Availability Sharded Cluster & Connection Pool Telemetry</h3>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 16px;">Real-time health monitoring of ACID transactions, read replicas, and buffer pool caching.</p>
+                        <button type="button" onclick="loadDbShardingHealth()" class="btn-dynamic" style="width: auto; padding: 12px 28px; margin-top: 0;">📊 Fetch Live Database Cluster Telemetry</button>
+                        <div id="mnc_db_result" style="display: none; margin-top: 16px; background: #0f172a; padding: 18px; border-radius: 14px; border: 1px solid rgba(6,182,212,0.4);"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 5: MLOps Model Registry -->
+                <div id="tabMlopsEngine" class="mnc-tab-panel" style="display: none;">
+                    <div style="background: rgba(3,7,18,0.7); padding: 24px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.12);">
+                        <h3 style="color: #f43f5e; font-size: 1.3rem; margin-bottom: 10px;">🚀 Continuous CI/CD MLOps Drift & Model Promotion Engine</h3>
+                        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 16px;">Evaluates Wasserstein concept drift and triggers automated MLflow model promotion to Production.</p>
+                        <button type="button" onclick="triggerContinuousMlops()" class="btn-dynamic" style="width: auto; padding: 12px 28px; margin-top: 0; background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);">🔄 Trigger Automated MLOps Retraining & Promotion</button>
+                        <div id="mnc_mlops_result" style="display: none; margin-top: 16px; background: #0f172a; padding: 18px; border-radius: 14px; border: 1px solid rgba(244,63,94,0.4);"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Interactive Bio-AI Genomic Sequencing & 24x7 Ambulance Dispatch Suite -->
