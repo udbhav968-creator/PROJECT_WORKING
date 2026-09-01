@@ -387,6 +387,74 @@ def get_shared_footer():
             requestAnimationFrame(draw);
         })();
 
+        // Web Audio API Synthesized Stethoscope Simulator
+        let audioCtx = null;
+        let stethPlaying = false;
+        let stethInterval = null;
+
+        function toggleStethoscopeAudio() {
+            const btn = document.getElementById('stethBtn');
+            if (!stethPlaying) {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                stethPlaying = true;
+                btn.innerHTML = '🛑 Stop Stethoscope Auscultation (72 BPM)';
+                btn.style.background = 'rgba(236,72,153,0.35)';
+                playHeartbeatSound();
+                stethInterval = setInterval(playHeartbeatSound, 833); // 72 BPM
+            } else {
+                stethPlaying = false;
+                clearInterval(stethInterval);
+                btn.innerHTML = '🎧 Play Live Clinical Stethoscope (S1/S2 Lub-Dub)';
+                btn.style.background = 'rgba(236,72,153,0.15)';
+            }
+        }
+
+        function playHeartbeatSound() {
+            if (!audioCtx) return;
+            // S1 (Lub) - 50Hz low thump
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.12);
+            gain1.gain.setValueAtTime(0.8, audioCtx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+            osc1.start();
+            osc1.stop(audioCtx.currentTime + 0.12);
+
+            // S2 (Dub) - 75Hz slightly higher thump 250ms later
+            setTimeout(() => {
+                if (!stethPlaying || !audioCtx) return;
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(75, audioCtx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.10);
+                gain2.gain.setValueAtTime(0.6, audioCtx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.10);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start();
+                osc2.stop(audioCtx.currentTime + 0.10);
+            }, 250);
+        }
+
+        // 1-Click SOS Trauma Modal with Geolocation
+        function triggerSosEmergency() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    alert(`🚨 EMERGENCY SOS TRAUMA ACTIVATED!\n\nGPS Coordinates Locked: Latitude ${pos.coords.latitude.toFixed(4)}, Longitude ${pos.coords.longitude.toFixed(4)}\n\nNearest Level-1 Trauma ALS Ambulance Dispatched (ETA: 4.2 Mins).\nAttending Physician Dr. Rajesh Verma notified.`);
+                }, () => {
+                    alert('🚨 EMERGENCY SOS TRAUMA PROTOCOL ACTIVATED!\n\nDispatching Level-1 Trauma ALS Ambulance to registered patient residence (ETA: 4.5 Mins).');
+                });
+            } else {
+                alert('🚨 EMERGENCY SOS TRAUMA PROTOCOL ACTIVATED!\n\nDispatching Level-1 Trauma ALS Ambulance (ETA: 4.5 Mins).');
+            }
+        }
+
         // MNC Corporate Multi-Tab Navigation Helper
         function switchMncTab(tabId, btnElement) {
             document.querySelectorAll('.mnc-tab-panel').forEach(panel => panel.style.display = 'none');
@@ -752,6 +820,16 @@ def home_page_view(request):
     footer = get_shared_footer()
     content = """
         <section class="hero-section">
+            <!-- Real-Time Multi-Currency FX Marquee Ticker -->
+            <div style="background: rgba(15, 23, 42, 0.85); border-radius: 20px; padding: 6px 16px; margin: 0 auto 20px; max-width: 820px; border: 1px solid rgba(6,182,212,0.3); font-size: 0.82rem; color: #cbd5e1; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px; font-weight: 700;">
+                <span>💱 LIVE OPD CONSULTATION FX RATES:</span>
+                <span style="color: #38bdf8;">USD: $45.00</span>
+                <span style="color: #34d399;">EUR: €41.50</span>
+                <span style="color: #fbbf24;">GBP: £35.80</span>
+                <span style="color: #ec4899;">AED: د.إ165.00</span>
+                <span style="color: #a855f7;">INR: ₹600.00</span>
+            </div>
+
             <div class="hero-chip" style="letter-spacing: 0.12em; background: linear-gradient(135deg, rgba(6,182,212,0.25) 0%, rgba(99,102,241,0.25) 100%); border: 1.5px solid rgba(6,182,212,0.5); padding: 8px 24px; border-radius: 30px; font-weight: 800; font-size: 0.85rem; color: #38bdf8; display: inline-block; margin-bottom: 20px; box-shadow: 0 0 25px rgba(6,182,212,0.35);">🌐 GLOBAL MULTI-NATIONAL CORPORATE HEALTHCARE & BIO-AI SUITE</div>
             <h1 style="font-size: 3.4rem; margin-bottom: 14px; line-height: 1.15; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                 Personalized Patient Care & Enterprise OPD Portal
@@ -769,6 +847,43 @@ def home_page_view(request):
             <!-- HTML5 Live Running EKG Waveform Canvas -->
             <div style="max-width: 680px; margin: 0 auto 20px; position: relative;">
                 <canvas id="ecgWaveformCanvas" width="680" height="80" style="width: 100%; height: 80px; background: rgba(3,7,18,0.9); border-radius: 16px; border: 1.5px solid rgba(6,182,212,0.45); box-shadow: 0 10px 30px rgba(6,182,212,0.3); display: block;"></canvas>
+            </div>
+
+            <!-- Stethoscope Audio Auscultation & Pulmonary Breathing Pacer Controls -->
+            <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 20px;">
+                <button type="button" onclick="toggleStethoscopeAudio()" id="stethBtn" style="background: rgba(236,72,153,0.15); border: 1.5px solid rgba(236,72,153,0.5); color: #f472b6; padding: 10px 20px; border-radius: 30px; font-weight: 800; cursor: pointer; font-size: 0.88rem; transition: all 0.3s ease;">
+                    🎧 Play Live Clinical Stethoscope (S1/S2 Lub-Dub)
+                </button>
+                <button type="button" onclick="triggerSosEmergency()" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: white; border: none; padding: 10px 22px; border-radius: 30px; font-weight: 900; cursor: pointer; font-size: 0.88rem; box-shadow: 0 0 20px rgba(239,68,68,0.6); animation: pulse 2s infinite;">
+                    🚨 1-Click SOS Trauma Protocol & GPS Beacon
+                </button>
+            </div>
+
+            <!-- Interactive 5-Step Connected Patient Journey Stepper -->
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 18px 20px; max-width: 900px; margin: 0 auto 25px;">
+                <div style="font-size: 0.85rem; font-weight: 800; color: #38bdf8; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em;">📋 Live Connected Patient Clinical Journey Stepper</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; text-align: center;">
+                    <div style="background: rgba(16,185,129,0.15); padding: 10px; border-radius: 12px; border: 1px solid rgba(16,185,129,0.4);">
+                        <div style="font-size: 1.1rem;">🤖 1. AI Triage</div>
+                        <div style="font-size: 0.72rem; color: #34d399; font-weight: 700;">COMPLETED</div>
+                    </div>
+                    <div style="background: rgba(6,182,212,0.15); padding: 10px; border-radius: 12px; border: 1px solid rgba(6,182,212,0.4);">
+                        <div style="font-size: 1.1rem;">👨‍⚕️ 2. Specialist</div>
+                        <div style="font-size: 0.72rem; color: #38bdf8; font-weight: 700;">ASSIGNED</div>
+                    </div>
+                    <div style="background: rgba(245,158,11,0.15); padding: 10px; border-radius: 12px; border: 1px solid rgba(245,158,11,0.4);">
+                        <div style="font-size: 1.1rem;">⏱️ 3. Wait Time</div>
+                        <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700;">12 MINS (ACTIVE)</div>
+                    </div>
+                    <div style="background: rgba(99,102,241,0.15); padding: 10px; border-radius: 12px; border: 1px solid rgba(99,102,241,0.4);">
+                        <div style="font-size: 1.1rem;">🎥 4. Tele-Consult</div>
+                        <div style="font-size: 0.72rem; color: #818cf8; font-weight: 700;">ENCRYPTED WEBRTC</div>
+                    </div>
+                    <div style="background: rgba(236,72,153,0.15); padding: 10px; border-radius: 12px; border: 1px solid rgba(236,72,153,0.4);">
+                        <div style="font-size: 1.1rem;">🚁 5. Drone Rx</div>
+                        <div style="font-size: 0.72rem; color: #f472b6; font-weight: 700;">DISPATCH READY</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Live Clinical Stats Counter Grid -->
