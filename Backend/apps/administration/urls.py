@@ -70,6 +70,16 @@ from apps.administration.views import (
     LoadBalancerClusterView,
     InsuranceCopayCalculatorView,
     DeveloperCodeGeneratorView,
+    InVivoKalmanDigitalTwinView,
+    DenovoAntibodyDiffusionView,
+    MultiAgentConsultSwarmView,
+    QuantumVqeDrugDissolutionView,
+    FheHomomorphicSqlView,
+    QmixDroneRadarView,
+    BciSleepNeuromodulationView,
+    WasmEdgeInferenceView,
+    SsiVerifiableCredentialsView,
+    ArTelesurgeryMentoringView,
 )
 
 urlpatterns = [
@@ -134,6 +144,17 @@ urlpatterns = [
     path('load-balancer-cluster/', LoadBalancerClusterView.as_view(), name='load-balancer-cluster'),
     path('insurance-copay-calculator/', InsuranceCopayCalculatorView.as_view(), name='insurance-copay-calculator'),
     path('developer-code-generator/', DeveloperCodeGeneratorView.as_view(), name='developer-code-generator'),
+    path('in-vivo-kalman-digital-twin/', InVivoKalmanDigitalTwinView.as_view(), name='in-vivo-kalman-digital-twin'),
+    path('denovo-antibody-diffusion/', DenovoAntibodyDiffusionView.as_view(), name='denovo-antibody-diffusion'),
+    path('multi-agent-consult-swarm/', MultiAgentConsultSwarmView.as_view(), name='multi-agent-consult-swarm'),
+    path('quantum-vqe-drug-dissolution/', QuantumVqeDrugDissolutionView.as_view(), name='quantum-vqe-drug-dissolution'),
+    path('fhe-homomorphic-sql/', FheHomomorphicSqlView.as_view(), name='fhe-homomorphic-sql'),
+    path('qmix-drone-radar/', QmixDroneRadarView.as_view(), name='qmix-drone-radar'),
+    path('bci-sleep-neuromodulation/', BciSleepNeuromodulationView.as_view(), name='bci-sleep-neuromodulation'),
+    path('wasm-edge-inference/', WasmEdgeInferenceView.as_view(), name='wasm-edge-inference'),
+    path('ssi-verifiable-credentials/', SsiVerifiableCredentialsView.as_view(), name='ssi-verifiable-credentials'),
+    path('ar-telesurgery-mentoring/', ArTelesurgeryMentoringView.as_view(), name='ar-telesurgery-mentoring'),
+
 
 
 

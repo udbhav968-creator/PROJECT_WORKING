@@ -1127,6 +1127,108 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertIn("code_snippets", res.data)
         self.assertIn("python_requests", res.data["code_snippets"])
 
+    def test_in_vivo_kalman_digital_twin_telemetry(self):
+        url = reverse("in-vivo-kalman-digital-twin")
+        res = self.client.post(url, {
+            "patient_id": "TWIN-INVIVO-8812",
+            "heart_rate_bpm": 76.0,
+            "spo2_percent": 98.5
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("in_vivo_telemetry", res.data)
+
+    def test_denovo_antibody_diffusion_ai(self):
+        url = reverse("denovo-antibody-diffusion")
+        res = self.client.post(url, {
+            "neoantigen": "HER2_EXON20_INSERTION_VARIANT"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("antibody_design", res.data)
+        self.assertIn("heavy_chain_cdr_h3_sequence", res.data["antibody_design"])
+
+    def test_multi_agent_consult_swarm_consensus(self):
+        url = reverse("multi-agent-consult-swarm")
+        res = self.client.post(url, {
+            "case_notes": "Patient has acute pleuritic chest pain and elevated D-dimer."
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("consult_swarm_consensus", res.data)
+        self.assertEqual(len(res.data["consult_swarm_consensus"]["agents_participating"]), 6)
+
+    def test_quantum_vqe_drug_dissolution_energy(self):
+        url = reverse("quantum-vqe-drug-dissolution")
+        res = self.client.post(url, {
+            "formulation_id": "LNP-MRNA-FORMULATION-V4"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("vqe_quantum_telemetry", res.data)
+        self.assertEqual(res.data["vqe_quantum_telemetry"]["logical_qubits_simulated"], 24)
+
+    def test_fhe_homomorphic_ciphertext_sql(self):
+        url = reverse("fhe-homomorphic-sql")
+        res = self.client.post(url, {
+            "query_ciphertext": "0x8F3A2B...ENCRYPTED_QUERY"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("fhe_query_telemetry", res.data)
+        self.assertEqual(res.data["fhe_query_telemetry"]["plaintext_ram_exposure_bytes"], 0)
+
+    def test_qmix_multi_agent_drone_swarm_radar(self):
+        url = reverse("qmix-drone-radar")
+        res = self.client.post(url, {
+            "active_drones": 12
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("qmix_radar_telemetry", res.data)
+        self.assertTrue(res.data["qmix_radar_telemetry"]["faa_corridor_deconfliction_passed"])
+
+    def test_bci_sleep_staging_and_neuromodulation(self):
+        url = reverse("bci-sleep-neuromodulation")
+        res = self.client.post(url, {
+            "patient_id": "SLEEP-NEURO-771"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("neuromodulation_telemetry", res.data)
+        self.assertEqual(res.data["neuromodulation_telemetry"]["current_sleep_stage"], "N3_SLOW_WAVE_DEEP_SLEEP")
+
+    def test_wasm_edge_quantized_inference_runtime(self):
+        url = reverse("wasm-edge-inference")
+        res = self.client.post(url, {
+            "client_region": "AP-SOUTH-MUMBAI-POP"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("wasm_edge_telemetry", res.data)
+        self.assertEqual(res.data["wasm_edge_telemetry"]["edge_cold_start_latency_ms"], 0.00)
+
+    def test_ssi_decentralized_verifiable_credentials(self):
+        url = reverse("ssi-verifiable-credentials")
+        res = self.client.post(url, {
+            "patient_did": "did:polygonid:polygon:amoy:2pz9F...HEALTH_PASSPORT"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("verifiable_credential", res.data)
+        self.assertEqual(res.data["verifiable_credential"]["credentialSubject"]["bloodGroup"], "O_POSITIVE")
+
+    def test_ar_telesurgery_spatial_hologram_mentoring(self):
+        url = reverse("ar-telesurgery-mentoring")
+        res = self.client.post(url, {
+            "procedure": "ROBOTIC_CORONARY_ARTERY_BYPASS_GRAFT"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("ar_session_telemetry", res.data)
+        self.assertTrue(res.data["ar_session_telemetry"]["webrtc_glass_to_glass_latency_ms"] < 50.0)
+
+
 
 
 

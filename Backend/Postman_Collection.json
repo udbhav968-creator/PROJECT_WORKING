@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "9939a8c2-4412-4eb1-9988-py-digital-services",
-    "name": "PY Digital Services - Pure Health Clinic Enterprise & Frontier Research API Collection (51 APIs)",
+    "name": "PY Digital Services - Pure Health Clinic Global MNC & Nobel-Tier API Collection (65 APIs)",
     "description": "Complete Production REST API Collection for Pure Health Clinic by Lead System Architect Udbhav (Bennett University).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -321,6 +321,81 @@
           "request": {
             "method": "POST",
             "url": "{{base_url}}/api/admin/drone-swarm-deconfliction/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Module 6: Nobel-Tier Frontier Breakthroughs (Next-Gen Medical AI)",
+      "item": [
+        {
+          "name": "In-Vivo Continuous Kalman-PINN Digital Twin",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/in-vivo-kalman-digital-twin/"
+          }
+        },
+        {
+          "name": "Generative De-Novo Antibody SE(3)-Diffusion",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/denovo-antibody-diffusion/"
+          }
+        },
+        {
+          "name": "Autonomous 6-Agent Consult Swarm (ToT)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/multi-agent-consult-swarm/"
+          }
+        },
+        {
+          "name": "Quantum VQE Error-Corrected Drug Dissolution",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/quantum-vqe-drug-dissolution/"
+          }
+        },
+        {
+          "name": "Fully Homomorphic Encryption (FHE) Cloud SQL",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/fhe-homomorphic-sql/"
+          }
+        },
+        {
+          "name": "QMIX Multi-Agent Autonomous Drone Swarm Radar",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/qmix-drone-radar/"
+          }
+        },
+        {
+          "name": "Non-Invasive BCI Sleep Staging & Neuromodulation",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/bci-sleep-neuromodulation/"
+          }
+        },
+        {
+          "name": "Global Edge CDN WebAssembly (Wasm) Micro-Runtime",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/wasm-edge-inference/"
+          }
+        },
+        {
+          "name": "Decentralized Self-Sovereign Identity (SSI) DIDs",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/ssi-verifiable-credentials/"
+          }
+        },
+        {
+          "name": "WebRTC 3D Spatial AR Tele-Surgical Mentoring",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/ar-telesurgery-mentoring/"
           }
         }
       ]
