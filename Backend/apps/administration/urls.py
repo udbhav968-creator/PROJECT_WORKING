@@ -66,6 +66,10 @@ from apps.administration.views import (
     MolecularDockingAiView,
     EegBciTelemetryView,
     DroneSwarmDeconflictionView,
+    PrometheusMetricsView,
+    LoadBalancerClusterView,
+    InsuranceCopayCalculatorView,
+    DeveloperCodeGeneratorView,
 )
 
 urlpatterns = [
@@ -126,6 +130,11 @@ urlpatterns = [
     path('molecular-docking-ai/', MolecularDockingAiView.as_view(), name='molecular-docking-ai'),
     path('eeg-bci-telemetry/', EegBciTelemetryView.as_view(), name='eeg-bci-telemetry'),
     path('drone-swarm-deconfliction/', DroneSwarmDeconflictionView.as_view(), name='drone-swarm-deconfliction'),
+    path('prometheus-metrics/', PrometheusMetricsView.as_view(), name='prometheus-metrics'),
+    path('load-balancer-cluster/', LoadBalancerClusterView.as_view(), name='load-balancer-cluster'),
+    path('insurance-copay-calculator/', InsuranceCopayCalculatorView.as_view(), name='insurance-copay-calculator'),
+    path('developer-code-generator/', DeveloperCodeGeneratorView.as_view(), name='developer-code-generator'),
+
 
 
 

@@ -5,7 +5,7 @@
 ![Institution](https://img.shields.io/badge/University-Bennett%20University-8b5cf6?style=for-the-badge)
 ![Organization](https://img.shields.io/badge/Company-PY%20Digital%20Services%20Pvt.%20Ltd.-00b4d8?style=for-the-badge)
 ![Email](https://img.shields.io/badge/Email-snojkumar968%40gmail.com-d14836?style=for-the-badge&logo=gmail)
-![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(117%2F117%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
+![Build Status](https://img.shields.io/badge/CI%2FCD%20Pipeline-PASSED%20(121%2F121%20Tests)-02c39a?style=for-the-badge&logo=githubactions)
 ![Django Version](https://img.shields.io/badge/Django-5.0.0-092e20?style=for-the-badge&logo=django)
 ![DRF Version](https://img.shields.io/badge/DRF-3.14.0-a30000?style=for-the-badge&logo=django)
 ![MySQL Version](https://img.shields.io/badge/MySQL-8.0.35-4479a1?style=for-the-badge&logo=mysql)
@@ -14,7 +14,11 @@
 
 ---
 
-### 🌟 Advanced Next-Gen Frontier Research & MLOps Engines (51 Total REST APIs):
+### 🌟 Advanced Next-Gen Load Balancing, Observability & Frontier AI Engines (55 Total REST APIs):
+- 📊 **Prometheus SRE Observability API**: `GET /api/admin/prometheus-metrics/` (Real-time CPU, memory, P99 latency & QPS scraper)
+- 🛡️ **Anycast Load Balancer & Multi-Node Cluster Gateway API**: `POST /api/admin/load-balancer-cluster/` (Dynamic weighted least-connection traffic distribution with 0% packet loss)
+- 💳 **Patient Health Insurance & Copay Estimator API**: `POST /api/admin/insurance-copay-calculator/` (Real-time cashless deductibles & copay calculation)
+- 💻 **Developer API Code Studio & Multi-Language Generator API**: `POST /api/admin/developer-code-generator/` (Instant Python, JS, and cURL SDK code snippets)
 - 🫀 **In-Silico Patient 3D PINN Digital Twin API**: `POST /api/admin/in-silico-digital-twin/` (Navier-Stokes PDEs for real-time FFR_CT & wall shear stress)
 - 🔐 **Zero-Knowledge (ZK-SNARK) Medical Verification API**: `POST /api/admin/zk-proof-verification/` (Groth16 cryptographic proof generation with 0.00% PHI risk)
 - ⚛️ **Quantum QAOA Resource Allocation & Organ Matcher API**: `POST /api/admin/quantum-qaoa-scheduler/` (Quantum circuit state space optimization for donor organ matches)

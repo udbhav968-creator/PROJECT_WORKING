@@ -1086,6 +1086,48 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertIn("drone_swarm_flight_plan", res.data)
         self.assertEqual(res.data["drone_swarm_flight_plan"]["airspace_deconfliction_status"], "100%_SEPARATED_AND_OPTIMAL")
 
+    def test_prometheus_metrics_and_sre_telemetry(self):
+        url = reverse("prometheus-metrics")
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("prometheus_metrics", res.data)
+        self.assertEqual(res.data["prometheus_metrics"]["error_rate_percent"], 0.00)
+
+    def test_load_balancer_weighted_least_connection_distribution(self):
+        url = reverse("load-balancer-cluster")
+        res = self.client.post(url, {
+            "simulated_requests": 5000,
+            "algorithm": "WEIGHTED_LEAST_CONNECTION"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("load_balancer_telemetry", res.data)
+        self.assertEqual(res.data["load_balancer_telemetry"]["packet_loss_percent"], 0.00)
+
+    def test_insurance_copay_and_cashless_deductibles(self):
+        url = reverse("insurance-copay-calculator")
+        res = self.client.post(url, {
+            "consultation_fee_inr": 600.0,
+            "coverage_percent": 80.0
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("insurance_estimate", res.data)
+        self.assertEqual(res.data["insurance_estimate"]["patient_payable_copay_inr"], 120.0)
+
+    def test_developer_multi_language_code_generator(self):
+        url = reverse("developer-code-generator")
+        res = self.client.post(url, {
+            "endpoint": "/api/admin/multi-modal-ai-super-brain/",
+            "method": "POST"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("code_snippets", res.data)
+        self.assertIn("python_requests", res.data["code_snippets"])
+
+
 
 
 
