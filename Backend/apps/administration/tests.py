@@ -992,6 +992,31 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertIn("pharmacogenomic_report", res.data)
         self.assertEqual(res.data["pharmacogenomic_report"]["metabolizer_phenotype"], "POOR_METABOLIZER (PM)")
 
+    def test_massive_4_datasets_bulk_ingestion(self):
+        url = reverse("bulk-insert-clinical-data")
+        res = self.client.post(url, {
+            "dataset_label": "MIMIC-IV EHR & NIH ChestX-ray14",
+            "modality": "MULTI_MODAL_BIG_DATA"
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(res.data["success"])
+        self.assertIn("bulk_insertion_telemetry", res.data)
+        self.assertEqual(res.data["bulk_insertion_telemetry"]["total_records_inserted"], 50000)
+
+    def test_multi_device_email_notification_outbox_audit(self):
+        from django.core import mail
+        url = reverse("send-email-notification")
+        res = self.client.post(url, {
+            "patient_email": "snojkumar968@gmail.com",
+            "patient_name": "Udbhav",
+            "token_number": "PURE-OPD-99881"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertTrue(len(mail.outbox) >= 1)
+
+
+
 
 
 
