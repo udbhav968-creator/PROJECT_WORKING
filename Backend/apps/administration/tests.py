@@ -1015,6 +1015,78 @@ class MegaPipelineRealWorldDatasetTestSuite(APITestCase):
         self.assertTrue(res.data["success"])
         self.assertTrue(len(mail.outbox) >= 1)
 
+    def test_in_silico_patient_3d_pinn_digital_twin(self):
+        url = reverse("in-silico-digital-twin")
+        res = self.client.post(url, {
+            "patient_id": "TWIN-PATIENT-9901",
+            "stenosis_percent": 65.0
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("digital_twin_simulation", res.data)
+        self.assertIn("fractional_flow_reserve_ffr_ct", res.data["digital_twin_simulation"])
+
+    def test_zk_snark_groth16_proof_verification(self):
+        url = reverse("zk-proof-verification")
+        res = self.client.post(url, {
+            "credential_type": "COVID19_OR_VACCINE_IMMUNITY"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("zk_proof_telemetry", res.data)
+        self.assertEqual(res.data["zk_proof_telemetry"]["proof_status"], "CRYPTOGRAPHICALLY_VALID_TRUE")
+
+    def test_quantum_qaoa_organ_allocation_scheduler(self):
+        url = reverse("quantum-qaoa-scheduler")
+        res = self.client.post(url, {
+            "organ_type": "HEART_AND_LUNG",
+            "qubits": 16
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("quantum_optimization_telemetry", res.data)
+
+    def test_homomorphic_federated_swarm_learning(self):
+        url = reverse("federated-swarm-learning")
+        res = self.client.post(url, {
+            "nodes_count": 8,
+            "round": 15
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("swarm_telemetry", res.data)
+        self.assertEqual(res.data["swarm_telemetry"]["raw_patient_data_transferred_bytes"], 0)
+
+    def test_molecular_docking_gnn_binding_affinity(self):
+        url = reverse("molecular-docking-ai")
+        res = self.client.post(url, {
+            "target_protein": "KRAS_G12C_ONCOGENIC_RECEPTOR"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("molecular_docking_report", res.data)
+        self.assertTrue(res.data["molecular_docking_report"]["binding_affinity_delta_g_kcal_mol"] < 0)
+
+    def test_real_time_eeg_bci_spectral_entropy_telemetry(self):
+        url = reverse("eeg-bci-telemetry")
+        res = self.client.post(url, {
+            "patient_id": "ICU-NEURO-882"
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("neurological_telemetry", res.data)
+
+    def test_autonomous_drone_swarm_airspace_deconfliction(self):
+        url = reverse("drone-swarm-deconfliction")
+        res = self.client.post(url, {
+            "drone_count": 6
+        })
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("drone_swarm_flight_plan", res.data)
+        self.assertEqual(res.data["drone_swarm_flight_plan"]["airspace_deconfliction_status"], "100%_SEPARATED_AND_OPTIMAL")
+
+
 
 
 

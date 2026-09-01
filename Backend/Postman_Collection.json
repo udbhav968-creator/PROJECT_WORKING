@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "9939a8c2-4412-4eb1-9988-py-digital-services",
-    "name": "PY Digital Services - Pure Health Clinic Enterprise API Collection (44 APIs)",
+    "name": "PY Digital Services - Pure Health Clinic Enterprise & Frontier Research API Collection (51 APIs)",
     "description": "Complete Production REST API Collection for Pure Health Clinic by Lead System Architect Udbhav (Bennett University).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -267,6 +267,60 @@
           "request": {
             "method": "GET",
             "url": "{{base_url}}/api/admin/fhir/Patient/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Module 5: Frontier Research Breakthroughs (Nobel-Tier)",
+      "item": [
+        {
+          "name": "In-Silico 3D PINN Digital Twin",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/in-silico-digital-twin/"
+          }
+        },
+        {
+          "name": "Zero-Knowledge (ZK-SNARK) Medical Verifier",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/zk-proof-verification/"
+          }
+        },
+        {
+          "name": "Quantum QAOA Organ Allocation Scheduler",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/quantum-qaoa-scheduler/"
+          }
+        },
+        {
+          "name": "Homomorphic Federated Swarm Learning",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/federated-swarm-learning/"
+          }
+        },
+        {
+          "name": "Molecular Docking & GNN Affinity Predictor",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/molecular-docking-ai/"
+          }
+        },
+        {
+          "name": "Real-Time 16-Channel EEG BCI Telemetry",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/eeg-bci-telemetry/"
+          }
+        },
+        {
+          "name": "Autonomous Drone Swarm Airspace Deconfliction",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/drone-swarm-deconfliction/"
           }
         }
       ]

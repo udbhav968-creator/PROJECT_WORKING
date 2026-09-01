@@ -59,6 +59,13 @@ from apps.administration.views import (
     DatabaseShardingHealthView,
     MultiModalAiSuperBrainView,
     PharmacogenomicsAiView,
+    InSilicoDigitalTwinView,
+    ZkProofVerificationView,
+    QuantumQaoaSchedulerView,
+    FederatedSwarmLearningView,
+    MolecularDockingAiView,
+    EegBciTelemetryView,
+    DroneSwarmDeconflictionView,
 )
 
 urlpatterns = [
@@ -112,6 +119,14 @@ urlpatterns = [
     path('database-sharding-health/', DatabaseShardingHealthView.as_view(), name='database-sharding-health'),
     path('multi-modal-ai-super-brain/', MultiModalAiSuperBrainView.as_view(), name='multi-modal-ai-super-brain'),
     path('pharmacogenomics-ai/', PharmacogenomicsAiView.as_view(), name='pharmacogenomics-ai'),
+    path('in-silico-digital-twin/', InSilicoDigitalTwinView.as_view(), name='in-silico-digital-twin'),
+    path('zk-proof-verification/', ZkProofVerificationView.as_view(), name='zk-proof-verification'),
+    path('quantum-qaoa-scheduler/', QuantumQaoaSchedulerView.as_view(), name='quantum-qaoa-scheduler'),
+    path('federated-swarm-learning/', FederatedSwarmLearningView.as_view(), name='federated-swarm-learning'),
+    path('molecular-docking-ai/', MolecularDockingAiView.as_view(), name='molecular-docking-ai'),
+    path('eeg-bci-telemetry/', EegBciTelemetryView.as_view(), name='eeg-bci-telemetry'),
+    path('drone-swarm-deconfliction/', DroneSwarmDeconflictionView.as_view(), name='drone-swarm-deconfliction'),
+
 
 
 
