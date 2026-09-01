@@ -1,171 +1,281 @@
 {
-	"info": {
-		"_postman_id": "pure-health-clinic-fullstack-2026",
-		"name": "Pure Health Clinic & Hospital Systems - Full Stack Enterprise API Collection (Modules 1, 2, 3 & 4)",
-		"description": "Complete Postman Collection covering All 4 Team Modules: Auth, Appointments, Content Management & Administration Integration.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Module 1: Authentication & User Management",
-			"item": [
-				{
-					"name": "User Registration (/api/auth/register/)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"dr_divit\",\n  \"email\": \"divit.shah@purehealthclinic.com\",\n  \"password\": \"PureHealth@2026!\",\n  \"full_name\": \"Dr. Divit Shah\",\n  \"role_name\": \"Doctor\"\n}"
-						},
-						"url": { "raw": "{{baseUrl}}/api/auth/register/", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register", ""] }
-					}
-				},
-				{
-					"name": "User Login & JWT Acquisition (/api/auth/login/)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"dr_divit\",\n  \"password\": \"PureHealth@2026!\"\n}"
-						},
-						"url": { "raw": "{{baseUrl}}/api/auth/login/", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login", ""] }
-					}
-				},
-				{
-					"name": "User Profile (/api/auth/profile/)",
-					"request": {
-						"method": "GET",
-						"header": [
-							{ "key": "Authorization", "value": "Bearer {{jwt_access_token}}" }
-						],
-						"url": { "raw": "{{baseUrl}}/api/auth/profile/", "host": ["{{baseUrl}}"], "path": ["api", "auth", "profile", ""] }
-					}
-				}
-			]
-		},
-		{
-			"name": "Module 2: OPD Appointments & Queue Management",
-			"item": [
-				{
-					"name": "List OPD Appointments (/api/admin/appointments/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/admin/appointments/?status=scheduled", "host": ["{{baseUrl}}"], "path": ["api", "admin", "appointments", ""], "query": [{"key": "status", "value": "scheduled"}] }
-					}
-				},
-				{
-					"name": "Book OPD Token & Telehealth Link (/api/admin/appointments/)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"patient_name\": \"Udbhav Sharma\",\n  \"patient_phone\": \"+91 9811122233\",\n  \"patient_email\": \"udbhav@example.com\",\n  \"doctor_name\": \"Dr. Divit Shah\",\n  \"department\": \"General_Consultation\",\n  \"priority\": \"emergency\",\n  \"consultation_type\": \"Teleconsultation\",\n  \"consultation_fee_inr\": 600.00,\n  \"appointment_date\": \"2026-07-31T10:00:00Z\",\n  \"notes\": \"Emergency telemedicine consultation\"\n}"
-						},
-						"url": { "raw": "{{baseUrl}}/api/admin/appointments/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "appointments", ""] }
-					}
-				},
-				{
-					"name": "Printable Reception OPD Slip (/api/admin/appointments/{id}/slip/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/admin/appointments/{{appointment_id}}/slip/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "appointments", "{{appointment_id}}", "slip", ""] }
-					}
-				}
-			]
-		},
-		{
-			"name": "Module 3: Content Management APIs",
-			"item": [
-				{
-					"name": "List Medical Services (/api/content/services/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/content/services/", "host": ["{{baseUrl}}"], "path": ["api", "content", "services", ""] }
-					}
-				},
-				{
-					"name": "List Board-Certified Doctors (/api/content/doctors/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/content/doctors/", "host": ["{{baseUrl}}"], "path": ["api", "content", "doctors", ""] }
-					}
-				},
-				{
-					"name": "List Medical Blogs (/api/content/blogs/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/content/blogs/", "host": ["{{baseUrl}}"], "path": ["api", "content", "blogs", ""] }
-					}
-				},
-				{
-					"name": "List Testimonials (/api/content/testimonials/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/content/testimonials/", "host": ["{{baseUrl}}"], "path": ["api", "content", "testimonials", ""] }
-					}
-				},
-				{
-					"name": "Submit Contact Inquiry (/api/content/contact/)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"full_name\": \"Rahul Verma\",\n  \"email\": \"rahul@example.com\",\n  \"phone\": \"+91 9876543210\",\n  \"subject\": \"OPD Appointment Query\",\n  \"message\": \"Please inform about Dr. Divit Shah's consultation hours.\"\n}"
-						},
-						"url": { "raw": "{{baseUrl}}/api/content/contact/", "host": ["{{baseUrl}}"], "path": ["api", "content", "contact", ""] }
-					}
-				}
-			]
-		},
-		{
-			"name": "Module 4: Administration & System Integration",
-			"item": [
-				{
-					"name": "System Health Monitor (/api/admin/health/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/admin/health/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "health", ""] }
-					}
-				},
-				{
-					"name": "Admin Dashboard Analytics & Revenue (/api/admin/dashboard/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/admin/dashboard/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "dashboard", ""] }
-					}
-				},
-				{
-					"name": "Audit Logs (/api/admin/audit-logs/)",
-					"request": {
-						"method": "GET",
-						"url": { "raw": "{{baseUrl}}/api/admin/audit-logs/?severity=CRITICAL", "host": ["{{baseUrl}}"], "path": ["api", "admin", "audit-logs", ""], "query": [{"key": "severity", "value": "CRITICAL"}] }
-					}
-				},
-				{
-					"name": "Seed Demo Data (/api/admin/seed/)",
-					"request": {
-						"method": "POST",
-						"url": { "raw": "{{baseUrl}}/api/admin/seed/", "host": ["{{baseUrl}}"], "path": ["api", "admin", "seed", ""] }
-					}
-				}
-			]
-		}
-	],
-	"variable": [
-		{ "key": "baseUrl", "value": "https://project-working-snojkumar968-9939s-projects.vercel.app", "type": "string" },
-		{ "key": "jwt_access_token", "value": "", "type": "string" },
-		{ "key": "appointment_id", "value": "", "type": "string" }
-	]
+  "info": {
+    "_postman_id": "9939a8c2-4412-4eb1-9988-py-digital-services",
+    "name": "PY Digital Services - Pure Health Clinic Enterprise API Collection (44 APIs)",
+    "description": "Complete Production REST API Collection for Pure Health Clinic by Lead System Architect Udbhav (Bennett University).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Module 1: Authentication & User Management",
+      "item": [
+        {
+          "name": "User Registration",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/register/"
+          }
+        },
+        {
+          "name": "JWT Token Login",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/token/"
+          }
+        },
+        {
+          "name": "JWT Token Refresh",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/token/refresh/"
+          }
+        },
+        {
+          "name": "User Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/auth/profile/"
+          }
+        },
+        {
+          "name": "TOTP MFA Step-Up Verification",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/mfa-verify/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Module 2: Appointment Management",
+      "item": [
+        {
+          "name": "List & Create Appointments",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/appointments/"
+          }
+        },
+        {
+          "name": "Track Appointment Token",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/admin/appointments/track/PURE-OPD-77112/"
+          }
+        },
+        {
+          "name": "Doctor Queue Wait-Time Estimator",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/queue-wait-time/"
+          }
+        },
+        {
+          "name": "Live Queue SSE Stream",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/admin/live-queue-sse/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Module 3: Content Management APIs",
+      "item": [
+        {
+          "name": "List Medical Services",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/content/services/"
+          }
+        },
+        {
+          "name": "List Specialist Doctors",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/content/doctors/"
+          }
+        },
+        {
+          "name": "List Blog Posts",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/content/blogs/"
+          }
+        },
+        {
+          "name": "List Testimonials",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/content/testimonials/"
+          }
+        },
+        {
+          "name": "Submit Contact Inquiry",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/content/contact/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Module 4: Administration & Next-Gen MLOps",
+      "item": [
+        {
+          "name": "Multi-Modal AI Diagnostic Super-Brain",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/multi-modal-ai-super-brain/"
+          }
+        },
+        {
+          "name": "Clinical Pharmacogenomics Precision AI",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/pharmacogenomics-ai/"
+          }
+        },
+        {
+          "name": "Automated MLOps Retraining Pipeline",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/automated-mlops-retrain/"
+          }
+        },
+        {
+          "name": "Database Connection Pool & Sharding Health",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/admin/database-sharding-health/"
+          }
+        },
+        {
+          "name": "Stripe Global Checkout Session",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/create-stripe-session/"
+          }
+        },
+        {
+          "name": "NPCI UPI Instant Dynamic QR",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/create-upi-qr/"
+          }
+        },
+        {
+          "name": "PayPal International Orders Gateway",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/create-paypal-order/"
+          }
+        },
+        {
+          "name": "GST Tax Invoice & Email Dispatch",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/send-tax-invoice-email/"
+          }
+        },
+        {
+          "name": "IoT Medical Devices Telemetry",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/iot-medical-devices/"
+          }
+        },
+        {
+          "name": "Genomic DNA Variant Sequencing",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/genomic-sequencing/"
+          }
+        },
+        {
+          "name": "Chest Radiology Vision AI Triage",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/radiology-xray-ai/"
+          }
+        },
+        {
+          "name": "Retinal Ophthalmology Vision AI",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/retinal-scan-ai/"
+          }
+        },
+        {
+          "name": "Emergency ALS Ambulance GPS Dispatch",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/ambulance-dispatch/"
+          }
+        },
+        {
+          "name": "Organ Transplant & HLA Crossmatch",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/organ-transplant-matching/"
+          }
+        },
+        {
+          "name": "Pharmacy Drone Express Logistics",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/pharmacy-order-tracking/"
+          }
+        },
+        {
+          "name": "Autonomous UV-C Disinfection Robot Fleet",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/uvc-robot-scheduling/"
+          }
+        },
+        {
+          "name": "Apple HealthKit & Wearables Gateway",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/healthkit-gateway/"
+          }
+        },
+        {
+          "name": "Twilio IVR Voice Announcement Callout",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/trigger-voice-call/"
+          }
+        },
+        {
+          "name": "Zero-Trust Security Threat Audit",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/security-audit/"
+          }
+        },
+        {
+          "name": "Cloudflare WAF Edge Security Server",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/admin/cloudflare-security-server/"
+          }
+        },
+        {
+          "name": "HL7 FHIR R4 Patient Interoperability",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/admin/fhir/Patient/"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://project-working-snojkumar968-9939s-projects.vercel.app"
+    }
+  ]
 }

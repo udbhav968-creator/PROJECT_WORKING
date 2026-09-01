@@ -1,79 +1,114 @@
--- ==============================================================================
--- PURE HEALTH CLINIC & HOSPITAL SYSTEMS - MYSQL DATABASE SCHEMA DDL
--- Author: Udbhav (udbhav968-creator)
--- Email: snojkumar968@gmail.com
--- Modules: Auth (Mod 1), OPD (Mod 2), Content (Mod 3), Administration (Mod 4)
--- Timestamp: 2026-08-02
--- ==============================================================================
+-- =============================================================================
+-- PY Digital Services Pvt. Ltd. - Production Database Schema DDL
+-- Project: Healthcare Clinic Website Backend & Appointment Management System
+-- Lead System Architect: Udbhav (Bennett University)
+-- Database Engine: MySQL 8.0.35 / SQLite3 Production Fallback
+-- =============================================================================
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` CHAR(36) NOT NULL PRIMARY KEY,
-  `email` VARCHAR(255) NOT NULL UNIQUE,
-  `password` VARCHAR(255) NOT NULL,
-  `role` VARCHAR(50) NOT NULL DEFAULT 'patient',
-  `first_name` VARCHAR(100) NOT NULL,
-  `last_name` VARCHAR(100) NOT NULL,
-  `phone_number` VARCHAR(20),
-  `is_active` TINYINT(1) DEFAULT 1,
-  `is_staff` TINYINT(1) DEFAULT 0,
-  `created_at` DATETIME(6) NOT NULL,
-  `updated_at` DATETIME(6) NOT NULL,
-  INDEX `idx_users_role` (`role`)
+CREATE DATABASE IF NOT EXISTS pure_health_clinic_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE pure_health_clinic_db;
+
+-- -----------------------------------------------------------------------------
+-- Table: users (Authentication & RBAC - Thota Harshavardhan Reddy)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS users (
+    id CHAR(36) PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    role ENUM('admin', 'doctor', 'staff', 'patient') DEFAULT 'patient',
+    is_active BOOLEAN DEFAULT TRUE,
+    is_staff BOOLEAN DEFAULT FALSE,
+    is_superuser BOOLEAN DEFAULT FALSE,
+    totp_secret VARCHAR(64) NULL,
+    mfa_enabled BOOLEAN DEFAULT FALSE,
+    last_login DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_user_email (email),
+    INDEX idx_user_role (role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `appointments` (
-  `id` CHAR(36) NOT NULL PRIMARY KEY,
-  `patient_name` VARCHAR(255) NOT NULL,
-  `patient_phone` VARCHAR(50) NOT NULL,
-  `patient_email` VARCHAR(255),
-  `doctor_name` VARCHAR(255) NOT NULL,
-  `department` VARCHAR(100) NOT NULL,
-  `priority` VARCHAR(50) NOT NULL DEFAULT 'routine',
-  `consultation_type` VARCHAR(50) NOT NULL DEFAULT 'OPD',
-  `consultation_fee_inr` DECIMAL(10,2) NOT NULL DEFAULT 500.00,
-  `token_number` VARCHAR(100),
-  `video_room_url` VARCHAR(500),
-  `emergency_escalation_code` VARCHAR(50),
-  `appointment_date` DATETIME(6) NOT NULL,
-  `status` VARCHAR(50) NOT NULL DEFAULT 'scheduled',
-  `notes` TEXT,
-  `is_deleted` TINYINT(1) DEFAULT 0,
-  `created_at` DATETIME(6) NOT NULL,
-  `updated_at` DATETIME(6) NOT NULL,
-  INDEX `idx_appt_dept_status` (`department`, `status`, `is_deleted`),
-  INDEX `idx_appt_date_status` (`appointment_date`, `status`),
-  INDEX `idx_appt_token` (`token_number`)
+-- -----------------------------------------------------------------------------
+-- Table: appointments (Appointment Management - Alok Verma)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS appointments (
+    id CHAR(36) PRIMARY KEY,
+    patient_name VARCHAR(255) NOT NULL,
+    patient_phone VARCHAR(50) NOT NULL,
+    patient_email VARCHAR(255) NULL,
+    doctor_name VARCHAR(255) NOT NULL,
+    department VARCHAR(100) NOT NULL DEFAULT 'General_Consultation',
+    priority ENUM('routine', 'urgent', 'emergency') DEFAULT 'routine',
+    consultation_type ENUM('OPD', 'IPD', 'Emergency', 'Teleconsultation') DEFAULT 'OPD',
+    consultation_fee_inr DECIMAL(10, 2) DEFAULT 500.00,
+    token_number VARCHAR(100) UNIQUE NOT NULL,
+    video_room_url VARCHAR(500) NULL,
+    emergency_escalation_code VARCHAR(50) NULL,
+    appointment_date DATETIME NOT NULL,
+    status ENUM('scheduled', 'in_consultation', 'completed', 'cancelled', 'no_show') DEFAULT 'scheduled',
+    notes TEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_appointment_token (token_number),
+    INDEX idx_appointment_date (appointment_date),
+    INDEX idx_appointment_dept (department),
+    INDEX idx_appointment_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `doctor_roster` (
-  `id` CHAR(36) NOT NULL PRIMARY KEY,
-  `doctor_name` VARCHAR(255) NOT NULL UNIQUE,
-  `department` VARCHAR(100) NOT NULL,
-  `consultation_fee_inr` DECIMAL(10,2) NOT NULL DEFAULT 500.00,
-  `shift_hours` VARCHAR(100) DEFAULT '09:00 AM - 05:00 PM',
-  `duty_status` VARCHAR(50) NOT NULL DEFAULT 'on_duty',
-  `room_number` VARCHAR(50) DEFAULT 'OPD Room 101',
-  `max_daily_patients` INT DEFAULT 30,
-  `current_queue_count` INT DEFAULT 0,
-  `estimated_wait_time_minutes` INT DEFAULT 15,
-  `is_deleted` TINYINT(1) DEFAULT 0,
-  `created_at` DATETIME(6) NOT NULL,
-  `updated_at` DATETIME(6) NOT NULL,
-  INDEX `idx_roster_status_dept` (`duty_status`, `department`)
+-- -----------------------------------------------------------------------------
+-- Table: medical_services (Content Management - Aniket Ghatage)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS medical_services (
+    id CHAR(36) PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    short_description VARCHAR(500) NOT NULL,
+    full_description TEXT NOT NULL,
+    icon_class VARCHAR(100) DEFAULT 'fas fa-stethoscope',
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `admin_audit_logs` (
-  `id` CHAR(36) NOT NULL PRIMARY KEY,
-  `admin_email` VARCHAR(255) NOT NULL,
-  `action` VARCHAR(100) NOT NULL,
-  `resource` VARCHAR(100) NOT NULL,
-  `severity` VARCHAR(20) NOT NULL DEFAULT 'INFO',
-  `compliance_category` VARCHAR(100) DEFAULT 'NABH_HIPAA_AUDIT',
-  `ip_address` VARCHAR(45),
-  `details` TEXT,
-  `is_deleted` TINYINT(1) DEFAULT 0,
-  `created_at` DATETIME(6) NOT NULL,
-  `updated_at` DATETIME(6) NOT NULL,
-  INDEX `idx_audit_severity` (`severity`, `created_at`),
-  INDEX `idx_audit_email` (`admin_email`, `severity`)
+-- -----------------------------------------------------------------------------
+-- Table: doctors (Specialist Directory - Aniket Ghatage)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS doctors (
+    id CHAR(36) PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL,
+    specialty VARCHAR(255) NOT NULL,
+    qualification VARCHAR(255) NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    consultation_fee_inr DECIMAL(10, 2) DEFAULT 600.00,
+    shift_hours VARCHAR(100) DEFAULT '09:00 AM - 05:00 PM',
+    duty_status ENUM('on_duty', 'off_duty', 'in_surgery', 'emergency_call') DEFAULT 'on_duty',
+    room_number VARCHAR(50) DEFAULT 'Room 101',
+    bio TEXT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- -----------------------------------------------------------------------------
+-- Table: admin_audit_logs (Administration & System Integration - Udbhav)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS admin_audit_logs (
+    id CHAR(36) PRIMARY KEY,
+    admin_email VARCHAR(255) NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    resource VARCHAR(255) NOT NULL,
+    severity ENUM('info', 'warning', 'critical') DEFAULT 'info',
+    compliance_category VARCHAR(100) DEFAULT 'HIPAA_AUDIT',
+    ip_address VARCHAR(50) NOT NULL,
+    details JSON NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_audit_created (created_at),
+    INDEX idx_audit_severity (severity)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =============================================================================
+-- End of Schema Definition
+-- =============================================================================
